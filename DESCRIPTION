@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person(given = "Alexis", family = "Varin", email = "alexis.varin@inserm.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-3474-7263"))
-Description: What the package does (one paragraph).
+Description: This package is a collection of various tools to facilitate the use of Seurat objects in R. It is intended to be used in conjunction with the Seurat package, and is not a standalone package. The package is currently in development and will be updated regularly with new functions and improvements.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
