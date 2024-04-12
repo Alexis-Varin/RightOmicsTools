@@ -30,6 +30,7 @@
 #' @import ggplot2
 #' @import patchwork
 #' @import scales
+#' @import grDevices
 #' @export
 
 Barplot_Cell_Proportion = function(seurat_object,
