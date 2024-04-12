@@ -54,7 +54,11 @@ Barplot_Cell_Proportion = function(seurat_object,
                                    unique.split.plot = FALSE) {
 
 if (is.null(colors)) {
-  colors = scales::hue_pal(n = length(levels(seurat_object)))
+  ggplotColours <- function(n = 6, h = c(0, 360) + 15){
+    if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
+    hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
+  }
+  colors = ggplotColours(n = length(levels(Idents(seurat_object))))
 }
 
 if (isTRUE(order.colors)) {
@@ -93,7 +97,7 @@ if (is.character(split.by)) {
     }
     else {
       if (order.split == "reverse") {
-        order.split = rev(levels(seurat_object))
+        order.split = rev(levels(Idents(seurat_object)))
         seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
       }
       else {
@@ -116,7 +120,7 @@ for (i in levels.split.by) {
     }
     else {
       if (order.group == "reverse") {
-        order.group = rev(levels(seurat_object))
+        order.group = rev(levels(Idents(seurat_object)))
         seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.group)
       }
       else {
@@ -519,7 +523,7 @@ return(proportion.plot)
   else {
   if (isTRUE(unique.split.plot)) {
   Idents(seurat_object) = split.by
-  proportion.plot[[length(levels(seurat_object))]] = proportion.plot[[length(levels(seurat_object))]]+
+  proportion.plot[[length(levels(Idents(seurat_object)))]] = proportion.plot[[length(levels(Idents(seurat_object)))]]+
     theme(plot.margin = margin(5.5,5.5,5.5,5.5))
   proportion.plot = wrap_plots(proportion.plot, nrow = nrow, guides = "collect")+
     plot_annotation(theme = theme(legend.position = "bottom"))
@@ -553,7 +557,7 @@ if (is.character(group.by)) {
     }
     else {
       if (order.group == "reverse") {
-        order.group = rev(levels(seurat_object))
+        order.group = rev(levels(Idents(seurat_object)))
         seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.group)
       }
       else {
