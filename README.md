@@ -87,6 +87,34 @@ specified layers and slots.
                     dimreducs = "pca",
                     data.layer = TRUE)
 
+## Barplot_Cell_Proportion
+
+### Description
+
+This function generates a barplot of the proportion of cells from a
+Seurat object.
+
+### Dependencies
+
+- Seurat
+- SeuratObject
+- ggplot2
+- patchwork
+- scales
+
+### Usage
+
+    Barplot_Cell_Proportion()
+
+### Arguments
+
+TBD
+
+### Output
+
+A ggplot object, a list of ggplot objects, a patchwork of ggplot objects
+or a list of patchworks of ggplot objects.
+
 ## About the Author
 
 Alexis Varin, PhD
