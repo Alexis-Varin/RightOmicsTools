@@ -108,16 +108,59 @@ This function generates a barplot of the proportion of cells from a Seurat objec
 -   ggplot2
 -   patchwork
 -   scales
+-   grDevices
 
 ### Usage
 
 ```         
-Barplot_Cell_Proportion()
+Barplot_Cell_Proportion(
+  seurat_object,
+  group.by = NULL,
+  split.by = NULL,
+  colors = NULL,
+  order.proportion = NULL,
+  order.group = NULL,
+  order.split = NULL,
+  order.colors = TRUE,
+  show.cellsum.label = TRUE,
+  cellsum.label.size = 3,
+  axis.text.size = 9,
+  x.axis.angle = 60,
+  y.axis.title.size = 11,
+  legend.text.size = 9,
+  split.plot.title.size = 24,
+  legend = TRUE,
+  percent = TRUE,
+  nrow = 1,
+  unique.group.plot = TRUE,
+  unique.split.plot = FALSE
+)
 ```
 
 ### Arguments
 
-TBD
+| Argument                    | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|--------------------|:---------------------------------------------------|
+| **seurat_object**           | A Seurat object.                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **group.by**                | Character. The name of an identity to group the active ident by into a stacked barplot.                                                                                                     |
+| **split.by**                | The name of an identity to split the active ident by into separate ggplot objects.                                                                                                     |
+| **colors**                  | A vector of colors to be used. Seurat's default colors will be used if NULL.                                                                                                     |
+| **order.proportion**        | Character. A vector specifying either "reverse" or the levels of the active ident to order the cells.                                                                                                     |
+| **order.group**             | Character. A vector specifying either "reverse" or the levels of the group.by identity to order the cells. Ignored if group.by is NULL.                                                                                                     |
+| **order.split**             | Character. A vector specifying either "reverse" or the levels of the split.by identity to order the cells. Ignored if split.by is NULL.                                                                                                    |
+| **order.colors**            | Logical. If TRUE, the colors will automatically be ordered according to order.proportion. Ignored if order.proportion is NULL.                                                                                                     |
+| **show.cellsum.label**      | Logical. If TRUE, the sum of cells of each identity will be shown at the top of each bar.                                                                                                     |
+| **cellsum.label.size**      | Numeric. The size of the cell sum label. Ignored if show.cellsum.label is FALSE.                                                                                                     |
+| **axis.text.size**          | Numeric. The size of the x axis identities and y axis cell percent or numbers.                                                                                                   |
+| **x.axis.angle**            | Numeric. The angle of the x axis identities.                                                                                                    |
+| **y.axis.title.size**       | Numeric. The size of the y axis title.                                                                                                    |
+| **legend.text.size**        | Numeric. The size of the legend text. Ignored if legend is FALSE.                                                                                                     |
+| **split.plot.title.size**   | Numeric. The size of the plot titles. Ignored if split.by is NULL.                                                                                                    |
+| **legend**                  | Logical. If TRUE, the legend will be shown at the bottom of the ggplot object or patchwork.                                                                                                    |
+| **percent**                 | Logical. If TRUE, the proportion should be shown as a percentage of total cells for each identity.                                                                                                     |
+| **nrow**                    | Numeric. The number of rows in the patchwork. Ignored if the function returns a ggplot object.                                                                                                     |
+| **unique.group.plot**       | Logical. If TRUE, the stacked proportion of cells will be gathered in a single ggplot object.                                                                                                     |
+| **unique.split.plot**       | Logical. If TRUE, the ggplot objects will be gathered in a single patchwork.                                                                                                     |
 
 ### Output
 
