@@ -158,6 +158,65 @@ Seurat object.
 A ggplot object, a list of ggplot objects, a patchwork of ggplot objects
 or a list of patchworks of ggplot objects.
 
+## GSEA_Signatures
+
+### Description
+
+This function creates signatures (module scores calculated from UCell or
+Seurat’s respective functions) from the pathways’s genes present in the
+Seurat object.
+
+### Dependencies
+
+- Seurat version \>= 5.0.0
+- SeuratObject version \>= 5.0.0
+- UCell
+- msigdbr
+
+### Usage
+
+    GSEA_Signatures(
+      seurat_object,
+      assay = "RNA",
+      layer = "data",
+      species = "Homo sapiens",
+      category = NULL,
+      subcategory = NULL,
+      pathways = NULL,
+      min.genes = 2,
+      signatures.names = "name",
+      method = "UCell",
+      only.genes = FALSE,
+      fail.safe = 10,
+      verbose = TRUE,
+      ...
+    )
+
+### Arguments
+
+| Argument             | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|----------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **seurat_object**    | A Seurat object.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **assay**            | Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example “RNA2” if you have created a second RNA assay you named “RNA2”. See Seurat v5 vignettes for more information). You may also use another assay such as SCT to pull gene expression from.                                                                                                                                                                                                                                                                                                                                               |
+| **layer**            | Character. Formerly known as slot. If you have split layers the function will always join them before adding the signatures.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **species**          | Character. The species name to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_species() for the list of available species.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **category**         | Character. The category or categories to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_collections() for the list of available categories (gs_cat column). Leave NULL to use all categories.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **subcategory**      | Character. The subcategory or subcategories to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_collections() for the list of available subcategories (gs_subcat column). Leave NULL to use all subcategories.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **pathways**         | Character. The names of the pathways to be used to create the signatures. You may provide either a pathway id (for example, “<GO:0006574>”) or a name matching the pattern found in msigdbr\$gs_name (all caps and underscores between words). Please note that you may provide a partial match (for example, “TYPE_I_INTERFERON”) and the function will find all pathways containing this partial string. Beware that this may result in a large number of pathways to be added as signatures (using only.genes = TRUE is highly recommended) but is very handy to explore all pathways of interest in a particular field or biological process. |
+| **min.genes**        | Numeric. The minimum number of genes present in the Seurat object for a pathway to be considered.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **signatures.names** | Character. “id” will add pathways ids as signatures (e.g. <GO:0004657>, hsa05200 etc), “name” will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use only.genes = TRUE and set signatures.names = “name” or “id” to get the number of signatures you need to provide names for.                                                                                                                                                                                                |
+| **method**           | Character. The method you want to use to calculate the module scores, either “UCell” or “Seurat”.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **only.genes**       | Logical. If TRUE, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the genes from the pathways found in the Seurat object and the genes present in the Seurat object.                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **fail.safe**        | Numeric. The maximum number of signatures the function will attempt to add to the Seurat object. If the number of signatures found is higher than this number, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the genes from the pathways found in the Seurat object and the genes present in the Seurat object.                                                                                                                                                                                                                                                                  |
+| **verbose**          | Logical. If FALSE, does not print progress messages and output, but warnings and errors will still be printed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **…**                | Additional arguments to be passed to UCell’s or Seurat’s AddModuleScore() function.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+
+### Output
+
+A list containing the Seurat object with the added signatures if
+only.genes = FALSE, the genes from the pathways, the genes present in
+the Seurat object and the names of the signatures in the Seurat object.
+
 ## About the Author
 
 Alexis Varin, PhD

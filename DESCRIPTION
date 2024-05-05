@@ -15,8 +15,8 @@ Imports:
     ggplot2,
     patchwork,
     scales,
-    grDevices
-Depends: 
-    R (>= 2.10)
+    grDevices,
+    UCell,
+    msigdbr
 URL: https://github.com/Alexis-Varin/RightSeuratTools
 BugReports: https://github.com/Alexis-Varin/RightSeuratTools/issues
