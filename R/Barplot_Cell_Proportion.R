@@ -14,8 +14,10 @@
 #' @param cellsum.label.size Numeric. The size of the cell sum label. Ignored if show.cellsum.label is FALSE.
 #' @param axis.text.size Numeric. The size of the x axis identities and y axis cell percent or numbers.
 #' @param x.axis.angle Numeric. The angle of the x axis identities.
+#' @param x.axis.hjust Numeric. The horizontal justification of the x axis identities.
 #' @param y.axis.title.size Numeric. The size of the y axis title.
 #' @param legend.text.size Numeric. The size of the legend text. Ignored if legend is FALSE.
+#' @param legend.position Character. Which side to display the legend, "left", "right", "top" or "bottom". Ignored if legend is FALSE.
 #' @param split.plot.title.size Numeric. The size of the plot titles. Ignored if split.by is NULL.
 #' @param legend Logical. If TRUE, the legend will be shown at the bottom of the ggplot object or patchwork.
 #' @param percent Logical. If TRUE, the proportion should be shown as a percentage of total cells for each identity.
@@ -45,8 +47,10 @@ Barplot_Cell_Proportion = function(seurat_object,
                                    cellsum.label.size = 3,
                                    axis.text.size = 9,
                                    x.axis.angle = 60,
+                                   x.axis.hjust = 1,
                                    y.axis.title.size = 11,
                                    legend.text.size = 9,
+                                   legend.position = "bottom",
                                    split.plot.title.size = 24,
                                    legend = TRUE,
                                    percent = TRUE,
@@ -186,9 +190,9 @@ for (i in levels.split.by) {
                 theme_bw() +
                 theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                      axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                      axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_fill_manual(values=colors)+
                 geom_text(data = data.frame("ident1" = i,
@@ -207,9 +211,9 @@ for (i in levels.split.by) {
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                   plot.margin = margin(5.5,5.5,5.5,20.5))+
             scale_y_continuous(expand= c(0,0), labels = scales::percent)+
             scale_fill_manual(values=colors)
@@ -224,9 +228,9 @@ for (i in levels.split.by) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_fill_manual(values=colors)+
               geom_text(data = data.frame("ident1" = i,
@@ -245,9 +249,9 @@ for (i in levels.split.by) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_y_continuous(expand= c(0,0), breaks = NULL)+
               scale_fill_manual(values=colors)
@@ -263,9 +267,9 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom")+
+                axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position)+
           scale_fill_manual(values=colors)+
           geom_text(data = data.frame("ident1" = i,
                                       "sum" = sum(table.list[[i]][[j]]$nbcells),
@@ -283,9 +287,9 @@ for (i in levels.split.by) {
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom")+
+                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position)+
             scale_y_continuous(expand= c(0,0))+
             scale_fill_manual(values=colors)
         }
@@ -305,10 +309,10 @@ for (i in levels.split.by) {
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.position = "bottom", aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.position, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
             scale_fill_manual(values=colors)+
             ggtitle(i)
@@ -320,10 +324,10 @@ for (i in levels.split.by) {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-              legend.position = "bottom", aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+              legend.position = legend.position, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
         scale_y_continuous(expand= c(0,0), labels = scales::percent)+
         scale_fill_manual(values=colors)+
         ggtitle(i)
@@ -340,10 +344,10 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom", aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.position, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
           scale_fill_manual(values=colors)+
           ggtitle(i)
@@ -355,10 +359,10 @@ for (i in levels.split.by) {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-              legend.position = "bottom", aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+              legend.position = legend.position, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
         scale_y_continuous(expand= c(0,0))+
         scale_fill_manual(values=colors)+
         ggtitle(i)
@@ -406,10 +410,10 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom", plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.position, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
           scale_fill_manual(values=colors)+
           NoLegend()+
@@ -421,10 +425,10 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom", plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.position, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= c(0,0), labels = scales::percent)+
           scale_fill_manual(values=colors)+
           NoLegend()+
@@ -440,10 +444,10 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom", plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.position, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
           scale_fill_manual(values=colors)+
           NoLegend()+
@@ -455,10 +459,10 @@ for (i in levels.split.by) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom", plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.position, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= c(0,0))+
           scale_fill_manual(values=colors)+
           NoLegend()+
@@ -499,7 +503,7 @@ if (isTRUE(unique.split.plot)) {
   }
   temp.plot = wrap_plots(temp.plot, nrow = nrow, guides = "collect")+
     plot_annotation(title = temp.title, theme = theme(plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                                  legend.position = "bottom"))
+                                  legend.position = legend.position))
   proportion.plot = temp.plot
   if (isFALSE(legend)) {
     proportion.plot = proportion.plot+
@@ -511,7 +515,7 @@ Idents(seurat_object) = split.by
 for (i in levels(Idents(seurat_object))) {
   proportion.plot[[i]] = wrap_plots(proportion.plot[[i]], nrow = nrow, guides = "collect")+
     plot_annotation(title = i, theme = theme(plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                                  legend.position = "bottom"))
+                                  legend.position = legend.position))
   if (isFALSE(legend)) {
     proportion.plot[[i]] = proportion.plot[[i]]+
       plot_annotation(theme = theme(legend.position = "none"))
@@ -527,7 +531,7 @@ return(proportion.plot)
   proportion.plot[[length(levels(Idents(seurat_object)))]] = proportion.plot[[length(levels(Idents(seurat_object)))]]+
     theme(plot.margin = margin(5.5,5.5,5.5,5.5))
   proportion.plot = wrap_plots(proportion.plot, nrow = nrow, guides = "collect")+
-    plot_annotation(theme = theme(legend.position = "bottom"))
+    plot_annotation(theme = theme(legend.position = legend.position))
   if (isFALSE(legend)) {
     proportion.plot = proportion.plot+
       plot_annotation(theme = theme(legend.position = "none"))
@@ -616,9 +620,9 @@ if (is.character(group.by)) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_fill_manual(values=colors)+
               geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
@@ -635,9 +639,9 @@ if (is.character(group.by)) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_y_continuous(expand= c(0,0), labels = scales::percent)+
               scale_fill_manual(values=colors)
@@ -651,9 +655,9 @@ if (is.character(group.by)) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_fill_manual(values=colors)+
               geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
@@ -670,9 +674,9 @@ if (is.character(group.by)) {
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                    axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom",
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_y_continuous(expand= c(0,0), breaks = NULL)+
               scale_fill_manual(values=colors)
@@ -687,9 +691,9 @@ if (is.character(group.by)) {
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom")+
+                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position)+
             scale_fill_manual(values=colors)+
             geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
                                         "ident2" = j,
@@ -705,9 +709,9 @@ if (is.character(group.by)) {
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                  axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = "bottom")+
+                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.position)+
             scale_y_continuous(expand= c(0,0))+
             scale_fill_manual(values=colors)
         }
@@ -720,7 +724,7 @@ if (is.character(group.by)) {
           theme(axis.title.y = element_blank())
     }
     proportion.plot = wrap_plots(proportion.plot, nrow = nrow, guides = "collect")+
-      plot_annotation(theme = theme(legend.position = "bottom"))
+      plot_annotation(theme = theme(legend.position = legend.position))
     if (isFALSE(legend)) {
       proportion.plot = proportion.plot+
         plot_annotation(theme = theme(legend.position = "none"))
@@ -739,10 +743,10 @@ if (is.character(group.by)) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom")+
+                legend.position = legend.position)+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
           scale_fill_manual(values=colors)
       }
@@ -753,10 +757,10 @@ if (is.character(group.by)) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom")+
+                legend.position = legend.position)+
           scale_y_continuous(expand= c(0,0), labels = scales::percent)+
           scale_fill_manual(values=colors)
       }
@@ -772,10 +776,10 @@ if (is.character(group.by)) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom")+
+                legend.position = legend.position)+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
           scale_fill_manual(values=colors)
       }
@@ -786,10 +790,10 @@ if (is.character(group.by)) {
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+                axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.position = "bottom")+
+                legend.position = legend.position)+
           scale_y_continuous(expand= c(0,0))+
           scale_fill_manual(values=colors)
       }
@@ -843,10 +847,10 @@ else {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-              legend.position = "bottom")+
+              legend.position = legend.position)+
         scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
         scale_fill_manual(values=colors)+
         NoLegend()
@@ -857,10 +861,10 @@ else {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-              legend.position = "bottom")+
+              legend.position = legend.position)+
         scale_y_continuous(expand= c(0,0), labels = scales::percent)+
         scale_fill_manual(values=colors)+
         NoLegend()
@@ -875,10 +879,10 @@ else {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-              legend.position = "bottom")+
+              legend.position = legend.position)+
         scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
         scale_fill_manual(values=colors)+
         NoLegend()
@@ -889,10 +893,10 @@ else {
         theme_bw() +
         theme(panel.border = element_blank(), panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = 1),
+              axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
               axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
               axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-              legend.position = "bottom")+
+              legend.position = legend.position)+
         scale_y_continuous(expand= c(0,0))+
         scale_fill_manual(values=colors)+
         NoLegend()

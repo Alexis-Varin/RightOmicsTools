@@ -17,8 +17,10 @@ Barplot_Cell_Proportion(
   cellsum.label.size = 3,
   axis.text.size = 9,
   x.axis.angle = 60,
+  x.axis.hjust = 1,
   y.axis.title.size = 11,
   legend.text.size = 9,
+  legend.position = "bottom",
   split.plot.title.size = 24,
   legend = TRUE,
   percent = TRUE,
@@ -52,9 +54,13 @@ Barplot_Cell_Proportion(
 
 \item{x.axis.angle}{Numeric. The angle of the x axis identities.}
 
+\item{x.axis.hjust}{Numeric. The horizontal justification of the x axis identities.}
+
 \item{y.axis.title.size}{Numeric. The size of the y axis title.}
 
 \item{legend.text.size}{Numeric. The size of the legend text. Ignored if legend is FALSE.}
+
+\item{legend.position}{Character. Which side to display the legend, "left", "right", "top" or "bottom". Ignored if legend is FALSE.}
 
 \item{split.plot.title.size}{Numeric. The size of the plot titles. Ignored if split.by is NULL.}
 
