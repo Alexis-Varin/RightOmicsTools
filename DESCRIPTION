@@ -1,6 +1,6 @@
 Package: RightSeuratTools
 Title: A collection of tools to manipulate and visualize Seurat objects data
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person(given = "Alexis", family = "Varin", email = "alexis.varin@inserm.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-3474-7263"))
