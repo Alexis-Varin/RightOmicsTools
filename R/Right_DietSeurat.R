@@ -42,6 +42,7 @@
 #'                 variable.features = TRUE,
 #'                 dimreducs = "pca",
 #'                 data.layer = TRUE)
+#'
 #' @import Seurat
 #' @import SeuratObject
 #' @export

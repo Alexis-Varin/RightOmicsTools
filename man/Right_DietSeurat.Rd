@@ -75,4 +75,5 @@ Right_DietSeurat(pbmc_small,
                 variable.features = TRUE,
                 dimreducs = "pca",
                 data.layer = TRUE)
+
 }

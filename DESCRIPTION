@@ -18,7 +18,12 @@ Imports:
     grDevices,
     UCell,
     msigdbr,
-    future.apply
+    future,
+    future.apply,
+    grid,
+    stats,
+    ComplexHeatmap,
+    colorRamp2
 URL: https://github.com/Alexis-Varin/RightSeuratTools
 BugReports: https://github.com/Alexis-Varin/RightSeuratTools/issues
 Depends: 
