@@ -19,8 +19,8 @@ DotPlot_Heatmap(
   dots.type = "square root",
   dots.size = 4,
   show.na.dots = FALSE,
-  col.min = "q0",
-  col.max = "q100",
+  col.min = "q5",
+  col.max = "q95",
   data.colors = list(dotplot = c("#35A5FF", "lightgrey", "red"), heatmap = c("#35A5FF",
     "white", "red")),
   na.color = "black",
@@ -42,7 +42,7 @@ DotPlot_Heatmap(
   column.names.height = unit(15, "cm"),
   inner.border = TRUE,
   outer.border = TRUE,
-  data.legend.name = NULL,
+  data.legend.name = "Expression",
   data.legend.side = "bottom",
   data.legend.direction = "horizontal",
   data.legend.position = "topcenter",
@@ -84,11 +84,11 @@ DotPlot_Heatmap(
 
 \item{show.na.dots}{Logical. If TRUE, the function will display a small dot for features that are not expressed (0\% expression) instead of nothing. Ignored if dotplot = FALSE.}
 
-\item{col.min}{Character or Numeric. The minimum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q0' by default, which is the minimum value of the expression matrix. A value of 'q2' or 'q5' is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).}
+\item{col.min}{Character or Numeric. The minimum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q5' by default, which is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).}
 
-\item{col.max}{Character or Numeric. The maximum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q100' by default, which is the maximum value of the expression matrix. A value of 'q98' or 'q95' is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).}
+\item{col.max}{Character or Numeric. The maximum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q95' by default, which is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).}
 
-\item{data.colors}{Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, middle, and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors or 1 palette, one for the dotplot and one for the heatmap.}
+\item{data.colors}{Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors and/or 1 palette, one for the dotplot and one for the heatmap.}
 
 \item{na.color}{Character. The color to use for NA values. Ignored if dotplot = TRUE.}
 
@@ -128,9 +128,9 @@ DotPlot_Heatmap(
 
 \item{outer.border}{Logical. If TRUE, the function will display an outer border around the plot or around each slice if k-means is higher than 1.}
 
-\item{data.legend.name}{Character. The name of the data legend. If NULL, either 'Z-Score' if scale = TRUE, otherwise 'Expression'.}
+\item{data.legend.name}{Character. The name of the data legend.}
 
-\item{data.legend.side}{Character. The side of the heatmap where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.}
+\item{data.legend.side}{Character. The side where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.}
 
 \item{data.legend.direction}{Character. The direction of the data legend, either 'horizontal' or 'vertical'.}
 
@@ -148,7 +148,7 @@ DotPlot_Heatmap(
 
 \item{output.data}{Logical. If TRUE, the function will return the matrices instead of drawing the heatmap.}
 
-\item{...}{Additional arguments to pass to the ComplexHeatmap::Heatmap() function, such as row_names_gp, clustering_method_columns, etc, accepts any parameter that wasn't already internally passed to ComplexHeatmap::Heatmap() (for example, cluster.columns sets the cluster_columns parameter of the inner function, so you will get an error if you try to pass it again).}
+\item{...}{Additional arguments to pass to the ComplexHeatmap::Heatmap() function, such as column_names_gp, clustering_method_columns, etc, accepts any parameter that wasn't already internally passed to ComplexHeatmap::Heatmap() (for example, cluster.columns sets the cluster_columns parameter of the inner function, so you will get an error if you try to pass it again).}
 }
 \value{
 A dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
