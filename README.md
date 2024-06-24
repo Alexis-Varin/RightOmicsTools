@@ -162,6 +162,37 @@ Seurat object.
 A ggplot object, a list of ggplot objects, a patchwork of ggplot objects
 or a list of patchworks of ggplot objects.
 
+## DotPlot_Heatmap
+
+### Description
+
+This function generates a dotplot or a heatmap to visualize features
+expression in a Seurat object.
+
+### Dependencies
+
+- Seurat version \>= 5.0.0
+- SeuratObject version \>= 5.0.0
+- grid
+- stats
+- ComplexHeatmap
+- grDevices
+- colorRamp2
+
+### Usage
+
+TBD
+
+### Arguments
+
+TBD
+
+### Output
+
+A dotplot, or a heatmap, or a list containing a matrix of the expression
+data and another matrix containing the percent of cells expressing each
+feature.
+
 ## GSEA_Signatures
 
 ### Description
@@ -220,6 +251,41 @@ Seurat object.
 A list containing the Seurat object with the added signatures if
 only.genes = FALSE, the genes from the pathways, the genes present in
 the Seurat object and the names of the signatures in the Seurat object.
+
+## Find_Annotation_Markers
+
+### Description
+
+This function is a wrapper around Seurat’s FindMarkers function that
+allows for parallelization and filtering of mitochondrial, ribosomal and
+non-coding RNA genes in human, as well as filtering of pseudogenes in
+mouse. It will also directly give the top X markers for each identity to
+use for plotting with DotPlot_Heatmap() for example.
+
+### Dependencies
+
+- Seurat version \>= 5.0.0
+- SeuratObject version \>= 5.0.0
+- future
+- future.apply
+
+### Usage
+
+TBD
+
+### Arguments
+
+TBD
+
+### Output
+
+A data frame or a list of data frames with gene names and associated
+statistics, or a character vector or a list of character vectors with
+gene names.
+
+### Examples
+
+TBD
 
 ## About the Author
 
