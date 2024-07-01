@@ -12,6 +12,7 @@ RoxygenNote: 7.3.1
 Imports: 
     Seurat (>= 5.0.0),
     SeuratObject (>= 5.0.0),
+    data.table,
     ggplot2,
     patchwork,
     scales,

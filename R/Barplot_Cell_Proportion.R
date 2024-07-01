@@ -96,7 +96,7 @@ if (is.character(split.by)) {
   if (is.null(order.split)) {
     order.split = levels(Idents(seurat_object))
   }
-  if (!is.null(order.split)) {
+  else {
     if (length(order.split) > 1) {
       seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
     }

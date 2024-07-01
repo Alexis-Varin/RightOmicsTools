@@ -4,6 +4,8 @@
 # RightSeuratTools
 
 <!-- badges: start -->
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12518910.svg)](https://doi.org/10.5281/zenodo.12518910)
 <!-- badges: end -->
 
 This package is a collection of various tools to facilitate the use of
@@ -310,4 +312,7 @@ Bâtiment B3 Médecine
 If you find this package useful and would like to cite it, please find
 the citation information below :
 
-TBD
+Varin, Alexis. (2024). RightSeuratTools: An R Package Providing
+Complementary Tools for the Manipulation and Visualization of Single
+Cell RNA-Seq Data in a Seurat Object. Zenodo.
+<https://doi.org/10.5281/zenodo.12518909>

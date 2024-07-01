@@ -1,6 +1,6 @@
 #' @title DotPlot_Heatmap
 #'
-#' @description This function generates a dotplot or a heatmap to visualize features expression in a Seurat object.
+#' @description This function generates a dotplot or a heatmap to visualize features expression in a Seurat object. Credits to Seurat's dev team for the original DotPlot() function from which data processing of this function is derived from and to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the initial idea to use ComplexHeatmap to draw a dotplot and the layer_fun function that draws the dots. Slight improvements were implemented here and there for my personal use, and made available to all through my package.
 #'
 #' @param seurat_object A Seurat object.
 #' @param assay Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example "RNA2" if you have created a second RNA assay you named "RNA2". See Seurat v5 vignettes for more information). You may also use another assay such as SCT to pull gene expression from.
@@ -12,7 +12,7 @@
 #' @param split.idents Character. A vector with one or several identities in the split.by identity to use if you only want those. If NULL, all identities will be used.
 #' @param scale Logical. If TRUE, the data will be scaled.
 #' @param rotate.axis Logical. If TRUE, flips the axis, so that genes are displayed as rows and identities as columns.
-#' @param dotplot Logical. If TRUE, the function will create a dotplot, with dot size proportional to the percentage of cells expressing the feature. If FALSE, the function will create a heatmap. Credits to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the layer_fun function that draws the dots.
+#' @param dotplot Logical. If TRUE, the function will create a dotplot, with dot size proportional to the percentage of cells expressing the feature. If FALSE, the function will create a heatmap.
 #' @param dots.type Character. Determines the dot size difference between 0 and 100% expression. Either 'square root' (lower difference) or 'radius' (higher difference). Ignored if dotplot = FALSE.
 #' @param dots.size Numeric. The size of the dots in the dotplot. Ignored if dotplot = FALSE.
 #' @param show.na.dots Logical. If TRUE, the function will display a small dot for features that are not expressed (0% expression) instead of nothing. Ignored if dotplot = FALSE.
@@ -26,6 +26,9 @@
 #' @param split.colors Character. A vector of colors to use for the split.by identity, of same length as the number of identities in the split.by identity or supplied to the split.idents parameter. If NULL, uses a custom palette from grDevices::colors(). Ignored if split.by = NULL.
 #' @param show.split.names.colors Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to identity names. Ignored if split.by = NULL.
 #' @param show.split.dend.colors Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to the dendogram. Ignored if split.by = NULL or if cluster.rows and cluster.columns are set to FALSE.
+#' @param order.idents Character. A vector specifying either "reverse" or the levels of the active.ident identity to order the cells.
+#' @param order.split Character. A vector specifying either "reverse" or the levels of the split.by identity to order the cells. Ignored if split.by is NULL.
+#' @param order.colors Logical. If TRUE, the colors for idents and split.idents will automatically be ordered according to order.idents and order.split. Ignored if order.idents and order.split are NULL.
 #' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if cluster.rows and cluster.columns are set to FALSE.
 #' @param cluster.rows Logical or Function. If TRUE, the function will cluster the rows. You may also pass an hclust or dendogram object which contains clustering.
 #' @param row.kmeans Numeric. The number of k-means slices to use for row clustering. Ignored if cluster.rows = FALSE.
@@ -86,6 +89,9 @@ DotPlot_Heatmap = function(seurat_object,
                          split.colors = NULL,
                          show.split.names.colors = TRUE,
                          show.split.dend.colors = TRUE,
+                         order.idents = NULL,
+                         order.split = NULL,
+                         order.colors = TRUE,
                          kmeans.repeats = 100,
                          cluster.rows = TRUE,
                          row.kmeans = 1,
@@ -127,6 +133,24 @@ DotPlot_Heatmap = function(seurat_object,
   else {
     ident.1 = idents
   }
+  if (!is.null(order.idents)) {
+    if (is.character(order.idents)) {
+      if (length(order.idents) > 1) {
+        ident.1 = ident.1[order.idents]
+      }
+      else {
+        if (order.idents == "reverse") {
+          ident.1 = rev(ident.1)
+        }
+        else {
+          stop("order.idents needs to be either 'reverse' or a character vector")
+        }
+      }
+    }
+    else {
+      stop("order.idents needs to be either 'reverse' or a character vector")
+    }
+  }
 
   if (is.character(split.by)) {
     vars = c("ident",split.by,features)
@@ -143,6 +167,24 @@ DotPlot_Heatmap = function(seurat_object,
     }
     else {
       ident.2 = split.idents
+    }
+    if (!is.null(order.split)) {
+      if (is.character(order.split)) {
+        if (length(order.split) > 1) {
+          ident.1 = ident.2[order.split]
+        }
+        else {
+          if (order.split == "reverse") {
+            ident.2 = rev(ident.2)
+          }
+          else {
+            stop("order.split needs to be either 'reverse' or a character vector")
+          }
+        }
+      }
+      else {
+        stop("order.split needs to be either 'reverse' or a character vector")
+      }
     }
     ident.3 = NULL
     for (i in ident.1) {
@@ -263,6 +305,30 @@ DotPlot_Heatmap = function(seurat_object,
     idents.colors = SeuratColors(n = length(ident.1))
   }
   idents.colors2 = idents.colors
+  if (isTRUE(order.colors)) {
+    if (is.character(order.idents)) {
+      if (length(order.idents) > 1) {
+        names(idents.colors) = ident.1
+        idents.colors = idents.colors[order.idents]
+      }
+      else {
+        if (order.idents == "reverse") {
+          idents.colors = rev(idents.colors)
+        }
+      }
+    }
+    if (is.character(order.split) & is.character(split.by)) {
+      if (length(order.split) > 1) {
+        names(split.colors) = ident.2
+        split.colors = split.colors[order.split]
+      }
+      else {
+        if (order.split == "reverse") {
+          split.colors = rev(split.colors)
+        }
+      }
+    }
+  }
   if (is.character(split.by)) {
     dup.colors = list()
     for (i in idents.colors) {
@@ -270,6 +336,7 @@ DotPlot_Heatmap = function(seurat_object,
     }
     idents.colors = unlist(dup.colors)
   }
+
 
   idents.legend = NULL
   split.legend = NULL

@@ -30,6 +30,9 @@ DotPlot_Heatmap(
   split.colors = NULL,
   show.split.names.colors = TRUE,
   show.split.dend.colors = TRUE,
+  order.idents = NULL,
+  order.split = NULL,
+  order.colors = TRUE,
   kmeans.repeats = 100,
   cluster.rows = TRUE,
   row.kmeans = 1,
@@ -76,7 +79,7 @@ DotPlot_Heatmap(
 
 \item{rotate.axis}{Logical. If TRUE, flips the axis, so that genes are displayed as rows and identities as columns.}
 
-\item{dotplot}{Logical. If TRUE, the function will create a dotplot, with dot size proportional to the percentage of cells expressing the feature. If FALSE, the function will create a heatmap. Credits to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the layer_fun function that draws the dots.}
+\item{dotplot}{Logical. If TRUE, the function will create a dotplot, with dot size proportional to the percentage of cells expressing the feature. If FALSE, the function will create a heatmap.}
 
 \item{dots.type}{Character. Determines the dot size difference between 0 and 100\% expression. Either 'square root' (lower difference) or 'radius' (higher difference). Ignored if dotplot = FALSE.}
 
@@ -103,6 +106,12 @@ DotPlot_Heatmap(
 \item{show.split.names.colors}{Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to identity names. Ignored if split.by = NULL.}
 
 \item{show.split.dend.colors}{Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to the dendogram. Ignored if split.by = NULL or if cluster.rows and cluster.columns are set to FALSE.}
+
+\item{order.idents}{Character. A vector specifying either "reverse" or the levels of the active.ident identity to order the cells.}
+
+\item{order.split}{Character. A vector specifying either "reverse" or the levels of the split.by identity to order the cells. Ignored if split.by is NULL.}
+
+\item{order.colors}{Logical. If TRUE, the colors for idents and split.idents will automatically be ordered according to order.idents and order.split. Ignored if order.idents and order.split are NULL.}
 
 \item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if cluster.rows and cluster.columns are set to FALSE.}
 
@@ -154,5 +163,5 @@ DotPlot_Heatmap(
 A dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
 }
 \description{
-This function generates a dotplot or a heatmap to visualize features expression in a Seurat object.
+This function generates a dotplot or a heatmap to visualize features expression in a Seurat object. Credits to Seurat's dev team for the original DotPlot() function from which data processing of this function is derived from and to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the initial idea to use ComplexHeatmap to draw a dotplot and the layer_fun function that draws the dots. Slight improvements were implemented here and there for my personal use, and made available to all through my package.
 }

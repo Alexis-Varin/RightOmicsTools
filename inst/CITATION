@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "RightSeuratTools: An R Package Providing Complementary Tools for the Manipulation and Visualization of Single Cell RNA-Seq Data in a Seurat Object.",
+  author   = "Varin, Alexis.",
+  journal  = "Zenodo",
+  year     = "2024",
+  doi      = "10.5281/zenodo.12518909"
+)
