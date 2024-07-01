@@ -17,6 +17,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12518910.svg)](https://doi.org/10.5281/zenodo.12518910)
+[![](https://img.shields.io/badge/devel%20version-1.0.1-orange.svg)](https://github.com/Alexis-Varin/RightSeuratTools)
+[![R-CMD-check](https://github.com/Alexis-Varin/RightSeuratTools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Alexis-Varin/RightSeuratTools/actions/workflows/R-CMD-check.yaml)
+[![](https://img.shields.io/github/languages/code-size/Alexis-Varin/RightSeuratTools.svg)](https://github.com/Alexis-Varin/RightSeuratTools)
+[![](https://img.shields.io/github/last-commit/Alexis-Varin/RightSeuratTools.svg)](https://github.com/Alexis-Varin/RightSeuratTools/commits/main)
 <!-- badges: end -->
 
 This package is a collection of various tools to facilitate the use of Seurat objects in R. It is intended to be used in conjunction with the Seurat package, and is not a standalone package. The package is currently in development and will be updated regularly with new functions and improvements, so be sure to check regularly for updates on this page.
@@ -174,7 +178,7 @@ A ggplot object, a list of ggplot objects, a patchwork of ggplot objects or a li
 
 ### Description
 
-This function generates a dotplot or a heatmap to visualize features expression in a Seurat object.
+This function generates a dotplot or a heatmap to visualize features expression in a Seurat object. Credits to Seurat's dev team for the original DotPlot() function from which data processing of this function is derived from and to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the initial idea to use ComplexHeatmap to draw a dotplot and the layer_fun function that draws the dots. Slight improvements were implemented here and there for my personal use, and made available to all through my package.
 
 ### Dependencies
 
@@ -196,7 +200,33 @@ TBD
 
 ### Output
 
-A dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
+A ComplexHeatmap object, either as a dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
+
+## Grid_VlnPlot
+
+### Description
+
+This function is a stacked violin plot optimized to display features expression in a Seurat object in a grid fashion (square) instead of a single column like other stacked violin functions available in other packages, resulting in nicer plots and easier to include in publications.
+
+### Dependencies
+
+-   Seurat version \>= 5.0.0
+-   SeuratObject version \>= 5.0.0
+-   data.table
+-   ggplot2
+-   grDevices
+
+### Usage
+
+TBD
+
+### Arguments
+
+TBD
+
+### Output
+
+A ggplot object.
 
 ## GSEA_Signatures
 

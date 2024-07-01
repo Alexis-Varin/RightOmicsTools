@@ -53,7 +53,7 @@
 #' @param output.data Logical. If TRUE, the function will return the matrices instead of drawing the heatmap.
 #' @param ... Additional arguments to pass to the ComplexHeatmap::Heatmap() function, such as column_names_gp, clustering_method_columns, etc, accepts any parameter that wasn't already internally passed to ComplexHeatmap::Heatmap() (for example, cluster.columns sets the cluster_columns parameter of the inner function, so you will get an error if you try to pass it again).
 #'
-#' @return A dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
+#' @return A ComplexHeatmap object, either as a dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
 #'
 #' @import Seurat
 #' @import SeuratObject
