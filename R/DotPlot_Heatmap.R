@@ -18,7 +18,7 @@
 #' @param show.na.dots Logical. If TRUE, the function will display a small dot for features that are not expressed (0% expression) instead of nothing. Ignored if dotplot = FALSE.
 #' @param col.min Character or Numeric. The minimum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q5' by default, which is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).
 #' @param col.max Character or Numeric. The maximum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q95' by default, which is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).
-#' @param data.colors Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors and/or 1 palette, one for the dotplot and one for the heatmap.
+#' @param data.colors Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors and/or 1 palette, one for 'dotplot' if dotplot = TRUE and one for 'heatmap' if dotplot = FALSE.
 #' @param na.color Character. The color to use for NA values. Ignored if dotplot = TRUE.
 #' @param idents.colors Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the idents parameter. If NULL, uses Seurat's default colors.
 #' @param show.idents.names.colors Logical. If TRUE, the function will display the colors specified by the idents.colors parameter next to identity names.
@@ -41,7 +41,7 @@
 #' @param column.names.height Numeric. The height of the column names. Increase this parameter if your column names are truncated.
 #' @param inner.border Logical. If TRUE, the function will display an inner border around each cell of the heatmap. Ignored if dotplot = TRUE.
 #' @param outer.border Logical. If TRUE, the function will display an outer border around the plot or around each slice if k-means is higher than 1.
-#' @param data.legend.name Character. The name of the data legend.
+#' @param data.legend.name Character. The name of the data legend. Either a single character value or a named list with two character values, one for 'scaled' if scale = TRUE and one for 'unscaled' if scale = FALSE.
 #' @param data.legend.side Character. The side where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.
 #' @param data.legend.direction Character. The direction of the data legend, either 'horizontal' or 'vertical'.
 #' @param data.legend.position Numeric. The centering of the data legend name, there are many options, default option from ComplexHeatmap::Heatmap() is 'topleft'.
@@ -104,7 +104,8 @@ DotPlot_Heatmap = function(seurat_object,
                          column.names.height = unit(15, "cm"),
                          inner.border = TRUE,
                          outer.border = TRUE,
-                         data.legend.name = "Expression",
+                         data.legend.name = list(scaled = "Z-Score",
+                                                 unscaled = "Average Expression"),
                          data.legend.side = "bottom",
                          data.legend.direction = "horizontal",
                          data.legend.position = "topcenter",
@@ -235,6 +236,9 @@ DotPlot_Heatmap = function(seurat_object,
     mat = log1p(mat)
   }
   if (isTRUE(scale)) {
+    if (nrow(mat) < 5) {
+      warning("Scaling may produce misleading visualization if there are too few identities, it is recommended to have at least 5")
+    }
     mat = scale(mat)
   }
 
@@ -541,6 +545,15 @@ DotPlot_Heatmap = function(seurat_object,
       na.label = list()
     }
     anno.legend = c(na.label,anno.legend)
+  }
+
+  if (is.list(data.legend.name)) {
+    if (isTRUE(scale)) {
+      data.legend.name = data.legend.name[["scaled"]]
+    }
+    else {
+      data.legend.name = data.legend.name[["unscaled"]]
+    }
   }
 
   zero.dot = 0

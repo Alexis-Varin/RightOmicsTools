@@ -12,7 +12,8 @@
 #' @param filter.ribo Logical. If TRUE, ribosomal genes will be filtered out.
 #' @param filter.ncRNA Logical. If TRUE, non-coding RNA genes will be filtered out.
 #' @param species Character. The species from which to pull data to filter out genes. If "human", non-coding RNA genes will be filtered out from a dataset named ncRNA_human built from genenames database. If "mouse", only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from dreamBase2 database. These datasets are loaded with RightSeuratTools package and may be checked for more information.
-#' @param parallelized Logical. If TRUE, FindMarkers will be parallelized with future and future.apply packages. Default is FALSE, as this consumes a lot more RAM (up to several hundreds of GB for very large datasets with hundreds of thousands of cells) and may easily crash your R session. Use with caution, is however incredibly fast, few seconds per cluster.
+#' @param parallelized Logical. If TRUE, FindMarkers will be parallelized using BiocParallel.
+#' @param BPPARAM A BiocParallelParam object to be used for parallelization. If NULL, will use SerialParam() which is not parallelized. Ignored if parallelized = FALSE.
 #' @param output.df Logical. If TRUE, a data frame of gene names and associated statistics will be returned. If FALSE, a character vector of gene names will be returned.
 #' @param output.list Logical. If TRUE, a list of gene names with or without statistics for each cluster will be returned.
 #' @param verbose Logical. If FALSE, does not print progress messages and output, but warnings and errors will still be printed.
@@ -41,8 +42,7 @@
 #'                        output.list = FALSE)
 #' @import Seurat
 #' @import SeuratObject
-#' @import future
-#' @import future.apply
+#' @import BiocParallel
 #' @export
 
 Find_Annotation_Markers = function(seurat_object,
@@ -56,6 +56,7 @@ Find_Annotation_Markers = function(seurat_object,
                                    filter.ncRNA = TRUE,
                                    species = "human",
                                    parallelized = FALSE,
+                                   BPPARAM = NULL,
                                    output.df = TRUE,
                                    output.list = FALSE,
                                    verbose = TRUE,
@@ -73,37 +74,41 @@ Find_Annotation_Markers = function(seurat_object,
   }
 
   if (isTRUE(parallelized)) {
+    if (is.null(BPPARAM)) {
+      warning("No BPPARAM parameter provided, using SerialParam(), which is not parallelized")
+      BPPARAM = SerialParam()
+    }
     if (is.null(ident.1) & is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = future_lapply(idents, function(x) {
+      all.markers2 = bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",x," against all other clusters","\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = x, min.pct = min.pct, ...)
-      }, future.seed = TRUE)
+      }, BPPARAM = BPPARAM)
     }
 
     if (is.null(ident.1) & !is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = future_lapply(idents, function(x) {
+      all.markers2 = bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",x," against cluster ",ident.2,"\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = x, ident.2 = ident.2, min.pct = min.pct, ...)
-      }, future.seed = TRUE)
+      }, BPPARAM = BPPARAM)
     }
 
     if (is.null(ident.2) & !is.null(ident.1)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = future_lapply(idents, function(x) {
+      all.markers2 = bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",ident.1," against cluster ",x,"\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = x, min.pct = min.pct, ...)
-      }, future.seed = TRUE)
+      }, BPPARAM = BPPARAM)
     }
 
     if (!is.null(ident.2) & !is.null(ident.1)) {
@@ -116,7 +121,7 @@ Find_Annotation_Markers = function(seurat_object,
     }
   }
 
-  if (isFALSE(parallelized)) {
+  else {
     if (is.null(ident.1) & is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))

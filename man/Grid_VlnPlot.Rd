@@ -10,6 +10,7 @@ Grid_VlnPlot(
   layer = "data",
   features = NULL,
   idents = NULL,
+  scale = TRUE,
   rotate.axis = FALSE,
   colors = NULL,
   order.idents = NULL,
@@ -33,6 +34,8 @@ Grid_VlnPlot(
 \item{features}{Character. A vector of features to plot.}
 
 \item{idents}{Character. A vector with one or several identities in the active.ident identity to use if you only want those (instead of subsetting your object). If NULL, all identities will be used.}
+
+\item{scale}{Logical. If TRUE, scales the violins to have the same max height between features.}
 
 \item{rotate.axis}{Logical. If TRUE, flips the axis, effectively displaying violins vertically instead of horizontally.}
 

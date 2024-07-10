@@ -16,6 +16,7 @@ Find_Annotation_Markers(
   filter.ncRNA = TRUE,
   species = "human",
   parallelized = FALSE,
+  BPPARAM = NULL,
   output.df = TRUE,
   output.list = FALSE,
   verbose = TRUE,
@@ -43,7 +44,9 @@ Find_Annotation_Markers(
 
 \item{species}{Character. The species from which to pull data to filter out genes. If "human", non-coding RNA genes will be filtered out from a dataset named ncRNA_human built from genenames database. If "mouse", only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from dreamBase2 database. These datasets are loaded with RightSeuratTools package and may be checked for more information.}
 
-\item{parallelized}{Logical. If TRUE, FindMarkers will be parallelized with future and future.apply packages. Default is FALSE, as this consumes a lot more RAM (up to several hundreds of GB for very large datasets with hundreds of thousands of cells) and may easily crash your R session. Use with caution, is however incredibly fast, few seconds per cluster.}
+\item{parallelized}{Logical. If TRUE, FindMarkers will be parallelized using BiocParallel.}
+
+\item{BPPARAM}{A BiocParallelParam object to be used for parallelization. If NULL, will use SerialParam() which is not parallelized. Ignored if parallelized = FALSE.}
 
 \item{output.df}{Logical. If TRUE, a data frame of gene names and associated statistics will be returned. If FALSE, a character vector of gene names will be returned.}
 

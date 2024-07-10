@@ -45,7 +45,7 @@ DotPlot_Heatmap(
   column.names.height = unit(15, "cm"),
   inner.border = TRUE,
   outer.border = TRUE,
-  data.legend.name = "Expression",
+  data.legend.name = list(scaled = "Z-Score", unscaled = "Average Expression"),
   data.legend.side = "bottom",
   data.legend.direction = "horizontal",
   data.legend.position = "topcenter",
@@ -91,7 +91,7 @@ DotPlot_Heatmap(
 
 \item{col.max}{Character or Numeric. The maximum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. 'q95' by default, which is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).}
 
-\item{data.colors}{Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors and/or 1 palette, one for the dotplot and one for the heatmap.}
+\item{data.colors}{Character or List. Either a vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available), or a named list of two vectors of 3 colors and/or 1 palette, one for 'dotplot' if dotplot = TRUE and one for 'heatmap' if dotplot = FALSE.}
 
 \item{na.color}{Character. The color to use for NA values. Ignored if dotplot = TRUE.}
 
@@ -137,7 +137,7 @@ DotPlot_Heatmap(
 
 \item{outer.border}{Logical. If TRUE, the function will display an outer border around the plot or around each slice if k-means is higher than 1.}
 
-\item{data.legend.name}{Character. The name of the data legend.}
+\item{data.legend.name}{Character. The name of the data legend. Either a single character value or a named list with two character values, one for 'scaled' if scale = TRUE and one for 'unscaled' if scale = FALSE.}
 
 \item{data.legend.side}{Character. The side where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.}
 
@@ -160,7 +160,7 @@ DotPlot_Heatmap(
 \item{...}{Additional arguments to pass to the ComplexHeatmap::Heatmap() function, such as column_names_gp, clustering_method_columns, etc, accepts any parameter that wasn't already internally passed to ComplexHeatmap::Heatmap() (for example, cluster.columns sets the cluster_columns parameter of the inner function, so you will get an error if you try to pass it again).}
 }
 \value{
-A dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
+A ComplexHeatmap object, either as a dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
 }
 \description{
 This function generates a dotplot or a heatmap to visualize features expression in a Seurat object. Credits to Seurat's dev team for the original DotPlot() function from which data processing of this function is derived from and to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the initial idea to use ComplexHeatmap to draw a dotplot and the layer_fun function that draws the dots. Slight improvements were implemented here and there for my personal use, and made available to all through my package.

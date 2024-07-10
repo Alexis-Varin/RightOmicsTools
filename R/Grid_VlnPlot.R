@@ -7,6 +7,7 @@
 #' @param layer Character. Formerly known as slot. It is recommended to use 'data'.
 #' @param features Character. A vector of features to plot.
 #' @param idents Character. A vector with one or several identities in the active.ident identity to use if you only want those (instead of subsetting your object). If NULL, all identities will be used.
+#' @param scale Logical. If TRUE, scales the violins to have the same max height between features.
 #' @param rotate.axis Logical. If TRUE, flips the axis, effectively displaying violins vertically instead of horizontally.
 #' @param colors Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the idents parameter. If NULL, uses Seurat's default colors.
 #' @param order.idents Character. A vector specifying either "reverse" or the levels of the active.ident identity to order the cells.
@@ -33,6 +34,7 @@ Grid_VlnPlot = function(seurat_object,
                         layer = "data",
                         features = NULL,
                         idents = NULL,
+                        scale = TRUE,
                         rotate.axis = FALSE,
                         colors = NULL,
                         order.idents = NULL,
@@ -103,19 +105,31 @@ Grid_VlnPlot = function(seurat_object,
   }
   if (isFALSE(rotate.axis)) {
     gg = ggplot(data, aes(y=ident, x=expression, fill=ident)) + geom_violin(scale = "width", trim = T, adjust = 1) +
-      facet_wrap(~gene, ncol=ncol, scales="free_x") + labs(y="", x="", fill ="") + theme_bw()  +
+      labs(y="", x="", fill ="") + theme_bw()  +
       theme(legend.position=legend.position, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
             axis.text.x=element_blank(), axis.ticks.x=element_blank(), strip.text.x = element_text(size = features.text.size),
             panel.grid = element_blank()) +
       scale_fill_manual(values = colors)
+    if (isTRUE(scale)) {
+      gg = gg + facet_wrap(~gene, ncol=ncol, scales="free_x")
+    }
+    else {
+      gg = gg + facet_wrap(~gene, ncol=ncol)
+    }
   }
   else {
     gg = ggplot(data, aes(y=expression, x=ident, fill=ident)) + geom_violin(scale = "width", trim = T, adjust = 1) +
-      facet_wrap(~gene, ncol=ncol, scales="free_y") + labs(y="", x="", fill ="") + theme_bw()  +
+      labs(y="", x="", fill ="") + theme_bw()  +
       theme(legend.position=legend.position, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
             axis.text.y=element_blank(), axis.ticks.y=element_blank(), strip.text.x = element_text(size = features.text.size),
             panel.grid = element_blank()) +
       scale_fill_manual(values = colors)
+    if (isTRUE(scale)) {
+      gg = gg + facet_wrap(~gene, ncol=ncol, scales="free_y")
+    }
+    else {
+      gg = gg + facet_wrap(~gene, ncol=ncol)
+    }
   }
   if (isFALSE(show.idents) & isFALSE(rotate.axis)) {
     gg = gg + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
