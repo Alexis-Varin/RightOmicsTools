@@ -8,7 +8,7 @@ Grid_VlnPlot(
   seurat_object,
   assay = "RNA",
   layer = "data",
-  features = NULL,
+  features,
   idents = NULL,
   scale = TRUE,
   rotate.axis = FALSE,

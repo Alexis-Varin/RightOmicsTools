@@ -32,7 +32,7 @@
 Grid_VlnPlot = function(seurat_object,
                         assay = "RNA",
                         layer = "data",
-                        features = NULL,
+                        features,
                         idents = NULL,
                         scale = TRUE,
                         rotate.axis = FALSE,
@@ -46,10 +46,6 @@ Grid_VlnPlot = function(seurat_object,
                         legend.position = "bottom",
                         legend = TRUE,
                         ncol = "square") {
-
-  if (!is.character(features)) {
-    stop("Please provide features to plot.")
-  }
 
   if (!is.character(idents)) {
     ident.1 = levels(Idents(seurat_object))
