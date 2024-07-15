@@ -158,7 +158,7 @@ DotPlot_Heatmap = function(seurat_object,
     vars = c("ident",features)
   }
   DefaultAssay(seurat_object) = assay
-  data = FetchData(object = seurat_object, vars = vars, layer = layer)
+  data = suppressWarnings(FetchData(object = seurat_object, vars = vars, layer = layer))
   if (is.character(split.by)) {
     if (!is.character(split.idents)) {
       Idents(seurat_object) = split.by
@@ -232,6 +232,16 @@ DotPlot_Heatmap = function(seurat_object,
   dot = dot[ident.3, ]
   if (isTRUE(data.are.log) & layer == "data") {
     mat = log1p(mat)
+  }
+  dot = dot[rowSums(is.na(mat)) < ncol(mat), ]
+  mat = mat[rowSums(is.na(mat)) < ncol(mat), ]
+  idents.removed = setdiff(ident.3, rownames(mat))
+  dot = dot[ , colSums(mat) > 0]
+  mat = mat[ , colSums(mat) > 0]
+  features.removed = setdiff(colnames(data), colnames(mat))
+  features.removed = features.removed[!features.removed == "ident"]
+  if (length(features.removed) > 0) {
+    warning("The following features were removed as they were not expressed in any cells:\n ",paste0(" ",features.removed, collapse = ","))
   }
   if (isTRUE(scale)) {
     if (nrow(mat) < 5) {
@@ -320,13 +330,24 @@ DotPlot_Heatmap = function(seurat_object,
   }
   idents.colors2 = idents.colors
   if (is.character(split.by)) {
+    split.colors2 = split.colors
     dup.colors = list()
+    dup.colors2 = list()
     for (i in idents.colors) {
       dup.colors[[i]] = rep(i, length(ident.3)/length(ident.1))
+      dup.colors2[[i]] = split.colors
     }
     idents.colors = unlist(dup.colors)
+    split.colors = unlist(dup.colors2)
+    names(idents.colors) = ident.3
+    names(split.colors) = ident.3
+    idents.colors = idents.colors[!names(idents.colors) %in% idents.removed]
+    split.colors = split.colors[!names(split.colors) %in% idents.removed]
   }
-
+  else {
+    names(idents.colors) = ident.3
+    idents.colors = idents.colors[!names(idents.colors) %in% idents.removed]
+  }
 
   idents.legend = NULL
   split.legend = NULL
@@ -339,7 +360,7 @@ DotPlot_Heatmap = function(seurat_object,
   }
   if (is.character(split.by) & isTRUE(show.split.legend)) {
     split.legend = Legend(at = ident.2,
-                          legend_gp = gpar(fill = split.colors),
+                          legend_gp = gpar(fill = split.colors2),
                           title = split.legend.name,
                           gap = unit(0.5, "cm"),
                           border = TRUE)
@@ -352,7 +373,8 @@ DotPlot_Heatmap = function(seurat_object,
     anno.legend = c(anno.legend, list(split.legend))
   }
   if (is.character(split.by)) {
-    ident.1 = ident.3
+    ident.1 = names(idents.colors)
+    dup.ident = names(split.colors)
   }
   if (isFALSE(rotate.axis)) {
     annotation.side = "row"
@@ -367,21 +389,13 @@ DotPlot_Heatmap = function(seurat_object,
   column.dend.side = "top"
   column.title.side = "top"
   if (is.character(split.by)) {
-    dup.colors = list()
-    dup.ident = list()
-    for (i in 1:length(ident.1)) {
-      dup.colors[[i]] = split.colors
-      dup.ident[[i]] = ident.2
-    }
-    split.colors = rep(split.colors, length(ident.1)/length(ident.2))
-    dup.ident = rep(ident.2, length(ident.1)/length(ident.2))
     if (isTRUE(show.split.names.colors) & isTRUE(show.idents.names.colors)) {
       if ((row.names.side == "left" & isFALSE(rotate.axis)) | (column.names.side == "bottom" & isTRUE(rotate.axis))) {
         idents.labels = HeatmapAnnotation(
           Identities = ident.1,
           Split = dup.ident,
-          col = list(Identities = setNames(idents.colors, ident.1),
-                     Split = setNames(split.colors, dup.ident)),
+          col = list(Identities = idents.colors,
+                     Split = split.colors),
           na_col = "grey40",
           which = annotation.side,
           show_annotation_name = FALSE,
@@ -391,8 +405,8 @@ DotPlot_Heatmap = function(seurat_object,
         idents.labels = HeatmapAnnotation(
           Split = dup.ident,
           Identities = ident.1,
-          col = list(Split = setNames(split.colors, dup.ident),
-                     Identities = setNames(idents.colors, ident.1)),
+          col = list(Split = split.colors,
+                     Identities = idents.colors),
           na_col = "grey40",
           which = annotation.side,
           show_annotation_name = FALSE,
@@ -402,7 +416,7 @@ DotPlot_Heatmap = function(seurat_object,
     else if (isTRUE(show.idents.names.colors)) {
       idents.labels = HeatmapAnnotation(
         Identities = ident.1,
-        col = list(Identities = setNames(idents.colors, ident.1)),
+        col = list(Identities = idents.colors),
         na_col = "grey40",
         which = annotation.side,
         show_annotation_name = FALSE,
@@ -411,7 +425,7 @@ DotPlot_Heatmap = function(seurat_object,
     else if (isTRUE(show.split.names.colors)) {
       idents.labels = HeatmapAnnotation(
         Split = dup.ident,
-        col = list(Split = setNames(split.colors, dup.ident)),
+        col = list(Split = split.colors),
         na_col = "grey40",
         which = annotation.side,
         show_annotation_name = FALSE,
@@ -426,8 +440,8 @@ DotPlot_Heatmap = function(seurat_object,
           idents.labels2 = HeatmapAnnotation(
             Split = dup.ident,
             Identities = ident.1,
-            col = list(Split = setNames(split.colors, dup.ident),
-                       Identities = setNames(idents.colors, ident.1)),
+            col = list(Split = split.colors,
+                       Identities = idents.colors),
             na_col = "grey40",
             which = annotation.side,
             show_annotation_name = FALSE,
@@ -437,8 +451,8 @@ DotPlot_Heatmap = function(seurat_object,
           idents.labels2 = HeatmapAnnotation(
             Identities = ident.1,
             Split = dup.ident,
-            col = list(Identities = setNames(idents.colors, ident.1),
-                       Split = setNames(split.colors, dup.ident)),
+            col = list(Identities = idents.colors,
+                       Split = split.colors),
             na_col = "grey40",
             which = annotation.side,
             show_annotation_name = FALSE,
@@ -448,7 +462,7 @@ DotPlot_Heatmap = function(seurat_object,
       else if (isTRUE(show.idents.dend.colors)) {
         idents.labels2 = HeatmapAnnotation(
           Identities = ident.1,
-          col = list(Identities = setNames(idents.colors, ident.1)),
+          col = list(Identities = idents.colors),
           na_col = "grey40",
           which = annotation.side,
           show_annotation_name = FALSE,
@@ -457,7 +471,7 @@ DotPlot_Heatmap = function(seurat_object,
       else if (isTRUE(show.split.dend.colors)) {
         idents.labels2 = HeatmapAnnotation(
           Split = dup.ident,
-          col = list(Split = setNames(split.colors, dup.ident)),
+          col = list(Split = split.colors),
           na_col = "grey40",
           which = annotation.side,
           show_annotation_name = FALSE,
@@ -472,7 +486,7 @@ DotPlot_Heatmap = function(seurat_object,
     if (isTRUE(show.idents.names.colors)) {
       idents.labels = HeatmapAnnotation(
         Identities = ident.1,
-        col = list(Identities = setNames(idents.colors, ident.1)),
+        col = list(Identities = idents.colors),
         na_col = "grey40",
         which = annotation.side,
         show_annotation_name = FALSE,
@@ -484,7 +498,7 @@ DotPlot_Heatmap = function(seurat_object,
     if ((!isFALSE(cluster.rows) & isFALSE(rotate.axis) & isTRUE(show.idents.dend.colors)) | (!isFALSE(cluster.columns) & isTRUE(rotate.axis) & isTRUE(show.idents.dend.colors))) {
     idents.labels2 = HeatmapAnnotation(
       Identities = ident.1,
-      col = list(Identities = setNames(idents.colors, ident.1)),
+      col = list(Identities = idents.colors),
       na_col = "grey40",
       which = annotation.side,
       show_annotation_name = FALSE,
@@ -523,7 +537,7 @@ DotPlot_Heatmap = function(seurat_object,
     if (sum(is.na(mat)) > 0) {
       na.label = list(Legend(at = "NA",
                         legend_gp = gpar(fill = na.color),
-                        title = "NA",
+                        title = NULL,
                         gap = unit(0.5, "cm"),
                         border = TRUE))
     }
@@ -632,7 +646,7 @@ DotPlot_Heatmap = function(seurat_object,
     if (isTRUE(inner.border)) {
       inner.border = gpar(col = "black")
     }
-    if (isFALSE(inner.border)) {
+    else {
       inner.border = gpar(col = NA)
     }
     ht = draw(Heatmap(
