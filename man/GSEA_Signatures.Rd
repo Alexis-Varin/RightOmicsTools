@@ -11,7 +11,7 @@ GSEA_Signatures(
   species = "Homo sapiens",
   category = NULL,
   subcategory = NULL,
-  pathways = NULL,
+  pathways,
   min.features = 2,
   signatures.names = "name",
   method = "UCell",
@@ -22,9 +22,9 @@ GSEA_Signatures(
 )
 }
 \arguments{
-\item{seurat_object}{A Seurat object.}
+\item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See Seurat v5 vignettes for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See Seurat v5 vignettes for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. If you have split layers the function will always join them before adding the signatures.}
 
@@ -36,23 +36,23 @@ GSEA_Signatures(
 
 \item{pathways}{Character. The names of the pathways to be used to create the signatures. You may provide either a pathway id (for example, 'GO:0006574') or a name matching the pattern found in gs_name column (all caps and underscores between words). Please note that you may also provide a partial match (for example, 'TYPE_I_INTERFERON') and the function will find all pathways containing this partial string. Beware that this may result in a large number of pathways to be added as signatures (using only.features = \code{TRUE} is highly recommended) but is very handy to explore all pathways of interest in a particular biological process.}
 
-\item{min.features}{Numeric. The minimum number of features present in the Seurat object for a pathway to be considered.}
+\item{min.features}{Numeric. The minimum number of features present in the \pkg{Seurat} object for a pathway to be considered.}
 
 \item{signatures.names}{Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use only.features = \code{TRUE} and set signatures.names = 'name' or 'id' to get the number of signatures you need to provide names for.}
 
 \item{method}{Character. The method you want to use to calculate the module scores, either 'UCell' or 'Seurat'.}
 
-\item{only.features}{Logical. If \code{TRUE}, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the features from the pathways found in the Seurat object and the features present in the Seurat object.}
+\item{only.features}{Logical. If \code{TRUE}, the function will not add any signature to the \pkg{Seurat} object and will only return the \pkg{Seurat} object as well as the features from the pathways found in the \pkg{Seurat} object and the features present in the \pkg{Seurat} object.}
 
-\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the Seurat object. If the number of signatures found is higher than this number, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the features from the pathways found in the Seurat object and the features present in the Seurat object.}
+\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the \pkg{Seurat} object. If the number of signatures found is higher than this number, the function will not add any signature to the \pkg{Seurat} object and will only return the \pkg{Seurat} object as well as the features from the pathways found in the \pkg{Seurat} object and the features present in the \pkg{Seurat} object.}
 
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 
 \item{...}{Additional arguments to be passed to \code{\link[UCell]{AddModuleScore_UCell}} or \code{\link[Seurat]{AddModuleScore}}.}
 }
 \value{
-A list containing the Seurat object with the added signatures if only.features = \code{FALSE}, the features from the pathways, the features present in the Seurat object and the names of the signatures in the Seurat object.
+A list containing the \pkg{Seurat} object with the added signatures if only.features = \code{FALSE}, the features from the pathways, the features present in the \pkg{Seurat} object and the names of the signatures in the \pkg{Seurat} object.
 }
 \description{
-This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from the pathways's features present in the Seurat object.
+This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from the pathways's features present in the \pkg{Seurat} object.
 }
