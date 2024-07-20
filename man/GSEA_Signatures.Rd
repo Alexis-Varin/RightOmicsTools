@@ -12,10 +12,10 @@ GSEA_Signatures(
   category = NULL,
   subcategory = NULL,
   pathways = NULL,
-  min.genes = 2,
+  min.features = 2,
   signatures.names = "name",
   method = "UCell",
-  only.genes = FALSE,
+  only.features = FALSE,
   fail.safe = 10,
   verbose = TRUE,
   ...
@@ -24,35 +24,35 @@ GSEA_Signatures(
 \arguments{
 \item{seurat_object}{A Seurat object.}
 
-\item{assay}{Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example "RNA2" if you have created a second RNA assay you named "RNA2". See Seurat v5 vignettes for more information). You may also use another assay such as SCT to pull gene expression from.}
+\item{assay}{Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See Seurat v5 vignettes for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. If you have split layers the function will always join them before adding the signatures.}
 
-\item{species}{Character. The species name to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_species() for the list of available species.}
+\item{species}{Character. The species name to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_species}} for the list of available species.}
 
-\item{category}{Character. The category or categories to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_collections() for the list of available categories (gs_cat column). Leave NULL to use all categories.}
+\item{category}{Character. The category or categories to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_collections}} for the list of available categories (gs_cat column). If \code{NULL}, all categories will be used.}
 
-\item{subcategory}{Character. The subcategory or subcategories to be passed to msigdbr to build the pathways database. Use msigdbr::msigdbr_collections() for the list of available subcategories (gs_subcat column). Leave NULL to use all subcategories.}
+\item{subcategory}{Character. The subcategory or subcategories to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_collections}} for the list of available subcategories (gs_subcat column). If \code{NULL}, all subcategories will be used.}
 
-\item{pathways}{Character. The names of the pathways to be used to create the signatures. You may provide either a pathway id (for example, "GO:0006574") or a name matching the pattern found in msigdbr$gs_name (all caps and underscores between words). Please note that you may provide a partial match (for example, "TYPE_I_INTERFERON") and the function will find all pathways containing this partial string. Beware that this may result in a large number of pathways to be added as signatures (using only.genes = TRUE is highly recommended) but is very handy to explore all pathways of interest in a particular field or biological process.}
+\item{pathways}{Character. The names of the pathways to be used to create the signatures. You may provide either a pathway id (for example, 'GO:0006574') or a name matching the pattern found in gs_name column (all caps and underscores between words). Please note that you may also provide a partial match (for example, 'TYPE_I_INTERFERON') and the function will find all pathways containing this partial string. Beware that this may result in a large number of pathways to be added as signatures (using only.features = \code{TRUE} is highly recommended) but is very handy to explore all pathways of interest in a particular biological process.}
 
-\item{min.genes}{Numeric. The minimum number of genes present in the Seurat object for a pathway to be considered.}
+\item{min.features}{Numeric. The minimum number of features present in the Seurat object for a pathway to be considered.}
 
-\item{signatures.names}{Character. "id" will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), "name" will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use only.genes = TRUE and set signatures.names = "name" or "id" to get the number of signatures you need to provide names for.}
+\item{signatures.names}{Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use only.features = \code{TRUE} and set signatures.names = 'name' or 'id' to get the number of signatures you need to provide names for.}
 
-\item{method}{Character. The method you want to use to calculate the module scores, either "UCell" or "Seurat".}
+\item{method}{Character. The method you want to use to calculate the module scores, either 'UCell' or 'Seurat'.}
 
-\item{only.genes}{Logical. If TRUE, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the genes from the pathways found in the Seurat object and the genes present in the Seurat object.}
+\item{only.features}{Logical. If \code{TRUE}, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the features from the pathways found in the Seurat object and the features present in the Seurat object.}
 
-\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the Seurat object. If the number of signatures found is higher than this number, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the genes from the pathways found in the Seurat object and the genes present in the Seurat object.}
+\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the Seurat object. If the number of signatures found is higher than this number, the function will not add any signature to the Seurat object and will only return the Seurat object as well as the features from the pathways found in the Seurat object and the features present in the Seurat object.}
 
-\item{verbose}{Logical. If FALSE, does not print progress messages and output, but warnings and errors will still be printed.}
+\item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 
-\item{...}{Additional arguments to be passed to UCell's or Seurat's AddModuleScore() function.}
+\item{...}{Additional arguments to be passed to \code{\link[UCell]{AddModuleScore_UCell}} or \code{\link[Seurat]{AddModuleScore}}.}
 }
 \value{
-A list containing the Seurat object with the added signatures if only.genes = FALSE, the genes from the pathways, the genes present in the Seurat object and the names of the signatures in the Seurat object.
+A list containing the Seurat object with the added signatures if only.features = \code{FALSE}, the features from the pathways, the features present in the Seurat object and the names of the signatures in the Seurat object.
 }
 \description{
-This function creates signatures (module scores calculated from UCell or Seurat's respective functions) from the pathways's genes present in the Seurat object.
+This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from the pathways's features present in the Seurat object.
 }
