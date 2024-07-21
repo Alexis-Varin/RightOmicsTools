@@ -32,7 +32,7 @@
 #' @param show.split.dend.colors Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to the dendrogram. Ignored if \code{split.by} = \code{NULL}.
 #' @param order.idents Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.
 #' @param order.split Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.
-#' @param order.colors Logical. If \code{TRUE}, the colors for \code{idents} and \code{split.idents} will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.
+#' @param order.colors Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.
 #' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.idents} and \code{cluster.features} are \code{FALSE}.
 #' @param cluster.idents Logical or Function. If \code{TRUE}, the function will cluster the identities. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.
 #' @param idents.kmeans Numeric. The number of k-means slices to use for identities clustering.
@@ -45,7 +45,7 @@
 #' @param features.names.style Character. The font face of the features names. The Gene nomenclature used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.
 #' @param row.names.side Character. The side where the row names will be displayed, either 'left' or 'right'. The dendrogram will be displayed on the opposite side.
 #' @param row.names.width Numeric. The width of the row names. Increase this parameter if your row names are truncated.
-#' @param column.names.angle Numeric. The angle of rotation for the column names.
+#' @param column.names.angle Numeric. The angle of rotation of the column names.
 #' @param column.names.side Character. The side where the column names will be displayed, either 'top' or 'bottom'. The dendrogram will be displayed on the opposite side.
 #' @param column.names.height Numeric. The height of the column names. Increase this parameter if your column names are truncated.
 #' @param inner.border Logical. If \code{TRUE}, the function will display a black outline around each dot if \code{dotplot} = \code{TRUE}, or a black border around each cell of the heatmap if \code{dotplot} = \code{FALSE}.
@@ -53,7 +53,7 @@
 #' @param data.legend.name Character. The name of the data legend.
 #' @param data.legend.side Character. The side where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.
 #' @param data.legend.direction Character. The direction of the data legend, either 'horizontal' or 'vertical'.
-#' @param data.legend.position Numeric. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.
+#' @param data.legend.position Character. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.
 #' @param data.legend.width Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.
 #' @param idents.legend.name Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
 #' @param show.idents.legend Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
@@ -63,7 +63,7 @@
 #' @param legend.text.size Numeric. The font size of all legend texts.
 #' @param legend.gap Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.
 #' @param output.data Logical. If \code{TRUE}, the function will return a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature, instead of displaying anything.
-#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster},\code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).
+#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster}, \code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).
 #'
 #' @return A \code{\link[ComplexHeatmap]{Heatmap}} object, either as a dotplot, or a heatmap, or a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature.
 #'

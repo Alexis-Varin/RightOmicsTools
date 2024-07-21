@@ -20,9 +20,9 @@ Barplot_Cell_Proportion(
   x.axis.hjust = 1,
   y.axis.title.size = 11,
   legend.text.size = 9,
-  legend.position = "bottom",
+  legend.side = "bottom",
+  show.legend = TRUE,
   split.plot.title.size = 24,
-  legend = TRUE,
   percent = TRUE,
   nrow = 1,
   unique.group.plot = TRUE,
@@ -30,53 +30,53 @@ Barplot_Cell_Proportion(
 )
 }
 \arguments{
-\item{seurat_object}{A Seurat object.}
+\item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{group.by}{Character. The name of an identity to group the active ident by into a stacked barplot.}
+\item{group.by}{Character. The name of an identity in the meta.data slot to group the active.ident identity by into a stacked barplot.}
 
-\item{split.by}{Character. The name of an identity to split the active ident by into separate ggplot objects.}
+\item{split.by}{Character. The name of an identity in the meta.data slot to split the active.ident identity by into separate ggplot objects.}
 
-\item{colors}{Character. A vector of colors to be used. Seurat's default colors will be used if NULL.}
+\item{colors}{Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
-\item{order.proportion}{Character. A vector specifying either "reverse" or the levels of the active ident to order the cells.}
+\item{order.proportion}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.}
 
-\item{order.group}{Character. A vector specifying either "reverse" or the levels of the group.by identity to order the cells. Ignored if group.by is NULL.}
+\item{order.group}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{order.split}{Character. A vector specifying either "reverse" or the levels of the split.by identity to order the cells. Ignored if split.by is NULL.}
+\item{order.split}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.colors}{Logical. If TRUE, the colors will automatically be ordered according to order.proportion. Ignored if order.proportion is NULL.}
+\item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity, the \code{group.by} identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents}, \code{order.group} and \code{order.split}. Ignored if \code{order.idents}, \code{order.group} and \code{order.split} are \code{NULL}.}
 
-\item{show.cellsum.label}{Logical. If TRUE, the sum of cells of each identity will be shown at the top of each bar.}
+\item{show.cellsum.label}{Logical. If \code{TRUE}, the cell sum of each identity will be shown at the top of each bar.}
 
-\item{cellsum.label.size}{Numeric. The size of the cell sum label. Ignored if show.cellsum.label is FALSE.}
+\item{cellsum.label.size}{Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.}
 
-\item{axis.text.size}{Numeric. The size of the x axis identities and y axis cell percent or numbers.}
+\item{axis.text.size}{Numeric. The font size of the identities names and cell percent or numbers.}
 
-\item{x.axis.angle}{Numeric. The angle of the x axis identities.}
+\item{x.axis.angle}{Numeric. The angle of rotation of the identities names.}
 
-\item{x.axis.hjust}{Numeric. The horizontal justification of the x axis identities.}
+\item{x.axis.hjust}{Numeric. The horizontal justification of the identities names.}
 
-\item{y.axis.title.size}{Numeric. The size of the y axis title.}
+\item{y.axis.title.size}{Numeric. The font size of the y axis title.}
 
-\item{legend.text.size}{Numeric. The size of the legend text. Ignored if legend is FALSE.}
+\item{legend.text.size}{Numeric. The font size of the legend text. Ignored if \code{show.legend} = \code{FALSE}.}
 
-\item{legend.position}{Character. Which side to display the legend, "left", "right", "top" or "bottom". Ignored if legend is FALSE.}
+\item{legend.side}{Character. The side where the legend will be displayed, either 'left', 'right', 'top' or 'bottom'. Ignored if \code{show.legend} = \code{FALSE}.}
 
-\item{split.plot.title.size}{Numeric. The size of the plot titles. Ignored if split.by is NULL.}
+\item{show.legend}{Logical. If \code{TRUE}, shows the legend.}
 
-\item{legend}{Logical. If TRUE, the legend will be shown at the bottom of the ggplot object or patchwork.}
+\item{split.plot.title.size}{Numeric. The font size of the split plots titles. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{percent}{Logical. If TRUE, the proportion should be shown as a percentage of total cells for each identity.}
+\item{percent}{Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity.}
 
-\item{nrow}{Numeric. The number of rows in the patchwork. Ignored if the function returns a ggplot object.}
+\item{nrow}{Numeric. The number of rows in the patchwork. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.}
 
-\item{unique.group.plot}{Logical. If TRUE, the stacked proportion of cells will be gathered in a single ggplot object.}
+\item{unique.group.plot}{Logical. If \code{TRUE}, the stacked barplots will be gathered in a single ggplot object.}
 
-\item{unique.split.plot}{Logical. If TRUE, the ggplot objects will be gathered in a single patchwork.}
+\item{unique.split.plot}{Logical. If \code{TRUE}, the ggplot objects will be gathered in a single patchwork.}
 }
 \value{
 A ggplot object, a list of ggplot objects, a patchwork of ggplot objects or a list of patchworks of ggplot objects.
 }
 \description{
-This function generates a barplot of the proportion of cells from a Seurat object.
+This function generates a barplot of the proportion of cells from a \pkg{Seurat} object.
 }

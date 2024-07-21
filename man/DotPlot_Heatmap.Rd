@@ -130,7 +130,7 @@ DotPlot_Heatmap(
 
 \item{order.split}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.colors}{Logical. If \code{TRUE}, the colors for \code{idents} and \code{split.idents} will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
+\item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
 
 \item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.idents} and \code{cluster.features} are \code{FALSE}.}
 
@@ -156,7 +156,7 @@ DotPlot_Heatmap(
 
 \item{row.names.width}{Numeric. The width of the row names. Increase this parameter if your row names are truncated.}
 
-\item{column.names.angle}{Numeric. The angle of rotation for the column names.}
+\item{column.names.angle}{Numeric. The angle of rotation of the column names.}
 
 \item{column.names.side}{Character. The side where the column names will be displayed, either 'top' or 'bottom'. The dendrogram will be displayed on the opposite side.}
 
@@ -172,7 +172,7 @@ DotPlot_Heatmap(
 
 \item{data.legend.direction}{Character. The direction of the data legend, either 'horizontal' or 'vertical'.}
 
-\item{data.legend.position}{Numeric. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.}
+\item{data.legend.position}{Character. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.}
 
 \item{data.legend.width}{Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.}
 
@@ -192,7 +192,7 @@ DotPlot_Heatmap(
 
 \item{output.data}{Logical. If \code{TRUE}, the function will return a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature, instead of displaying anything.}
 
-\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster},\code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).}
+\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster}, \code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).}
 }
 \value{
 A \code{\link[ComplexHeatmap]{Heatmap}} object, either as a dotplot, or a heatmap, or a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature.

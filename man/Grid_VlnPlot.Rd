@@ -19,49 +19,49 @@ Grid_VlnPlot(
   show.idents = FALSE,
   features.text.size = 11,
   legend.text.size = 12,
-  legend.position = "bottom",
-  legend = TRUE,
+  legend.side = "bottom",
+  show.legend = TRUE,
   ncol = "square"
 )
 }
 \arguments{
-\item{seurat_object}{A Seurat object.}
+\item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example "RNA2" if you have created a second RNA assay you named "RNA2". See Seurat v5 vignettes for more information). You may also use another assay such as SCT to pull gene expression from.}
+\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. It is recommended to use 'data'.}
 
 \item{features}{Character. A vector of features to plot.}
 
-\item{idents}{Character. A vector with one or several identities in the active.ident identity to use if you only want those (instead of subsetting your object). If NULL, all identities will be used.}
+\item{idents}{Character. A vector with one or several identities names in the active.ident identity to use if you only want those (instead of subsetting your object). If \code{NULL}, all identities will be used.}
 
-\item{scale}{Logical. If TRUE, scales the violins to have the same max height between features.}
+\item{scale}{Logical. If \code{TRUE}, scales the violins to have the same max height between features.}
 
-\item{rotate.axis}{Logical. If TRUE, flips the axis, effectively displaying violins vertically instead of horizontally.}
+\item{rotate.axis}{Logical. If \code{TRUE}, flips the axis, displaying violins vertically instead of horizontally.}
 
-\item{colors}{Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the idents parameter. If NULL, uses Seurat's default colors.}
+\item{colors}{Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the \code{idents} parameter. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
-\item{order.idents}{Character. A vector specifying either "reverse" or the levels of the active.ident identity to order the cells.}
+\item{order.idents}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.}
 
-\item{order.colors}{Logical. If TRUE, the colors will automatically be ordered according to order.idents. Ignored if order.idents is NULL.}
+\item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity will automatically be ordered according to \code{order.idents}. Ignored if \code{order.idents} = \code{NULL}.}
 
-\item{idents.text.size}{Numeric. The size of the axis identities.}
+\item{idents.text.size}{Numeric. The font size of the identities names. Ignored if \code{show.idents} = \code{FALSE}.}
 
-\item{show.idents}{Logical. If TRUE, shows the identities on the plot.}
+\item{show.idents}{Logical. If \code{TRUE}, shows the identities names on the plot.}
 
-\item{features.text.size}{Numeric. The size of the axis features.}
+\item{features.text.size}{Numeric. The font size of the features names.}
 
-\item{legend.text.size}{Numeric. The size of the legend text. Ignored if legend is FALSE.}
+\item{legend.text.size}{Numeric. The font size of the legend text. Ignored if \code{show.legend} = \code{FALSE}.}
 
-\item{legend.position}{Character. Which side to display the legend, "left", "right", "top" or "bottom". Ignored if legend is FALSE.}
+\item{legend.side}{Character. The side where the legend will be displayed, either 'left', 'right', 'top' or 'bottom'. Ignored if \code{show.legend} = \code{FALSE}.}
 
-\item{legend}{Logical. If TRUE, shows the legend.}
+\item{show.legend}{Logical. If \code{TRUE}, shows the legend.}
 
-\item{ncol}{Numeric. Number of columns to use. If "square", will display features in a square grid or as close as possible depending on number of features.}
+\item{ncol}{Numeric. Number of columns to use. If 'square', will display features in a square grid or as close as possible depending on number of features.}
 }
 \value{
 A ggplot object.
 }
 \description{
-This function is a stacked violin plot optimized to display features expression in a Seurat object in a grid fashion (square) instead of a single column like other stacked violin functions available in other packages, resulting in nicer plots and easier to include in publications.
+This function is a stacked violin plot optimized to display features expression in a \pkg{Seurat} object in a grid fashion (square) instead of a single column like other stacked violin functions available in other packages, resulting in nicer plots and easier to include in publications.
 }
