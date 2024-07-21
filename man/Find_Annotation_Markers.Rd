@@ -9,7 +9,7 @@ Find_Annotation_Markers(
   ident.1 = NULL,
   ident.2 = NULL,
   min.pct = 0.25,
-  top.markers = 5,
+  top.markers = 10,
   unique.markers = TRUE,
   filter.mito = TRUE,
   filter.ribo = TRUE,
@@ -24,43 +24,43 @@ Find_Annotation_Markers(
 )
 }
 \arguments{
-\item{seurat_object}{A Seurat object.}
+\item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{ident.1}{Character. Identity class to define markers for; pass an object of class phylo or 'clustertree' to find markers for a node in a cluster tree; passing 'clustertree' requires BuildClusterTree to have been run. Leave NULL to find markers for all clusters.}
+\item{ident.1}{Character. (from \code{\link[Seurat]{FindMarkers}} documentation) Identity class to define markers for; pass an object of class \code{phylo} or 'clustertree' to find markers for a node in a cluster tree; passing 'clustertree' requires \code{\link[Seurat]{BuildClusterTree}} to have been run. Leave \code{NULL} to find markers for all clusters.}
 
-\item{ident.2}{Character. A second identity class for comparison; if NULL, use all other cells for comparison; if an object of class phylo or 'clustertree' is passed to ident.1, must pass a node to find markers for.}
+\item{ident.2}{Character. (from \code{\link[Seurat]{FindMarkers}} documentation) A second identity class for comparison; if \code{NULL}, use all other cells for comparison; if an object of class \code{phylo} or 'clustertree' is passed to \code{ident.1}, must pass a node to find markers for.}
 
-\item{min.pct}{Numeric. Only test genes that are detected in a minimum fraction of min.pct cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expressed.}
+\item{min.pct}{Numeric. (from \code{\link[Seurat]{FindMarkers}} documentation) Only test features that are detected in a minimum fraction of min.pct cells in either of the two populations. Meant to speed up the function by not testing features that are very infrequently expressed.}
 
-\item{top.markers}{Numeric. The number of top markers to return. If set to Inf, all markers will be returned.}
+\item{top.markers}{Numeric. The number of top markers to return. If set to \code{Inf}, all markers will be returned.}
 
-\item{unique.markers}{Logical. If TRUE, unique markers will be returned for each cluster in order to prevent markers repeated in multiple clusters.}
+\item{unique.markers}{Logical. If \code{TRUE}, unique markers will be returned for each identity in order to prevent features repeated multiple times.}
 
-\item{filter.mito}{Logical. If TRUE, mitochondrial genes will be filtered out.}
+\item{filter.mito}{Logical. If \code{TRUE}, mitochondrial features will be filtered out.}
 
-\item{filter.ribo}{Logical. If TRUE, ribosomal genes will be filtered out.}
+\item{filter.ribo}{Logical. If \code{TRUE}, ribosomal features will be filtered out.}
 
-\item{filter.ncRNA}{Logical. If TRUE, non-coding RNA genes will be filtered out.}
+\item{filter.ncRNA}{Logical. If \code{TRUE}, non-coding RNA features will be filtered out.}
 
-\item{species}{Character. The species from which to pull data to filter out genes. If "human", non-coding RNA genes will be filtered out from a dataset named ncRNA_human built from genenames database. If "mouse", only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from dreamBase2 database. These datasets are loaded with RightSeuratTools package and may be checked for more information.}
+\item{species}{Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named ncRNA_human built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightSeuratTools} and may be checked for more information.}
 
-\item{parallelized}{Logical. If TRUE, FindMarkers will be parallelized using BiocParallel.}
+\item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}.}
 
-\item{BPPARAM}{A BiocParallelParam object to be used for parallelization. If NULL, will use SerialParam() which is not parallelized. Ignored if parallelized = FALSE.}
+\item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
-\item{output.df}{Logical. If TRUE, a data frame of gene names and associated statistics will be returned. If FALSE, a character vector of gene names will be returned.}
+\item{output.df}{Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.}
 
-\item{output.list}{Logical. If TRUE, a list of gene names with or without statistics for each cluster will be returned.}
+\item{output.list}{Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.}
 
-\item{verbose}{Logical. If FALSE, does not print progress messages and output, but warnings and errors will still be printed.}
+\item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 
-\item{...}{Additional arguments to be passed to FindMarkers, such as test.use, or other methods and to specific DE methods downstream of FindMarkers.}
+\item{...}{Additional arguments to be passed to \code{\link[Seurat]{FindMarkers}}, such as \code{test.use}, or passed to other methods and to specific DE methods.}
 }
 \value{
-A data frame or a list of data frames with gene names and associated statistics, or a character vector or a list of character vectors with gene names.
+A data frame or a list of data frames with features names and associated statistics, or a character vector or a list of character vectors with features names.
 }
 \description{
-This function is a wrapper around Seurat's FindMarkers function that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA genes in human, as well as filtering of pseudogenes in mouse. It will also directly give the top X markers for each identity to use for plotting with DotPlot_Heatmap() for example.
+This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
 }
 \examples{
 library(Seurat)

@@ -1,64 +1,75 @@
 #' @title DotPlot_Heatmap
 #'
-#' @description This function generates a dotplot or a heatmap to visualize features expression in a Seurat object. Credits to Seurat's dev team for the original DotPlot() function from which data processing of this function is derived from and to https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/ for the initial idea to use ComplexHeatmap to draw a dotplot and the layer_fun function that draws the dots. Slight improvements were implemented here and there for my personal use, and made available to all through this package.
+#' @description This function generates a dotplot or a heatmap to visualize features expression in a \pkg{Seurat} object. Credits to \pkg{Seurat}'s dev team for the original \code{\link[Seurat]{DotPlot}} from which data processing of this function is derived from and to \href{https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/}{Ming Tang} for the initial idea to use \pkg{ComplexHeatmap} to draw a dotplot and the \code{layer_fun} function that draws the dots. Various new parameters were added to offer more flexibility and customization.
 #'
-#' @param seurat_object A Seurat object.
-#' @param assay Character. If the Seurat object contains multiple RNA assays, you may specify which one to use (for example "RNA2" if you have created a second RNA assay you named "RNA2". See Seurat v5 vignettes for more information). You may also use another assay such as SCT to pull gene expression from.
+#' @param seurat_object A \pkg{Seurat} object.
+#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
 #' @param layer Character. Formerly known as slot. It is recommended to use 'data'.
-#' @param data.are.log Logical. If TRUE, tells the function data are log transformed. If, and only if, layer = 'data', feature values are exponentiated (using R base expm1() function) so that averaging is done in non-log space (as per Seurat's default behavior for its own DotPlot() or AverageExpression() functions), after that, average expression is log transformed back (using R base log1p() function). If FALSE, and/or layer = 'scale.data' or 'counts', feature values are not exponentiated prior to averaging.
+#' @param data.are.log Logical. If \code{TRUE}, tells the function data are log transformed. If, and only if, \code{layer} = 'data', cell expression values are exponentiated (using \code{\link[base]{expm1}}) so that averaging is done in non-log space (as per \pkg{Seurat}'s default behavior for its own \code{\link[Seurat]{DotPlot}} or \code{\link[Seurat]{AverageExpression}}), after that, average expression values are log transformed back (using \code{\link[base]{log1p}}). If \code{FALSE}, or \code{layer} = 'scale.data' or 'counts', cell expression values are not exponentiated prior to averaging.
 #' @param features Character. A vector of features to plot.
-#' @param split.by Character. The name of an identity in the metadata slot to split the active.ident identity by.
-#' @param idents Character. A vector with one or several identities in the active.ident identity to use if you only want those (instead of subsetting your object). If NULL, all identities will be used.
-#' @param split.idents Character. A vector with one or several identities in the split.by identity to use if you only want those. If NULL, all identities will be used.
-#' @param scale Logical. If TRUE, average expression values will be scaled using R base scale() function and default parameters. The resulting values will be Z-scores (mean subtracted values divided by standard deviation) and not positive average expression values anymore, which is why there will be positive and negative values displayed, depending on if the average expression in a particular identity is below or above the mean average expression from all identities (which is calculated independently for each feature). Caution should be exercised when interpreting results with low number of identities (typically below 5), as small differences in average expression might lead to exacerbated differences when scaled.
-#' @param rotate.axis Logical. If TRUE, flips the axis, so that genes are displayed as rows and identities as columns.
-#' @param dotplot Logical. If TRUE, the function will create a dotplot, with dot size proportional to the percentage of cells expressing the feature. If FALSE, the function will create a heatmap.
-#' @param dots.type Character. Determines the dot size difference between 0 and 100% expression. Either 'square root' (lower difference) or 'radius' (higher difference). Ignored if dotplot = FALSE.
-#' @param dots.size Numeric. The size of the dots in the dotplot. Ignored if dotplot = FALSE.
-#' @param show.na.dots Logical. If TRUE, the function will display a small dot for features that are not expressed (0% expression) instead of nothing. Ignored if dotplot = FALSE.
-#' @param col.min Character or Numeric. The minimum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q5' or 'q10' is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).
-#' @param col.max Character or Numeric. The maximum value for the color scale parameter internally passed to colorRamp2::colorRamp2(). If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q95' or 'q90' is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).
-#' @param data.colors Character. Either a character vector of exactly 3 colors, corresponding to the lowest, zero (or middle if scale = FALSE), and highest values of the expression matrix and internally passed to colorRamp2::colorRamp2(), or a single character value corresponding to the name of a palette and internally passed to the hcl_palette parameter of colorRamp2::colorRamp2() (such as 'Inferno', 'Berlin', 'Viridis' etc, check grDevices::hcl.pals() for all palettes available).
-#' @param palette.reverse Logical. If TRUE and if data.colors is a palette (such as "Viridis"), the function will reverse its colors.
-#' @param na.color Character. The color to use for NA values.
-#' @param background.color Character. The color to use for the background behind the dots. Ignored if dotplot = FALSE.
-#' @param idents.colors Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the idents parameter. If NULL, uses Seurat's default colors.
-#' @param show.idents.names.colors Logical. If TRUE, the function will display the colors specified by the idents.colors parameter next to identity names.
-#' @param show.idents.dend.colors Logical. If TRUE, the function will display the colors specified by the idents.colors parameter next to the dendogram. Ignored if cluster.rows and cluster.columns are set to FALSE.
-#' @param split.colors Character. A vector of colors to use for the split.by identity, of same length as the number of identities in the split.by identity or supplied to the split.idents parameter. If NULL, uses a custom set of colors from grDevices::colors(). Ignored if split.by = NULL.
-#' @param show.split.names.colors Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to identity names. Ignored if split.by = NULL.
-#' @param show.split.dend.colors Logical. If TRUE, the function will display the colors specified by the split.colors parameter next to the dendogram. Ignored if split.by = NULL or if cluster.rows and cluster.columns are set to FALSE.
-#' @param order.idents Character. A vector specifying either "reverse" or the levels of the active.ident identity to order the cells.
-#' @param order.split Character. A vector specifying either "reverse" or the levels of the split.by identity to order the cells. Ignored if split.by is NULL.
-#' @param order.colors Logical. If TRUE, the colors for idents and split.idents will automatically be ordered according to order.idents and order.split. Ignored if order.idents and order.split are NULL.
-#' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if cluster.rows and cluster.columns are set to FALSE.
-#' @param cluster.rows Logical or Function. If TRUE, the function will cluster the rows. You may also pass an hclust or dendogram object which contains clustering.
-#' @param row.kmeans Numeric. The number of k-means slices to use for row clustering. Ignored if cluster.rows = FALSE.
-#' @param row.names.side Character. The side where the row names will be displayed, either 'left' or 'right'. If cluster.rows = TRUE or Function, the dendogram will be displayed on the opposite side.
+#' @param split.by Character. The name of an identity in the meta.data slot to split the active.ident identity by.
+#' @param idents Character. A vector with one or several identities names in the active.ident identity to use if you only want those (instead of subsetting your object). If \code{NULL}, all identities will be used.
+#' @param split.idents Character. A vector with one or several identities names in the \code{split.by} identity to use if you only want those. If \code{NULL}, all identities will be used.
+#' @param scale Logical. If \code{TRUE}, average expression values for each feature will be scaled using \code{\link[base]{scale}} and default parameters. The resulting values will be Z-scores (mean subtracted values divided by standard deviation) and not positive average expression values anymore, which is why there will be positive and negative values displayed, depending on if the average expression in a particular identity is below or above the mean average expression from all identities (which is calculated independently for each feature). Caution should be exercised when interpreting results with low number of identities (typically below 5), as small differences in average expression might lead to exacerbated differences when scaled.
+#' @param rescale Logical. If \code{TRUE}, average expression values will be adjusted using \code{\link[scales]{rescale}} between the first numerical value of the \code{rescale.range} parameter (lowest expression) and the second numerical value (highest expression) for each feature. This is different than \code{\link[base]{scale}} as this doesn't compare values to any mean or standard deviation and is therefore not a Z-score, it only refits each average expression value (independently for each feature) in order to visualize all features in the same dimension regardless of their differences in levels of expression. Caution should be exercised when interpreting results with low number of identities (typically below 5), as small differences in average expression might lead to exacerbated differences when rescaled. Ignored if \code{scale} = \code{TRUE}.
+#' @param rescale.range Numeric. A vector specifying the minimum and maximum values to resize the average expression values and internally passed to \code{\link[scales]{rescale}}. These values are arbitrary and will not change the visualization, only the values in the legend, you need to adjust the \code{col.min} and \code{col.max} parameters to influence the color scale. Ignored if \code{rescale} = \code{FALSE} or \code{scale} = \code{TRUE}.
+#' @param rotate.axis Logical. If \code{TRUE}, flips the axis, so that features are displayed as rows and identities as columns.
+#' @param dotplot Logical. If \code{TRUE}, the function will display a dotplot, with dots size proportional to the percentage of cells expressing a feature. If \code{FALSE}, the function will instead display a heatmap.
+#' @param dots.type Character. Determines the dots size difference between 0 and 100% expression. Either 'square root' (lower difference) or 'radius' (higher difference). Ignored if \code{dotplot} = \code{FALSE}.
+#' @param dots.size Numeric. The size of the dots in the dotplot. Decreasing this parameter helps when displaying a large number of features. Ignored if \code{dotplot} = \code{FALSE}.
+#' @param show.noexpr.dots Logical. If \code{TRUE}, the function will display a small dot for features with 0% expression instead of nothing. Ignored if \code{dotplot} = \code{FALSE}.
+#' @param col.min Character or Numeric. The minimum value for the \code{breaks} parameter internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q5' or 'q10' is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).
+#' @param col.max Character or Numeric. The maximum value for the \code{breaks} parameter internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q95' or 'q90' is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).
+#' @param data.colors Character. Either a character vector of exactly 3 colors, corresponding to the lowest, zero (or middle if \code{scale} = \code{FALSE}), and highest values in the expression matrix and internally passed to \code{\link[colorRamp2]{colorRamp2}}, or a single character value corresponding to the name of a palette and internally passed to the \code{hcl_palette} parameter of \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available).
+#' @param palette.reverse Logical. If \code{TRUE} and if \code{data.colors} is a palette (such as 'Viridis'), the function will reverse its colors.
+#' @param na.color Character. The color to use for missing values (\code{NA}).
+#' @param background.color Character. The color to use for the background behind the dots. Ignored if \code{dotplot} = \code{FALSE}.
+#' @param idents.colors Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the \code{idents} parameter. If \code{NULL}, uses \pkg{Seurat}'s default colors.
+#' @param show.idents.names.colors Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter next to identities names.
+#' @param show.idents.dend.colors Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter next to the dendrogram.
+#' @param split.colors Character. A vector of colors to use for the split.by identity, of same length as the number of identities in the \code{split.by} identity or supplied to the \code{split.idents} parameter. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{split.by} = \code{NULL}.
+#' @param show.split.names.colors Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to identities names. Ignored if \code{split.by} = \code{NULL}.
+#' @param show.split.dend.colors Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to the dendrogram. Ignored if \code{split.by} = \code{NULL}.
+#' @param order.idents Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.
+#' @param order.split Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.
+#' @param order.colors Logical. If \code{TRUE}, the colors for \code{idents} and \code{split.idents} will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.
+#' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.idents} and \code{cluster.features} are \code{FALSE}.
+#' @param cluster.idents Logical or Function. If \code{TRUE}, the function will cluster the identities. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.
+#' @param idents.kmeans Numeric. The number of k-means slices to use for identities clustering.
+#' @param idents.kmeans.numbers.size Numeric. The font size of the identities k-means slices numbers. Set to 0 to remove them.
+#' @param cluster.features Logical or Function. If \code{TRUE}, the function will cluster the features. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.
+#' @param features.kmeans Numeric. The number of k-means slices to use for features clustering.
+#' @param features.kmeans.numbers.size Numeric. The font size of the features k-means slices numbers. Set to 0 to remove them.
+#' @param idents.names.size Numeric. The font size of the identities names.
+#' @param features.names.size Numeric. The font size of the features names.
+#' @param features.names.style Character. The font face of the features names. The Gene nomenclature used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.
+#' @param row.names.side Character. The side where the row names will be displayed, either 'left' or 'right'. The dendrogram will be displayed on the opposite side.
 #' @param row.names.width Numeric. The width of the row names. Increase this parameter if your row names are truncated.
-#' @param cluster.columns Logical or Function. If TRUE, the function will cluster the columns. You may also pass an hclust or dendogram object which contains clustering.
-#' @param column.kmeans Numeric. The number of k-means slices to use for column clustering. Ignored if cluster.columns = FALSE.
-#' @param column.names.rotation Numeric. The angle of rotation for the column names.
-#' @param column.names.side Character. The side where the column names will be displayed, either 'top' or 'bottom'. If cluster.columns = TRUE or Function, the dendogram will be displayed on the opposite side.
+#' @param column.names.angle Numeric. The angle of rotation for the column names.
+#' @param column.names.side Character. The side where the column names will be displayed, either 'top' or 'bottom'. The dendrogram will be displayed on the opposite side.
 #' @param column.names.height Numeric. The height of the column names. Increase this parameter if your column names are truncated.
-#' @param inner.border Logical. If TRUE, the function will display a black outline around each dot if dotplot = TRUE, or a black border around each cell of the heatmap if dotplot = FALSE.
-#' @param outer.border Logical. If TRUE, the function will display an outer border around the plot or around each slice if row and/or column k-means is higher than 1.
+#' @param inner.border Logical. If \code{TRUE}, the function will display a black outline around each dot if \code{dotplot} = \code{TRUE}, or a black border around each cell of the heatmap if \code{dotplot} = \code{FALSE}.
+#' @param outer.border Logical. If \code{TRUE}, the function will display an outer border around the plot or around each slice if \code{idents.kmeans} and/or \code{features.kmeans} are higher than 1.
 #' @param data.legend.name Character. The name of the data legend.
 #' @param data.legend.side Character. The side where the data legend will be displayed, either 'left', 'right', 'top' or 'bottom'.
 #' @param data.legend.direction Character. The direction of the data legend, either 'horizontal' or 'vertical'.
-#' @param data.legend.position Numeric. The centering of the data legend name, there are many options, default option from ComplexHeatmap::Heatmap() is 'topleft'.
-#' @param data.legend.width Numeric. How long the data legend will be, only affects the data legend if data.legend.direction = 'horizontal'.
-#' @param idents.legend.name Character. The name of the active.ident identity legend.
-#' @param show.idents.legend Logical. If TRUE, the function will display a legend for the active.ident identity.
-#' @param split.legend.name Character. The name of the split.by identity legend. Ignored if split.by = NULL.
-#' @param show.split.legend Logical. If TRUE, the function will display a legend for the split.by identity.
-#' @param output.data Logical. If TRUE, the function will return a list composed of the expression matrix and another matrix containing the percent of cells expressing each feature, instead of drawing.
-#' @param ... Additional arguments to pass to the ComplexHeatmap::Heatmap() function, such as column_names_gp, clustering_method_columns, etc, accepts any parameter that wasn't already internally passed to ComplexHeatmap::Heatmap() (for example, cluster.columns sets the cluster_columns parameter of the inner function, so you will get an error if you try to pass it again).
+#' @param data.legend.position Numeric. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.
+#' @param data.legend.width Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.
+#' @param idents.legend.name Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
+#' @param show.idents.legend Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
+#' @param split.legend.name Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.
+#' @param show.split.legend Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.
+#' @param legend.title.size Numeric. The font size of all legend titles.
+#' @param legend.text.size Numeric. The font size of all legend texts.
+#' @param legend.gap Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.
+#' @param output.data Logical. If \code{TRUE}, the function will return a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature, instead of displaying anything.
+#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster},\code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).
 #'
-#' @return A ComplexHeatmap object, either as a dotplot, or a heatmap, or a list containing a matrix of the expression data and another matrix containing the percent of cells expressing each feature.
+#' @return A \code{\link[ComplexHeatmap]{Heatmap}} object, either as a dotplot, or a heatmap, or a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature.
 #'
 #' @import Seurat
 #' @import SeuratObject
+#' @import scales
 #' @import grid
 #' @import stats
 #' @import ComplexHeatmap
@@ -75,34 +86,41 @@ DotPlot_Heatmap = function(seurat_object,
                          idents = NULL,
                          split.idents = NULL,
                          scale = TRUE,
+                         rescale = FALSE,
+                         rescale.range = c(0, 3),
                          rotate.axis = FALSE,
                          dotplot = TRUE,
                          dots.type = "square root",
                          dots.size = 4,
-                         show.na.dots = FALSE,
+                         show.noexpr.dots = FALSE,
                          col.min = ifelse(isTRUE(scale), -2, 0),
                          col.max = ifelse(isTRUE(scale), 2, "q100"),
                          data.colors = if (isTRUE(scale)) c("#35A5FF","white","red") else "Viridis",
                          palette.reverse = FALSE,
-                         na.color = "black",
+                         na.color = "grey40",
                          background.color = "white",
                          idents.colors = NULL,
-                         show.idents.names.colors = TRUE,
+                         show.idents.names.colors = FALSE,
                          show.idents.dend.colors = TRUE,
                          split.colors = NULL,
-                         show.split.names.colors = TRUE,
+                         show.split.names.colors = FALSE,
                          show.split.dend.colors = TRUE,
                          order.idents = NULL,
                          order.split = NULL,
                          order.colors = TRUE,
                          kmeans.repeats = 100,
-                         cluster.rows = TRUE,
-                         row.kmeans = 1,
+                         cluster.idents = TRUE,
+                         idents.kmeans = 1,
+                         idents.kmeans.numbers.size = 11,
+                         cluster.features = TRUE,
+                         features.kmeans = 1,
+                         features.kmeans.numbers.size = 11,
+                         idents.names.size = 9,
+                         features.names.size = 9,
+                         features.names.style = "italic",
                          row.names.side = "left",
                          row.names.width = unit(15, "cm"),
-                         cluster.columns = TRUE,
-                         column.kmeans = 1,
-                         column.names.rotation = 45,
+                         column.names.angle = 45,
                          column.names.side = "bottom",
                          column.names.height = unit(15, "cm"),
                          inner.border = TRUE,
@@ -116,6 +134,9 @@ DotPlot_Heatmap = function(seurat_object,
                          show.idents.legend = TRUE,
                          split.legend.name = "Split identities",
                          show.split.legend = TRUE,
+                         legend.title.size = 10,
+                         legend.text.size = 10,
+                         legend.gap = 10,
                          output.data = FALSE,
                          ...) {
 
@@ -126,28 +147,33 @@ DotPlot_Heatmap = function(seurat_object,
     ident = c("ident",split.by)
   }
 
-  if (!is.character(idents)) {
-    ident.1 = levels(Idents(seurat_object))
+  ident.1 = levels(Idents(seurat_object))
+
+  if (is.character(idents)) {
+    ident.1 = ident.1[ident.1 %in% idents]
+    if (length(ident.1) == 0) {
+      stop("None of the identities supplied to idents were found, please check the spelling")
+    }
+    if (length(ident.1) < length(idents)) {
+      message("The following identities supplied to idents were not found, please check the spelling:\n", paste0(setdiff(idents, ident.1), collapse = ", "))
+    }
   }
-  else {
-    ident.1 = idents
-  }
-  if (!is.null(order.idents)) {
-    if (is.character(order.idents)) {
-      if (length(order.idents) > 1) {
-        ident.1 = ident.1[order.idents]
+  if (is.character(order.idents) | is.numeric(order.idents)) {
+    if (length(order.idents) == length(ident.1)) {
+      if (is.character(order.idents)) {
+        ident.1 = ident.1[order(match(ident.1, order.idents))]
       }
       else {
-        if (order.idents == "reverse") {
-          ident.1 = rev(ident.1)
-        }
-        else {
-          stop("order.idents needs to be either 'reverse' or a character vector")
-        }
+        ident.1 = ident.1[order.idents]
       }
     }
     else {
-      stop("order.idents needs to be either 'reverse' or a character vector")
+      if (order.idents == "reverse") {
+        ident.1 = rev(ident.1)
+      }
+      else {
+        stop("order.idents needs to be either 'reverse' or a character or numeric vector of same length as the number of identities")
+      }
     }
   }
 
@@ -159,30 +185,39 @@ DotPlot_Heatmap = function(seurat_object,
   }
   DefaultAssay(seurat_object) = assay
   data = suppressWarnings(FetchData(object = seurat_object, vars = vars, layer = layer))
+  features.removed = setdiff(features, colnames(data))
+  if (!split.by %in% colnames(data)) {
+    message("The split.by identity was not found in the meta.data slot, data will not be split, please check the spelling")
+    split.by = NULL
+  }
   if (is.character(split.by)) {
-    if (!is.character(split.idents)) {
-      Idents(seurat_object) = split.by
-      ident.2 = levels(Idents(seurat_object))
+    Idents(seurat_object) = split.by
+    ident.2 = levels(Idents(seurat_object))
+    if (is.character(split.idents)) {
+      ident.2 = ident.2[ident.2 %in% split.idents]
+      if (length(ident.2) == 0) {
+        stop("None of the identities supplied to split.idents were found, please check the spelling")
+      }
+      if (length(ident.2) < length(split.idents)) {
+        message("The following identities supplied to split.idents were not found, please check the spelling:\n", paste0(setdiff(split.idents, ident.2), collapse = ", "))
+      }
     }
-    else {
-      ident.2 = split.idents
-    }
-    if (!is.null(order.split)) {
-      if (is.character(order.split)) {
-        if (length(order.split) > 1) {
-          ident.1 = ident.2[order.split]
+      if (is.character(order.split) | is.numeric(order.split)) {
+      if (length(order.split) == length(ident.2)) {
+        if (is.character(order.split)) {
+          ident.2 = ident.2[order(match(ident.2, order.split))]
         }
         else {
-          if (order.split == "reverse") {
-            ident.2 = rev(ident.2)
-          }
-          else {
-            stop("order.split needs to be either 'reverse' or a character vector")
-          }
+          ident.2 = ident.2[order.split]
         }
       }
       else {
-        stop("order.split needs to be either 'reverse' or a character vector")
+        if (order.split == "reverse") {
+          ident.2 = rev(ident.2)
+        }
+        else {
+          stop("order.split needs to be either 'reverse' or a character or numeric vector of same length as the number of identities")
+        }
       }
     }
     ident.3 = NULL
@@ -199,9 +234,6 @@ DotPlot_Heatmap = function(seurat_object,
   if (is.character(split.by)) {
     data$ident = paste(data$ident, "in", data[ , 2])
     data[ , 2] = NULL
-  }
-  if (ncol(data) == 1) {
-    stop("None of the features were found")
   }
   mat = list()
   dot = list()
@@ -226,37 +258,32 @@ DotPlot_Heatmap = function(seurat_object,
     mat[[i-1]] = do.call(rbind, avg)
     dot[[i-1]] = do.call(rbind, pct)
   }
-  mat = round(as.matrix(as.data.frame(mat)), 3)
-  dot = round(as.matrix(as.data.frame(dot)), 3)
-  mat = mat[ident.3, ]
-  dot = dot[ident.3, ]
+  mat = as.matrix(as.data.frame(mat))[ident.3, ]
+  dot = as.matrix(as.data.frame(dot))[ident.3, ]
   if (isTRUE(data.are.log) & layer == "data") {
     mat = log1p(mat)
   }
-  dot = dot[rowSums(is.na(mat)) < ncol(mat), ]
-  mat = mat[rowSums(is.na(mat)) < ncol(mat), ]
+  dot = dot[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
+  mat = mat[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
   idents.removed = setdiff(ident.3, rownames(mat))
-  dot = dot[ , colSums(mat) > 0]
-  mat = mat[ , colSums(mat) > 0]
-  features.removed = setdiff(colnames(data), colnames(mat))
+  dot = dot[ , colSums(mat) > 0, drop = FALSE]
+  mat = mat[ , colSums(mat) > 0, drop  =FALSE]
+  features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   features.removed = features.removed[!features.removed == "ident"]
+  if (ncol(mat) == 0) {
+    stop("None of the features were found or expressed in any cells, please check the spelling")
+  }
   if (length(features.removed) > 0) {
-    warning("The following features were removed as they were not expressed in any cells:\n ",paste0(" ",features.removed, collapse = ","))
+    message("The following features were removed as they were not found or were not expressed in any cells, please check the spelling:\n",paste0(features.removed, collapse = ", "))
   }
   if (isTRUE(scale)) {
-    if (nrow(mat) < 5) {
-      warning(paste("Only",nrow(mat),"identities present in the dotplot, scaling may produce misleading visualization with too few identities"))
+    if (nrow(mat) < 5 & isFALSE(output.data)) {
+      message("Less than 5 identities will be displayed, scaling may produce misleading visualization.\nUsing Cell_Heatmap() might be more appropriate.")
     }
     mat = scale(mat)
   }
-
-  if (isTRUE(rotate.axis)) {
-    mat = t(mat)
-    dot = t(dot)
-  }
-
-  if (isTRUE(output.data)) {
-    return(list(Expression = mat, Percent = dot))
+  if (isTRUE(rescale) & isFALSE(scale)) {
+    mat = apply(mat, 2, function(x) rescale(x, to = rescale.range))
   }
 
   if (is.character(col.min)) {
@@ -272,6 +299,15 @@ DotPlot_Heatmap = function(seurat_object,
       q2 = quantile(mat, probs = q2, na.rm = TRUE)
       col.max = q2
     }
+  }
+
+  if (isTRUE(rotate.axis)) {
+    mat = t(mat)
+    dot = t(dot)
+  }
+
+  if (isTRUE(output.data)) {
+    return(list(Expression = round(mat, 4), Percent = round(dot, 4)))
   }
 
   if (isTRUE(scale)) {
@@ -305,6 +341,9 @@ DotPlot_Heatmap = function(seurat_object,
     idents.colors = SeuratColors(n = length(ident.1))
   }
   if (isTRUE(order.colors)) {
+    if (!is.null(names(idents.colors))) {
+      idents.colors = idents.colors[ident.1]
+    }
     if (is.character(order.idents)) {
       if (length(order.idents) > 1) {
         names(idents.colors) = ident.1
@@ -317,6 +356,9 @@ DotPlot_Heatmap = function(seurat_object,
       }
     }
     if (is.character(order.split) & is.character(split.by)) {
+      if (!is.null(names(split.colors))) {
+        split.colors = split.colors[ident.2]
+      }
       if (length(order.split) > 1) {
         names(split.colors) = ident.2
         split.colors = split.colors[order.split]
@@ -351,19 +393,23 @@ DotPlot_Heatmap = function(seurat_object,
 
   idents.legend = NULL
   split.legend = NULL
-  if (isTRUE(show.idents.legend)) {
+  if (isTRUE(show.idents.legend) & (!isFALSE(show.idents.names.colors) | !isFALSE(show.idents.dend.colors))) {
     idents.legend = Legend(at = ident.1,
                            legend_gp = gpar(fill = idents.colors2),
                            title = idents.legend.name,
                            gap = unit(0.5, "cm"),
-                           border = TRUE)
+                           border = TRUE,
+                           title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+                           labels_gp = gpar(fontsize = legend.text.size))
   }
-  if (is.character(split.by) & isTRUE(show.split.legend)) {
+  if (is.character(split.by) & isTRUE(show.split.legend) & (!isFALSE(show.split.names.colors) | !isFALSE(show.split.dend.colors))) {
     split.legend = Legend(at = ident.2,
                           legend_gp = gpar(fill = split.colors2),
                           title = split.legend.name,
                           gap = unit(0.5, "cm"),
-                          border = TRUE)
+                          border = TRUE,
+                          title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+                          labels_gp = gpar(fontsize = legend.text.size))
   }
   anno.legend = list()
   if (!is.null(idents.legend)) {
@@ -390,13 +436,13 @@ DotPlot_Heatmap = function(seurat_object,
   column.title.side = "top"
   if (is.character(split.by)) {
     if (isTRUE(show.split.names.colors) & isTRUE(show.idents.names.colors)) {
-      if ((row.names.side == "left" & isFALSE(rotate.axis)) | (column.names.side == "bottom" & isTRUE(rotate.axis))) {
+      if ((isFALSE(rotate.axis) & row.names.side == "left") | (isTRUE(rotate.axis) & column.names.side == "top")) {
         idents.labels = HeatmapAnnotation(
           Identities = ident.1,
           Split = dup.ident,
           col = list(Identities = idents.colors,
                      Split = split.colors),
-          na_col = "grey40",
+          na_col = na.color,
           which = annotation.side,
           show_annotation_name = FALSE,
           show_legend = FALSE)
@@ -407,7 +453,7 @@ DotPlot_Heatmap = function(seurat_object,
           Identities = ident.1,
           col = list(Split = split.colors,
                      Identities = idents.colors),
-          na_col = "grey40",
+          na_col = na.color,
           which = annotation.side,
           show_annotation_name = FALSE,
           show_legend = FALSE)
@@ -417,7 +463,7 @@ DotPlot_Heatmap = function(seurat_object,
       idents.labels = HeatmapAnnotation(
         Identities = ident.1,
         col = list(Identities = idents.colors),
-        na_col = "grey40",
+        na_col = na.color,
         which = annotation.side,
         show_annotation_name = FALSE,
         show_legend = FALSE)
@@ -426,7 +472,7 @@ DotPlot_Heatmap = function(seurat_object,
       idents.labels = HeatmapAnnotation(
         Split = dup.ident,
         col = list(Split = split.colors),
-        na_col = "grey40",
+        na_col = na.color,
         which = annotation.side,
         show_annotation_name = FALSE,
         show_legend = FALSE)
@@ -434,15 +480,14 @@ DotPlot_Heatmap = function(seurat_object,
     else {
       idents.labels = NULL
     }
-    if ((!isFALSE(cluster.rows) & isFALSE(rotate.axis)) | (!isFALSE(cluster.columns) & isTRUE(rotate.axis))) {
-      if(is.character(split.by) & isTRUE(show.split.dend.colors) & isTRUE(show.idents.dend.colors)) {
-        if ((row.names.side == "left" & isFALSE(rotate.axis)) | (column.names.side == "bottom" & isTRUE(rotate.axis))) {
+    if(isTRUE(show.split.dend.colors) & isTRUE(show.idents.dend.colors)) {
+        if ((isFALSE(rotate.axis) & row.names.side == "left") | (isTRUE(rotate.axis) & column.names.side == "top")) {
           idents.labels2 = HeatmapAnnotation(
             Split = dup.ident,
             Identities = ident.1,
             col = list(Split = split.colors,
                        Identities = idents.colors),
-            na_col = "grey40",
+            na_col = na.color,
             which = annotation.side,
             show_annotation_name = FALSE,
             show_legend = FALSE)
@@ -453,33 +498,32 @@ DotPlot_Heatmap = function(seurat_object,
             Split = dup.ident,
             col = list(Identities = idents.colors,
                        Split = split.colors),
-            na_col = "grey40",
+            na_col = na.color,
             which = annotation.side,
             show_annotation_name = FALSE,
             show_legend = FALSE)
         }
       }
-      else if (isTRUE(show.idents.dend.colors)) {
-        idents.labels2 = HeatmapAnnotation(
-          Identities = ident.1,
-          col = list(Identities = idents.colors),
-          na_col = "grey40",
-          which = annotation.side,
-          show_annotation_name = FALSE,
-          show_legend = FALSE)
-      }
-      else if (isTRUE(show.split.dend.colors)) {
-        idents.labels2 = HeatmapAnnotation(
-          Split = dup.ident,
-          col = list(Split = split.colors),
-          na_col = "grey40",
-          which = annotation.side,
-          show_annotation_name = FALSE,
-          show_legend = FALSE)
-      }
-      else {
-        idents.labels2 = NULL
-      }
+    else if (isTRUE(show.idents.dend.colors)) {
+      idents.labels2 = HeatmapAnnotation(
+        Identities = ident.1,
+        col = list(Identities = idents.colors),
+        na_col = na.color,
+        which = annotation.side,
+        show_annotation_name = FALSE,
+        show_legend = FALSE)
+    }
+    else if (isTRUE(show.split.dend.colors)) {
+      idents.labels2 = HeatmapAnnotation(
+        Split = dup.ident,
+        col = list(Split = split.colors),
+        na_col = na.color,
+        which = annotation.side,
+        show_annotation_name = FALSE,
+        show_legend = FALSE)
+    }
+    else {
+      idents.labels2 = NULL
     }
   }
   else {
@@ -487,7 +531,7 @@ DotPlot_Heatmap = function(seurat_object,
       idents.labels = HeatmapAnnotation(
         Identities = ident.1,
         col = list(Identities = idents.colors),
-        na_col = "grey40",
+        na_col = na.color,
         which = annotation.side,
         show_annotation_name = FALSE,
         show_legend = FALSE)
@@ -495,11 +539,11 @@ DotPlot_Heatmap = function(seurat_object,
     else {
       idents.labels = NULL
     }
-    if ((!isFALSE(cluster.rows) & isFALSE(rotate.axis) & isTRUE(show.idents.dend.colors)) | (!isFALSE(cluster.columns) & isTRUE(rotate.axis) & isTRUE(show.idents.dend.colors))) {
+    if (isTRUE(show.idents.dend.colors)) {
     idents.labels2 = HeatmapAnnotation(
       Identities = ident.1,
       col = list(Identities = idents.colors),
-      na_col = "grey40",
+      na_col = na.color,
       which = annotation.side,
       show_annotation_name = FALSE,
       show_legend = FALSE)
@@ -517,11 +561,25 @@ DotPlot_Heatmap = function(seurat_object,
     row.dend.side = "left"
     row.title.side = "left"
   }
+  idents.names.gp = gpar(fontsize = idents.names.size)
+  features.names.gp = gpar(fontsize = features.names.size, fontface = features.names.style)
   if (isTRUE(rotate.axis)) {
     idents.labels3 = idents.labels
     idents.labels = NULL
     idents.labels4 = idents.labels2
     idents.labels2 = NULL
+    idents.names.gptmp = idents.names.gp
+    idents.names.gp = features.names.gp
+    features.names.gp = idents.names.gptmp
+    cluster.identstmp = cluster.idents
+    cluster.idents = cluster.features
+    cluster.features = cluster.identstmp
+    idents.kmeanstmp = idents.kmeans
+    idents.kmeans = features.kmeans
+    features.kmeans = idents.kmeanstmp
+    idents.kmeans.numbers.sizetmp = idents.kmeans.numbers.size
+    idents.kmeans.numbers.size = features.kmeans.numbers.size
+    features.kmeans.numbers.size = idents.kmeans.numbers.sizetmp
   }
   if (column.names.side == "top") {
     if (isTRUE(rotate.axis)) {
@@ -547,10 +605,20 @@ DotPlot_Heatmap = function(seurat_object,
     anno.legend = c(na.label,anno.legend)
   }
 
-  zero.dot = 0
+  ht_opt$ANNOTATION_LEGEND_PADDING = unit(legend.gap, "mm")
+  if (data.legend.position == "right" | data.legend.position == "left" | column.names.side == "top") {
+    ht_opt$HEATMAP_LEGEND_PADDING = unit(legend.gap, "mm")
+  }
+  else {
+    ht_opt$HEATMAP_LEGEND_PADDING = unit(2, "mm")
+  }
   if (isTRUE(dotplot)) {
-    if (isTRUE(show.na.dots)) {
-      zero.dot = 0.001
+    zero.dot = 0
+    if (isTRUE(show.noexpr.dots)) {
+      zero.dot = min(dot[dot > 0], na.rm = TRUE)
+      if (zero.dot > 0.001) {
+        zero.dot = 0.001
+      }
       dot[dot==0] = zero.dot
     }
     if (dots.type == "radius") {
@@ -563,6 +631,8 @@ DotPlot_Heatmap = function(seurat_object,
                          gp = gpar(fill = data.colors(pindex(mat, i, j)), col = NA)))}
     dots.legend = Legend(labels = c(0,10,25,50,75,100), title = "Percent\nof cells\nexpressing",
                          gap = unit(0.5, "cm"),
+                         title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+                         labels_gp = gpar(fontsize = legend.text.size),
               graphics = list(
                 function(x, y, w, h) grid.circle(x = x, y = y, r = zero.dot * unit(1.8, "mm"),
                                                  gp = gpar(fill = "black")),
@@ -587,6 +657,8 @@ DotPlot_Heatmap = function(seurat_object,
                            gp = gpar(fill = data.colors(pindex(mat, i, j)), col = NA)))}
       dots.legend = Legend(labels = c(0,10,25,50,75,100), title = "Percent\nof cells\nexpressing",
                            gap = unit(0.5, "cm"),
+                           title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+                           labels_gp = gpar(fontsize = legend.text.size),
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(zero.dot) * unit(1.8, "mm"),
                                                               gp = gpar(fill = "black")),
@@ -602,7 +674,7 @@ DotPlot_Heatmap = function(seurat_object,
                                                               gp = gpar(fill = "black"))))
     }
     anno.legend = c(anno.legend,list(dots.legend))
-    ht = draw(Heatmap(
+    ht = Heatmap(
       mat,
       col = data.colors,
       na_col = na.color,
@@ -612,18 +684,22 @@ DotPlot_Heatmap = function(seurat_object,
       layer_fun = dots.creation,
       left_annotation = idents.labels,
       right_annotation = idents.labels2,
-      bottom_annotation = idents.labels4,
-      top_annotation = idents.labels3,
-      cluster_rows = cluster.rows,
-      cluster_columns = cluster.columns,
+      bottom_annotation = idents.labels3,
+      top_annotation = idents.labels4,
+      cluster_rows = cluster.idents,
+      cluster_columns = cluster.features,
       row_title_rot = 0,
       row_title_side = row.title.side,
-      row_km = row.kmeans,
+      row_title_gp = gpar(fontsize = idents.kmeans.numbers.size),
+      row_km = idents.kmeans,
       row_km_repeats = kmeans.repeats,
-      column_km = column.kmeans,
+      column_km = features.kmeans,
       column_km_repeats = kmeans.repeats,
-      column_names_rot = column.names.rotation,
+      column_names_gp = features.names.gp,
+      row_names_gp = idents.names.gp,
+      column_names_rot = column.names.angle,
       column_title_side = column.title.side,
+      column_title_gp = gpar(fontsize = features.kmeans.numbers.size),
       row_names_side = row.names.side,
       row_names_max_width = row.names.width,
       column_names_side = column.names.side,
@@ -633,13 +709,10 @@ DotPlot_Heatmap = function(seurat_object,
       heatmap_legend_param = list(
         legend_direction = data.legend.direction,
         title_position = data.legend.position,
-      legend_width = unit(data.legend.width, "cm")),
-      ...),
-      heatmap_legend_side = data.legend.side,
-      align_heatmap_legend = "heatmap_center",
-      align_annotation_legend = "heatmap_center",
-      annotation_legend_list = anno.legend,
-      legend_grouping = "original")
+        legend_width = unit(data.legend.width, "cm"),
+        title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+        labels_gp = gpar(fontsize = legend.text.size)),
+      ...)
   }
 
   else {
@@ -649,7 +722,7 @@ DotPlot_Heatmap = function(seurat_object,
     else {
       inner.border = gpar(col = NA)
     }
-    ht = draw(Heatmap(
+    ht = Heatmap(
       mat,
       col = data.colors,
       na_col = na.color,
@@ -658,18 +731,22 @@ DotPlot_Heatmap = function(seurat_object,
       border = outer.border,
       left_annotation = idents.labels,
       right_annotation = idents.labels2,
-      bottom_annotation = idents.labels4,
-      top_annotation = idents.labels3,
-      cluster_rows = cluster.rows,
-      cluster_columns = cluster.columns,
+      bottom_annotation = idents.labels3,
+      top_annotation = idents.labels4,
+      cluster_rows = cluster.idents,
+      cluster_columns = cluster.features,
       row_title_rot = 0,
       row_title_side = row.title.side,
-      row_km = row.kmeans,
+      row_title_gp = gpar(fontsize = idents.kmeans.numbers.size),
+      row_km = idents.kmeans,
       row_km_repeats = kmeans.repeats,
-      column_km = column.kmeans,
+      column_km = features.kmeans,
       column_km_repeats = kmeans.repeats,
-      column_names_rot = column.names.rotation,
+      column_names_gp = features.names.gp,
+      row_names_gp = idents.names.gp,
+      column_names_rot = column.names.angle,
       column_title_side = column.title.side,
+      column_title_gp = gpar(fontsize = features.kmeans.numbers.size),
       row_names_side = row.names.side,
       row_names_max_width = row.names.width,
       column_names_side = column.names.side,
@@ -679,14 +756,16 @@ DotPlot_Heatmap = function(seurat_object,
       heatmap_legend_param = list(
         legend_direction = data.legend.direction,
         title_position = data.legend.position,
-        legend_width = unit(data.legend.width, "cm")),
-      ...),
-      heatmap_legend_side = data.legend.side,
-      align_heatmap_legend = "heatmap_center",
-      align_annotation_legend = "heatmap_center",
-      annotation_legend_list = anno.legend,
-      legend_grouping = "original")
+        legend_width = unit(data.legend.width, "cm"),
+        title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+        labels_gp = gpar(fontsize = legend.text.size)),
+      ...)
   }
 
-  return(ht)
+  return(draw(ht,
+              heatmap_legend_side = data.legend.side,
+              align_heatmap_legend = "heatmap_center",
+              align_annotation_legend = "heatmap_center",
+              annotation_legend_list = anno.legend,
+              legend_grouping = "original"))
 }

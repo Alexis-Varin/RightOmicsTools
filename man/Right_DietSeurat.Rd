@@ -38,7 +38,7 @@ Right_DietSeurat(
 
 \item{split.counts.layer}{Character. The name of an identity in the meta.data slot to split the counts layer by if you need to in your downstream analysis. If \code{NULL}, the diet object will have a single counts layer, even if the original object had split counts layers.}
 
-\item{data.layer}{Logical. If \code{TRUE}, the data layer of the RNA assay will be kept in the diet object if it is present. As with the counts layer, if there are split data layers, they will be joined into a single data layer unless the split.counts.layer parameter is set.}
+\item{data.layer}{Logical. If \code{TRUE}, the data layer of the RNA assay will be kept in the diet object if it is present. As with the counts layer, if there are split data layers, they will be joined into a single data layer unless the \code{split.counts.layer} parameter is set.}
 
 \item{scale.layer}{Logical. If \code{TRUE}, the scale.data layer of the RNA assay will be kept in the diet object if it is present.}
 
@@ -48,7 +48,7 @@ Right_DietSeurat(
 A \pkg{Seurat} object, hopefully smaller, with class Assay5 RNA assay and specified layers and slots.
 }
 \description{
-As of \pkg{Seurat} v5 release, \code{\link[Seurat]{DietSeurat}} function does not remove data and scale.data layers, resulting in objects with little to no reduction in size. This function was created with the purpose to restore \code{\link[Seurat]{DietSeurat}}'s proper behavior until the function is fixed by \pkg{Seurat}'s dev team, as well as to offer a few new options such as the ability to subset cells or keep variable features.
+As of \pkg{Seurat} v5 release, \code{\link[Seurat]{DietSeurat}} does not remove data and scale.data layers, resulting in objects with little to no reduction in size. This function was created with the purpose to restore \code{\link[Seurat]{DietSeurat}}'s proper behavior until the function is fixed by \pkg{Seurat}'s dev team, as well as to offer a few new options such as the ability to subset cells or keep variable features.
 }
 \examples{
 library(Seurat)

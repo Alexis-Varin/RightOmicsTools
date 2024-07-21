@@ -1,25 +1,25 @@
 #' @title Find_Annotation_Markers
 #'
-#' @description This function is a wrapper around Seurat's FindMarkers function that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA genes in human, as well as filtering of pseudogenes in mouse. It will also directly give the top X markers for each identity to use for plotting with DotPlot_Heatmap() for example.
+#' @description This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
 #'
-#' @param seurat_object A Seurat object.
-#' @param ident.1 Character. Identity class to define markers for; pass an object of class phylo or 'clustertree' to find markers for a node in a cluster tree; passing 'clustertree' requires BuildClusterTree to have been run. Leave NULL to find markers for all clusters.
-#' @param ident.2 Character. A second identity class for comparison; if NULL, use all other cells for comparison; if an object of class phylo or 'clustertree' is passed to ident.1, must pass a node to find markers for.
-#' @param min.pct Numeric. Only test genes that are detected in a minimum fraction of min.pct cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expressed.
-#' @param top.markers Numeric. The number of top markers to return. If set to Inf, all markers will be returned.
-#' @param unique.markers Logical. If TRUE, unique markers will be returned for each cluster in order to prevent markers repeated in multiple clusters.
-#' @param filter.mito Logical. If TRUE, mitochondrial genes will be filtered out.
-#' @param filter.ribo Logical. If TRUE, ribosomal genes will be filtered out.
-#' @param filter.ncRNA Logical. If TRUE, non-coding RNA genes will be filtered out.
-#' @param species Character. The species from which to pull data to filter out genes. If "human", non-coding RNA genes will be filtered out from a dataset named ncRNA_human built from genenames database. If "mouse", only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from dreamBase2 database. These datasets are loaded with RightSeuratTools package and may be checked for more information.
-#' @param parallelized Logical. If TRUE, FindMarkers will be parallelized using BiocParallel.
-#' @param BPPARAM A BiocParallelParam object to be used for parallelization. If NULL, will use SerialParam() which is not parallelized. Ignored if parallelized = FALSE.
-#' @param output.df Logical. If TRUE, a data frame of gene names and associated statistics will be returned. If FALSE, a character vector of gene names will be returned.
-#' @param output.list Logical. If TRUE, a list of gene names with or without statistics for each cluster will be returned.
-#' @param verbose Logical. If FALSE, does not print progress messages and output, but warnings and errors will still be printed.
-#' @param ... Additional arguments to be passed to FindMarkers, such as test.use, or other methods and to specific DE methods downstream of FindMarkers.
+#' @param seurat_object A \pkg{Seurat} object.
+#' @param ident.1 Character. (from \code{\link[Seurat]{FindMarkers}} documentation) Identity class to define markers for; pass an object of class \code{phylo} or 'clustertree' to find markers for a node in a cluster tree; passing 'clustertree' requires \code{\link[Seurat]{BuildClusterTree}} to have been run. Leave \code{NULL} to find markers for all clusters.
+#' @param ident.2 Character. (from \code{\link[Seurat]{FindMarkers}} documentation) A second identity class for comparison; if \code{NULL}, use all other cells for comparison; if an object of class \code{phylo} or 'clustertree' is passed to \code{ident.1}, must pass a node to find markers for.
+#' @param min.pct Numeric. (from \code{\link[Seurat]{FindMarkers}} documentation) Only test features that are detected in a minimum fraction of min.pct cells in either of the two populations. Meant to speed up the function by not testing features that are very infrequently expressed.
+#' @param top.markers Numeric. The number of top markers to return. If set to \code{Inf}, all markers will be returned.
+#' @param unique.markers Logical. If \code{TRUE}, unique markers will be returned for each identity in order to prevent features repeated multiple times.
+#' @param filter.mito Logical. If \code{TRUE}, mitochondrial features will be filtered out.
+#' @param filter.ribo Logical. If \code{TRUE}, ribosomal features will be filtered out.
+#' @param filter.ncRNA Logical. If \code{TRUE}, non-coding RNA features will be filtered out.
+#' @param species Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named ncRNA_human built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightSeuratTools} and may be checked for more information.
+#' @param parallelized Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}.
+#' @param BPPARAM A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.
+#' @param output.df Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.
+#' @param output.list Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.
+#' @param verbose Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.
+#' @param ... Additional arguments to be passed to \code{\link[Seurat]{FindMarkers}}, such as \code{test.use}, or passed to other methods and to specific DE methods.
 #'
-#' @return A data frame or a list of data frames with gene names and associated statistics, or a character vector or a list of character vectors with gene names.
+#' @return A data frame or a list of data frames with features names and associated statistics, or a character vector or a list of character vectors with features names.
 #'
 #' @examples
 #' library(Seurat)
@@ -49,7 +49,7 @@ Find_Annotation_Markers = function(seurat_object,
                                    ident.1 = NULL,
                                    ident.2 = NULL,
                                    min.pct = 0.25,
-                                   top.markers = 5,
+                                   top.markers = 10,
                                    unique.markers = TRUE,
                                    filter.mito = TRUE,
                                    filter.ribo = TRUE,
@@ -67,15 +67,15 @@ Find_Annotation_Markers = function(seurat_object,
   }
 
   if (species == "human") {
-    to.remove = ncRNA_human
+    to.remove = RightSeuratTools::ncRNA_human
   }
   if (species == "mouse") {
-    to.remove = pseudogenes_mouse
+    to.remove = RightSeuratTools::pseudogenes_mouse
   }
 
   if (isTRUE(parallelized)) {
     if (is.null(BPPARAM)) {
-      warning("No BPPARAM parameter provided, using SerialParam(), which is not parallelized")
+      warning("No BPPARAM parameter provided, using BiocParallel::SerialParam(), which is not parallelized")
       BPPARAM = SerialParam()
     }
     if (is.null(ident.1) & is.null(ident.2)) {
@@ -169,31 +169,31 @@ Find_Annotation_Markers = function(seurat_object,
   top.markers.df = data.frame()
   for (i in 1:length(all.markers2)) {
     all.markers2[[i]]$cluster = levels(Idents(seurat_object))[i]
-    all.markers2[[i]]$gene = gsub("\\..[0-9]*","",rownames(all.markers2[[i]]))
+    all.markers2[[i]]$feature = gsub("\\..[0-9]*","",rownames(all.markers2[[i]]))
     all.markers2[[i]] = all.markers2[[i]][order(all.markers2[[i]]$avg_log2FC, decreasing = T),]
 
     if (isTRUE(filter.ncRNA)) {
       all.markers2[[i]] = setdiff(all.markers2[[i]], all.markers2[[i]][which(all.markers2[[i]] %in% to.remove)])
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$gene),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$feature),]
       }
     }
 
     if (isTRUE(filter.mito)) {
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^MT-", x = all.markers2[[i]]$gene),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^MT-", x = all.markers2[[i]]$feature),]
       }
       if (species == "mouse") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^mt-", x = all.markers2[[i]]$gene),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^mt-", x = all.markers2[[i]]$feature),]
       }
     }
 
     if (isTRUE(filter.ribo)) {
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^RP[SL]", x = all.markers2[[i]]$gene),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^RP[SL]", x = all.markers2[[i]]$feature),]
       }
       if (species == "mouse") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^Rp[sl]", x = all.markers2[[i]]$gene),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^Rp[sl]", x = all.markers2[[i]]$feature),]
       }
     }
 
@@ -208,7 +208,7 @@ Find_Annotation_Markers = function(seurat_object,
         k = 0
         while (j < top.markers+1) {
           k = k + 1
-          if (isFALSE(any(grepl(all.markers2[[i]]$gene[k],top.markers.df)))) {
+          if (isFALSE(any(grepl(all.markers2[[i]]$feature[k],top.markers.df)))) {
             top.markers.df = rbind(top.markers.df,all.markers2[[i]][k,])
             j = j + 1
           }
@@ -239,20 +239,20 @@ Find_Annotation_Markers = function(seurat_object,
 
   if (isFALSE(output.df) & isTRUE(output.list)) {
     if (!is.infinite(top.markers)) {
-      final.list = list("features" = top.markers.df$gene, "list" = all.markers2)
+      final.list = list("features" = top.markers.df$feature, "list" = all.markers2)
     }
     else {
-      final.list = list("features" = all.markers$gene, "list" = all.markers2)
+      final.list = list("features" = all.markers$feature, "list" = all.markers2)
     }
     return(final.list)
   }
 
   if (isFALSE(output.df) & isFALSE(output.list)) {
     if (!is.infinite(top.markers)) {
-      return(top.markers.df$gene)
+      return(top.markers.df$feature)
     }
     else {
-      return(all.markers$gene)
+      return(all.markers$feature)
     }
   }
 }

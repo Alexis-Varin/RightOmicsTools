@@ -1,3 +1,3 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("If you find this package useful and would like to cite it, please use citation('RightSeuratTools').")
+  packageStartupMessage("If you would like to reference this package, please use citation('RightSeuratTools').")
 }
