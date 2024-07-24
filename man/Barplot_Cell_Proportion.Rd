@@ -40,9 +40,9 @@ Barplot_Cell_Proportion(
 
 \item{order.proportion}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.}
 
-\item{order.group}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.}
+\item{order.group}{Character. A vector specifying either 'reverse' or the levels of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{order.split}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.}
+\item{order.split}{Character. A vector specifying either 'reverse' or the levels of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.}
 
 \item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity, the \code{group.by} identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents}, \code{order.group} and \code{order.split}. Ignored if \code{order.idents}, \code{order.group} and \code{order.split} are \code{NULL}.}
 

@@ -29,10 +29,10 @@ DotPlot_Heatmap(
   background.color = "white",
   idents.colors = NULL,
   show.idents.names.colors = FALSE,
-  show.idents.dend.colors = TRUE,
+  show.idents.oppo.colors = TRUE,
   split.colors = NULL,
   show.split.names.colors = FALSE,
-  show.split.dend.colors = TRUE,
+  show.split.oppo.colors = TRUE,
   order.idents = NULL,
   order.split = NULL,
   order.colors = TRUE,
@@ -43,6 +43,8 @@ DotPlot_Heatmap(
   cluster.features = TRUE,
   features.kmeans = 1,
   features.kmeans.numbers.size = 11,
+  idents.gap = 1,
+  features.gap = 1,
   idents.names.size = 9,
   features.names.size = 9,
   features.names.style = "italic",
@@ -118,13 +120,13 @@ DotPlot_Heatmap(
 
 \item{show.idents.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter next to identities names.}
 
-\item{show.idents.dend.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter next to the dendrogram.}
+\item{show.idents.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter on the opposite side of identities names.}
 
 \item{split.colors}{Character. A vector of colors to use for the split.by identity, of same length as the number of identities in the \code{split.by} identity or supplied to the \code{split.idents} parameter. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{split.by} = \code{NULL}.}
 
 \item{show.split.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to identities names. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{show.split.dend.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to the dendrogram. Ignored if \code{split.by} = \code{NULL}.}
+\item{show.split.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter on the opposite side of identities names. Ignored if \code{split.by} = \code{NULL}.}
 
 \item{order.idents}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.}
 
@@ -146,11 +148,15 @@ DotPlot_Heatmap(
 
 \item{features.kmeans.numbers.size}{Numeric. The font size of the features k-means slices numbers. Set to 0 to remove them.}
 
-\item{idents.names.size}{Numeric. The font size of the identities names.}
+\item{idents.gap}{Numeric. The gap between the identities slices. Ignored if \code{cluster.idents} = \code{FALSE}.}
 
-\item{features.names.size}{Numeric. The font size of the features names.}
+\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{cluster.features} = \code{FALSE}.}
 
-\item{features.names.style}{Character. The font face of the features names. The Gene nomenclature used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.}
+\item{idents.names.size}{Numeric. The font size of the identities names. Set to 0 to remove them.}
+
+\item{features.names.size}{Numeric. The font size of the features names. Set to 0 to remove them.}
+
+\item{features.names.style}{Character. The font face of the features names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.}
 
 \item{row.names.side}{Character. The side where the row names will be displayed, either 'left' or 'right'. The dendrogram will be displayed on the opposite side.}
 
@@ -172,31 +178,31 @@ DotPlot_Heatmap(
 
 \item{data.legend.direction}{Character. The direction of the data legend, either 'horizontal' or 'vertical'.}
 
-\item{data.legend.position}{Character. The centering of the data legend name, there are many options, default option from \code{link[ComplexHeatmap]{Heatmap}} is 'topleft'.}
+\item{data.legend.position}{Character. The centering of the data legend name, there are many options, default option from \code{\link[ComplexHeatmap]{Heatmap}} is 'topleft'.}
 
 \item{data.legend.width}{Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.}
 
-\item{idents.legend.name}{Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.}
+\item{idents.legend.name}{Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.}
+\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{split.legend.name}{Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.}
+\item{split.legend.name}{Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
-\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.}
+\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
 \item{legend.title.size}{Numeric. The font size of all legend titles.}
 
 \item{legend.text.size}{Numeric. The font size of all legend texts.}
 
-\item{legend.gap}{Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.}
+\item{legend.gap}{Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{\link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.}
 
 \item{output.data}{Logical. If \code{TRUE}, the function will return a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature, instead of displaying anything.}
 
-\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{use_raster}, \code{clustering_method_columns}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).}
+\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).}
 }
 \value{
 A \code{\link[ComplexHeatmap]{Heatmap}} object, either as a dotplot, or a heatmap, or a list containing a matrix of the average expression data, scaled or not, and another matrix containing the percentage of cells expressing each feature.
 }
 \description{
-This function generates a dotplot or a heatmap to visualize features expression in a \pkg{Seurat} object. Credits to \pkg{Seurat}'s dev team for the original \code{\link[Seurat]{DotPlot}} from which data processing of this function is derived from and to \href{https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/}{Ming Tang} for the initial idea to use \pkg{ComplexHeatmap} to draw a dotplot and the \code{layer_fun} function that draws the dots. Various new parameters were added to offer more flexibility and customization.
+This function generates a dotplot or a heatmap to visualize the average expression in each identity of features in a \pkg{Seurat} object. Credits to \pkg{Seurat}'s dev team for the original \code{\link[Seurat]{DotPlot}} from which data processing of this function is derived from and to \href{https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/}{Ming Tang} for the initial idea to use \pkg{ComplexHeatmap} to draw a dotplot and the \code{layer_fun} function that draws the dots. Various new parameters were added to offer more flexibility and customization.
 }

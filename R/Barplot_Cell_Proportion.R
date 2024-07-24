@@ -7,8 +7,8 @@
 #' @param split.by Character. The name of an identity in the meta.data slot to split the active.ident identity by into separate ggplot objects.
 #' @param colors Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity. If \code{NULL}, uses \pkg{Seurat}'s default colors.
 #' @param order.proportion Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.
-#' @param order.group Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.
-#' @param order.split Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.
+#' @param order.group Character. A vector specifying either 'reverse' or the levels of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.
+#' @param order.split Character. A vector specifying either 'reverse' or the levels of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.
 #' @param order.colors Logical. If \code{TRUE}, the colors for the active.ident identity, the \code{group.by} identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents}, \code{order.group} and \code{order.split}. Ignored if \code{order.idents}, \code{order.group} and \code{order.split} are \code{NULL}.
 #' @param show.cellsum.label Logical. If \code{TRUE}, the cell sum of each identity will be shown at the top of each bar.
 #' @param cellsum.label.size Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.
@@ -69,10 +69,10 @@ Barplot_Cell_Proportion = function(seurat_object,
   }
 
   if (isTRUE(order.colors)) {
+    if (!is.null(names(colors))) {
+      colors = colors[levels(Idents(seurat_object))]
+    }
     if (is.character(order.proportion)) {
-      if (!is.null(names(colors))) {
-        colors = colors[levels(Idents(seurat_object))]
-      }
       if (length(order.proportion) > 1) {
         names(colors) = levels(Idents(seurat_object))
         colors = colors[order.proportion]
@@ -102,7 +102,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       order.split = levels(Idents(seurat_object))
     }
     else {
-      if (length(order.split) > 1) {
+      if (length(order.split) == length(levels(Idents(seurat_object)))) {
         seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
       }
       else {
@@ -111,7 +111,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
         }
         else {
-          stop("order.split needs to be either 'reverse' or a character vector")
+          stop("order.split needs to be either 'reverse' or a character or numeric vector of same length as the number of identities")
         }
       }
     }
@@ -197,7 +197,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                         axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                         axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                        axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                        axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                         plot.margin = margin(5.5,5.5,5.5,20.5))+
                   scale_fill_manual(values=colors)+
                   geom_text(data = data.frame("ident1" = i,
@@ -218,7 +218,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                     axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                     plot.margin = margin(5.5,5.5,5.5,20.5))+
               scale_y_continuous(expand= c(0,0), labels = scales::percent)+
               scale_fill_manual(values=colors)
@@ -235,7 +235,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_fill_manual(values=colors)+
                 geom_text(data = data.frame("ident1" = i,
@@ -256,7 +256,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_y_continuous(expand= c(0,0), breaks = NULL)+
                 scale_fill_manual(values=colors)
@@ -274,7 +274,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side)+
+                  axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side)+
             scale_fill_manual(values=colors)+
             geom_text(data = data.frame("ident1" = i,
                                         "sum" = sum(table.list[[i]][[j]]$nbcells),
@@ -294,7 +294,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                     axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side)+
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side)+
               scale_y_continuous(expand= c(0,0))+
               scale_fill_manual(values=colors)
           }
@@ -317,7 +317,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                     axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                     axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                    legend.side = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                    legend.position = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
               scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
               scale_fill_manual(values=colors)+
               ggtitle(i)
@@ -332,7 +332,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.side = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= c(0,0), labels = scales::percent)+
           scale_fill_manual(values=colors)+
           ggtitle(i)
@@ -352,7 +352,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
             scale_fill_manual(values=colors)+
             ggtitle(i)
@@ -367,7 +367,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                legend.side = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                legend.position = legend.side, aspect.ratio = l/k, plot.margin = margin(5.5,65.5,5.5,5.5))+
           scale_y_continuous(expand= c(0,0))+
           scale_fill_manual(values=colors)+
           ggtitle(i)
@@ -418,7 +418,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
             scale_fill_manual(values=colors)+
             NoLegend()+
@@ -433,7 +433,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= c(0,0), labels = scales::percent)+
             scale_fill_manual(values=colors)+
             NoLegend()+
@@ -452,7 +452,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
             scale_fill_manual(values=colors)+
             NoLegend()+
@@ -467,7 +467,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
+                  legend.position = legend.side, plot.margin = margin(5.5,65.5,5.5,5.5))+
             scale_y_continuous(expand= c(0,0))+
             scale_fill_manual(values=colors)+
             NoLegend()+
@@ -508,11 +508,11 @@ Barplot_Cell_Proportion = function(seurat_object,
     }
     temp.plot = wrap_plots(temp.plot, nrow = nrow, guides = "collect")+
       plot_annotation(title = temp.title, theme = theme(plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                                    legend.side = legend.side))
+                                    legend.position = legend.side))
     proportion.plot = temp.plot
     if (isFALSE(show.legend)) {
       proportion.plot = proportion.plot+
-        plot_annotation(theme = theme(legend.side = "none"))
+        plot_annotation(theme = theme(legend.position = "none"))
     }
   }
   else {
@@ -520,10 +520,10 @@ Barplot_Cell_Proportion = function(seurat_object,
   for (i in levels(Idents(seurat_object))) {
     proportion.plot[[i]] = wrap_plots(proportion.plot[[i]], nrow = nrow, guides = "collect")+
       plot_annotation(title = i, theme = theme(plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                                    legend.side = legend.side))
+                                    legend.position = legend.side))
     if (isFALSE(show.legend)) {
       proportion.plot[[i]] = proportion.plot[[i]]+
-        plot_annotation(theme = theme(legend.side = "none"))
+        plot_annotation(theme = theme(legend.position = "none"))
     }
   }
   }
@@ -536,10 +536,10 @@ Barplot_Cell_Proportion = function(seurat_object,
     proportion.plot[[length(levels(Idents(seurat_object)))]] = proportion.plot[[length(levels(Idents(seurat_object)))]]+
       theme(plot.margin = margin(5.5,5.5,5.5,5.5))
     proportion.plot = wrap_plots(proportion.plot, nrow = nrow, guides = "collect")+
-      plot_annotation(theme = theme(legend.side = legend.side))
+      plot_annotation(theme = theme(legend.position = legend.side))
     if (isFALSE(show.legend)) {
       proportion.plot = proportion.plot+
-        plot_annotation(theme = theme(legend.side = "none"))
+        plot_annotation(theme = theme(legend.position = "none"))
     }
     }
     else {
@@ -627,7 +627,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_fill_manual(values=colors)+
                 geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
@@ -646,7 +646,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_y_continuous(expand= c(0,0), labels = scales::percent)+
                 scale_fill_manual(values=colors)
@@ -662,7 +662,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_fill_manual(values=colors)+
                 geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
@@ -681,7 +681,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                       panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                       axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                       axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side,
+                      axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side,
                       plot.margin = margin(5.5,5.5,5.5,20.5))+
                 scale_y_continuous(expand= c(0,0), breaks = NULL)+
                 scale_fill_manual(values=colors)
@@ -698,7 +698,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                     axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side)+
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side)+
               scale_fill_manual(values=colors)+
               geom_text(data = data.frame("sum" = sum(table.list[[j]]$nbcells),
                                           "ident2" = j,
@@ -716,7 +716,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
                     axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                     axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
-                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.side = legend.side)+
+                    axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), legend.position = legend.side)+
               scale_y_continuous(expand= c(0,0))+
               scale_fill_manual(values=colors)
           }
@@ -729,10 +729,10 @@ Barplot_Cell_Proportion = function(seurat_object,
             theme(axis.title.y = element_blank())
       }
       proportion.plot = wrap_plots(proportion.plot, nrow = nrow, guides = "collect")+
-        plot_annotation(theme = theme(legend.side = legend.side))
+        plot_annotation(theme = theme(legend.position = legend.side))
       if (isFALSE(show.legend)) {
         proportion.plot = proportion.plot+
-          plot_annotation(theme = theme(legend.side = "none"))
+          plot_annotation(theme = theme(legend.position = "none"))
       }
       return(proportion.plot)
     }
@@ -751,7 +751,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side)+
+                  legend.position = legend.side)+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
             scale_fill_manual(values=colors)
         }
@@ -765,7 +765,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side)+
+                  legend.position = legend.side)+
             scale_y_continuous(expand= c(0,0), labels = scales::percent)+
             scale_fill_manual(values=colors)
         }
@@ -784,7 +784,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side)+
+                  legend.position = legend.side)+
             scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
             scale_fill_manual(values=colors)
         }
@@ -798,7 +798,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                   axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                   axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                   axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size), plot.title = element_text(hjust = 0.5, size = split.plot.title.size),
-                  legend.side = legend.side)+
+                  legend.position = legend.side)+
             scale_y_continuous(expand= c(0,0))+
             scale_fill_manual(values=colors)
         }
@@ -855,7 +855,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-                legend.side = legend.side)+
+                legend.position = legend.side)+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)), labels = scales::percent)+
           scale_fill_manual(values=colors)+
           NoLegend()
@@ -869,7 +869,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-                legend.side = legend.side)+
+                legend.position = legend.side)+
           scale_y_continuous(expand= c(0,0), labels = scales::percent)+
           scale_fill_manual(values=colors)+
           NoLegend()
@@ -887,7 +887,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-                legend.side = legend.side)+
+                legend.position = legend.side)+
           scale_y_continuous(expand= expansion(mult = c(0,cellsum.label.size/50)))+
           scale_fill_manual(values=colors)+
           NoLegend()
@@ -901,7 +901,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                 axis.ticks.x = element_blank(), axis.text.x = element_text(angle = x.axis.angle, hjust = x.axis.hjust),
                 axis.title.x = element_blank(), axis.title.y = element_text(size = y.axis.title.size),
                 axis.text = element_text(size = axis.text.size), legend.text = element_text(size = legend.text.size),
-                legend.side = legend.side)+
+                legend.position = legend.side)+
           scale_y_continuous(expand= c(0,0))+
           scale_fill_manual(values=colors)+
           NoLegend()

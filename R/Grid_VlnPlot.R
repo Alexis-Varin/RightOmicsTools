@@ -104,7 +104,7 @@ Grid_VlnPlot = function(seurat_object,
   if (isFALSE(rotate.axis)) {
     gg = ggplot(data, aes(y=ident, x=expression, fill=ident)) + geom_violin(scale = "width", trim = T, adjust = 1) +
       labs(y="", x="", fill ="") + theme_bw()  +
-      theme(legend.side=legend.side, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
+      theme(legend.position = legend.side, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
             axis.text.x=element_blank(), axis.ticks.x=element_blank(), strip.text.x = element_text(size = features.text.size),
             panel.grid = element_blank()) +
       scale_fill_manual(values = colors)
@@ -118,7 +118,7 @@ Grid_VlnPlot = function(seurat_object,
   else {
     gg = ggplot(data, aes(y=expression, x=ident, fill=ident)) + geom_violin(scale = "width", trim = T, adjust = 1) +
       labs(y="", x="", fill ="") + theme_bw()  +
-      theme(legend.side=legend.side, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
+      theme(legend.position = legend.side, panel.spacing = unit(0, "lines"), legend.text = element_text(size = legend.text.size),
             axis.text.y=element_blank(), axis.ticks.y=element_blank(), strip.text.x = element_text(size = features.text.size),
             panel.grid = element_blank()) +
       scale_fill_manual(values = colors)
@@ -136,7 +136,7 @@ Grid_VlnPlot = function(seurat_object,
     gg = gg + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
   }
   if (isFALSE(show.legend)) {
-    gg = gg + theme(legend.side="none")
+    gg = gg + theme(legend.position="none")
   }
   return(gg)
 }
