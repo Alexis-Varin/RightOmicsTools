@@ -87,7 +87,7 @@ GSEA_Signatures = function(seurat_object,
           found.multiple.pathways = list()
           for (j in 1:length(pathways.found)) {
             features.multiple.pathways[[j]] = features.from.pathways.list[[i]][grep(pathways.found[j], features.from.pathways.list[[i]]$gs_name_source),]
-            features.multiple.pathways[[j]] = unique(as.vector(t(features.multiple.pathways[[j]]$human_feature_symbol)))
+            features.multiple.pathways[[j]] = unique(as.vector(t(features.multiple.pathways[[j]]$human_gene_symbol)))
             found.multiple.pathways[[j]] = intersect(features.multiple.pathways[[j]],rownames(LayerData(seurat_object, assay = assay, layer = layer)))
             names(features.multiple.pathways)[j] = pathways.found[j]
             names(found.multiple.pathways)[j] = pathways.found[j]
@@ -99,7 +99,7 @@ GSEA_Signatures = function(seurat_object,
           found.features.list[[i]] = found.multiple.pathways
         }
         else {
-          features.from.pathways.list[[i]] = unique(as.vector(t(features.from.pathways.list[[i]]$human_feature_symbol)))
+          features.from.pathways.list[[i]] = unique(as.vector(t(features.from.pathways.list[[i]]$human_gene_symbol)))
           found.features.list[[i]] = intersect(features.from.pathways.list[[i]],rownames(LayerData(seurat_object, assay = assay, layer = layer)))
           names(features.from.pathways.list)[i] = pathways.found
           names(found.features.list)[i] = pathways.found
@@ -169,13 +169,13 @@ GSEA_Signatures = function(seurat_object,
         cat("No signatures will be added, returning the Seurat object as well as features and pathways found.","\n",sep="")
       }
       return.list = list(seurat_object,features.from.pathways.list,found.features.list)
-      names(return.list) = c("Seurat object","features from pathways","features present in Seurat object")
+      names(return.list) = c("Seurat object","Features from pathways","Features present in Seurat object")
       return (return.list)
     }
     if (length(found.features.list) > fail.safe) {
       message("The function is attempting to add ",length(found.features.list)," signatures to the Seurat object which is higher than the fail-safe threshold, no signatures will be added, returning the Seurat object as well as features and pathways found. Increase fail.safe and run the function again to proceed with adding this many signatures",call. = FALSE, immediate. = TRUE)
       return.list = list(seurat_object,features.from.pathways.list,found.features.list)
-      names(return.list) = c("Seurat object","features from pathways","features present in Seurat object")
+      names(return.list) = c("Seurat object","Features from pathways","Features present in Seurat object")
       return (return.list)
     }
     if (length(found.features.list) == 1) {
@@ -222,7 +222,7 @@ GSEA_Signatures = function(seurat_object,
       cat("Done.","\n",sep="")
     }
     return.list = list(seurat_object,features.from.pathways.list,found.features.list,signatures.names)
-    names(return.list) = c("Seurat object","features from pathways","features present in Seurat object","Names of signatures in Seurat object")
+    names(return.list) = c("Seurat object","Features from pathways","Features present in Seurat object","Names of signatures in Seurat object")
     return (return.list)
   }
   else {
