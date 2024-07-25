@@ -24,9 +24,11 @@ You can install the `RightSeuratTools` package from GitHub using the `devtools` 
 
 `install.packages("devtools")`
 
-Be sure to also install in a similar fashion all other packages needed for this tutorial. Once you have `devtools` installed, you can install the `RightSeuratTools` package using the following command:
+Once you have `devtools` installed, you can install the `RightSeuratTools` package, as well as another package called `SeuratData` which will be used to load the dataset, using the following command:
 
 `devtools::install_github("Alexis-Varin/RightSeuratTools")`
+
+`devtools::install_github("satijalab/seurat-data")`
 
 ## Loading the package
 
@@ -38,13 +40,7 @@ library(RightSeuratTools)
 
 For this tutorial, we will use the `pbmc3k` dataset, which contains single-cell RNA-seq data from peripheral blood mononuclear cells (PBMCs).
 
-We will also build on `Seurat`'s own tutorial for `pbmc3k` to load and preprocess the data, available for reference [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial).
-
-First, download the [raw data](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz).
-
-Then, extract the compressed files and put the filtered_gene_bc_matrices folder in your working directory, which you can determine using `getwd()`.
-
-We can then proceed in loading the data and preprocessing it using the `Seurat` package.
+We will also build on `Seurat`'s tutorial for `pbmc3k` to preprocess the data, available for reference [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial).
 
 ```{r}
 library(Seurat)

@@ -25,7 +25,7 @@ Imports:
     ComplexHeatmap,
     colorRamp2
 Remotes:
-    satijalab/seurat-data
+    SeuratData=satijalab/seurat-data
 URL: https://github.com/Alexis-Varin/RightSeuratTools
 BugReports: https://github.com/Alexis-Varin/RightSeuratTools/issues
 Depends: 
