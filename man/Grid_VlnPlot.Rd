@@ -27,7 +27,7 @@ Grid_VlnPlot(
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. It is recommended to use 'data'.}
 

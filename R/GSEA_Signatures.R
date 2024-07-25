@@ -3,7 +3,7 @@
 #' @description This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from features found in the \pkg{Seurat} object and extracted from supplied MSigDB's pathways.
 #'
 #' @param seurat_object A \pkg{Seurat} object.
-#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
+#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
 #' @param layer Character. Formerly known as slot. If you have split layers the function will always join them before searching features and adding the signatures.
 #' @param species Character. The species name to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_species}} for the list of available species.
 #' @param category Character. The category or categories to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_collections}} for the list of available categories (gs_cat column). If \code{NULL}, all categories will be used.

@@ -1,9 +1,9 @@
 #' @title Cell_Heatmap
 #'
-#' @description This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to reproduce \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.
+#' @description This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to replicate \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.
 #'
 #' @param seurat_object A \pkg{Seurat} object.
-#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
+#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
 #' @param layer Character. Formerly known as slot. It is recommended to use 'data'.
 #' @param features Character. A vector of features to plot.
 #' @param split.by Character. The name of an identity in the meta.data slot to split the active.ident identity by.
@@ -27,14 +27,14 @@
 #' @param order.idents Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.
 #' @param order.split Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.
 #' @param order.colors Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.
-#' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.features} = \code{FALSE}.
+#' @param kmeans.repeats Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{features.kmeans} = 1.
 #' @param shuffle.cells Logical. If \code{TRUE}, the function will randomize the distribution of cells in each identity. Useful to smooth expression, which limits visible batch effect (cells in a merged \pkg{Seurat} object are typically ordered based on the levels of the 'orig.ident' identity, this might lead to unwanted patterns of expression in another identity). Note that no values are modified, it only changes the order of cells in each identity. Ignored if \code{cluster.cells} = \code{TRUE}.
 #' @param cluster.cells Logical. If \code{TRUE}, the function will cluster the cells within each identity. Will have the opposite effect of \code{shuffle.cells}, as it will order cells based on their expression similarity and will therefore increase batch effect. Useful to visualize if, within an identity, a subset of cells are expressing features while the rest of the cells do not, or vice versa. Just like \code{shuffle.cells}, no values are modified, it only changes the order of cells in each identity.
 #' @param cluster.features Logical or Function. If \code{TRUE}, the function will cluster the features. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.
 #' @param features.kmeans Numeric. The number of k-means slices to use for features clustering.
 #' @param features.kmeans.numbers.size Numeric. The font size of the features k-means slices numbers. Set to 0 to remove them.
 #' @param idents.gap Numeric. The gap between the identities slices.
-#' @param features.gap Numeric. The gap between the features slices. Ignored if \code{cluster.features} = \code{FALSE}.
+#' @param features.gap Numeric. The gap between the features slices. Ignored if \code{features.kmeans} = 1.
 #' @param idents.names.size Numeric. The font size of the identities names. Set to 0 to remove them.
 #' @param features.names.size Numeric. The font size of the features names. Set to 0 to remove them.
 #' @param features.names.style Character. The font face of the features names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.
@@ -49,17 +49,17 @@
 #' @param data.legend.direction Character. The direction of the data legend, either 'horizontal' or 'vertical'.
 #' @param data.legend.position Character. The centering of the data legend name, there are many options, default option from \code{\link[ComplexHeatmap]{Heatmap}} is 'topleft'.
 #' @param data.legend.width Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.
-#' @param idents.legend.name Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
-#' @param show.idents.legend Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.
-#' @param split.legend.name Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.
-#' @param show.split.legend Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.
+#' @param idents.legend.name Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.
+#' @param show.idents.legend Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.
+#' @param split.legend.name Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.
+#' @param show.split.legend Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.
 #' @param legend.title.size Numeric. The font size of all legend titles.
 #' @param legend.text.size Numeric. The font size of all legend texts.
 #' @param legend.gap Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{\link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.
 #' @param raster Logical. (from \code{\link[ComplexHeatmap]{Heatmap}} documentation) If \code{TRUE}, the function will render the heatmap body as a raster image. It helps to reduce file size when the matrix is huge.
 #' @param raster.quality Numeric. The quality of the raster image. A higher value will slow rendering but will lower expression smoothing. Ignored if \code{raster} = \code{FALSE}.
 #' @param output.data Logical. If \code{TRUE}, the function will return a matrix of the cell expression data, scaled or not, instead of displaying anything.
-#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).
+#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{Cell_Heatmap}}).
 #'
 #' @return A \code{\link[ComplexHeatmap]{Heatmap}} object, or a matrix of the cell expression data, scaled or not.
 #'

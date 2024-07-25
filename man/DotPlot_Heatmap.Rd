@@ -74,11 +74,11 @@ DotPlot_Heatmap(
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. It is recommended to use 'data'.}
 
-\item{data.are.log}{Logical. If \code{TRUE}, tells the function data are log transformed. If, and only if, \code{layer} = 'data', cell expression values are exponentiated (using \code{\link[base]{expm1}}) so that averaging is done in non-log space (as per \pkg{Seurat}'s default behavior for its own \code{\link[Seurat]{DotPlot}} or \code{\link[Seurat]{AverageExpression}}), after that, average expression values are log transformed back (using \code{\link[base]{log1p}}). If \code{FALSE}, or \code{layer} = 'scale.data' or 'counts', cell expression values are not exponentiated prior to averaging.}
+\item{data.are.log}{Logical. If \code{TRUE}, tells the function data are log transformed. If, and only if, \code{layer} = 'data', cell expression values are exponentiated (using \code{\link[base]{expm1}}) so that averaging is done in non-log space (as per \code{\link[Seurat]{DotPlot}} or \code{\link[Seurat]{AverageExpression}}'s default behavior), after that, average expression values are log transformed back (using \code{\link[base]{log1p}}). If \code{FALSE}, or \code{layer} = 'scale.data' or 'counts', cell expression values are not exponentiated prior to averaging.}
 
 \item{features}{Character. A vector of features to plot.}
 
@@ -134,7 +134,7 @@ DotPlot_Heatmap(
 
 \item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
 
-\item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.idents} and \code{cluster.features} are \code{FALSE}.}
+\item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{idents.kmeans} and \code{features.kmeans} are equal to 1.}
 
 \item{cluster.idents}{Logical or Function. If \code{TRUE}, the function will cluster the identities. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.}
 
@@ -148,9 +148,9 @@ DotPlot_Heatmap(
 
 \item{features.kmeans.numbers.size}{Numeric. The font size of the features k-means slices numbers. Set to 0 to remove them.}
 
-\item{idents.gap}{Numeric. The gap between the identities slices. Ignored if \code{cluster.idents} = \code{FALSE}.}
+\item{idents.gap}{Numeric. The gap between the identities slices. Ignored if \code{idents.kmeans} = 1.}
 
-\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{cluster.features} = \code{FALSE}.}
+\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{features.kmeans} = 1.}
 
 \item{idents.names.size}{Numeric. The font size of the identities names. Set to 0 to remove them.}
 

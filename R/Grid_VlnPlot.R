@@ -3,7 +3,7 @@
 #' @description This function is a stacked violin plot optimized to display features expression in a \pkg{Seurat} object in a grid fashion (square) instead of a single column like other stacked violin functions available in other packages, resulting in nicer plots and easier to include in publications.
 #'
 #' @param seurat_object A \pkg{Seurat} object.
-#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
+#' @param assay Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.
 #' @param layer Character. Formerly known as slot. It is recommended to use 'data'.
 #' @param features Character. A vector of features to plot.
 #' @param idents Character. A vector with one or several identities names in the active.ident identity to use if you only want those (instead of subsetting your object). If \code{NULL}, all identities will be used.

@@ -68,7 +68,7 @@ Cell_Heatmap(
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
 
 \item{layer}{Character. Formerly known as slot. It is recommended to use 'data'.}
 
@@ -116,7 +116,7 @@ Cell_Heatmap(
 
 \item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
 
-\item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{cluster.features} = \code{FALSE}.}
+\item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{features.kmeans} = 1.}
 
 \item{shuffle.cells}{Logical. If \code{TRUE}, the function will randomize the distribution of cells in each identity. Useful to smooth expression, which limits visible batch effect (cells in a merged \pkg{Seurat} object are typically ordered based on the levels of the 'orig.ident' identity, this might lead to unwanted patterns of expression in another identity). Note that no values are modified, it only changes the order of cells in each identity. Ignored if \code{cluster.cells} = \code{TRUE}.}
 
@@ -130,7 +130,7 @@ Cell_Heatmap(
 
 \item{idents.gap}{Numeric. The gap between the identities slices.}
 
-\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{cluster.features} = \code{FALSE}.}
+\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{features.kmeans} = 1.}
 
 \item{idents.names.size}{Numeric. The font size of the identities names. Set to 0 to remove them.}
 
@@ -160,13 +160,13 @@ Cell_Heatmap(
 
 \item{data.legend.width}{Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.}
 
-\item{idents.legend.name}{Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.}
+\item{idents.legend.name}{Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.dend.colors} are \code{FALSE}.}
+\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{split.legend.name}{Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.}
+\item{split.legend.name}{Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
-\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.dend.colors} are \code{FALSE}.}
+\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
 \item{legend.title.size}{Numeric. The font size of all legend titles.}
 
@@ -180,11 +180,11 @@ Cell_Heatmap(
 
 \item{output.data}{Logical. If \code{TRUE}, the function will return a matrix of the cell expression data, scaled or not, instead of displaying anything.}
 
-\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{DotPlot_Heatmap}}).}
+\item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{Cell_Heatmap}}).}
 }
 \value{
 A \code{\link[ComplexHeatmap]{Heatmap}} object, or a matrix of the cell expression data, scaled or not.
 }
 \description{
-This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to reproduce \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.
+This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to replicate \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.
 }
