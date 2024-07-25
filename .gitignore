@@ -5,6 +5,4 @@
 .DS_Store
 .quarto
 RightSeuratTools.Rproj
-Rbuildignore
-.Rbuildignore
 inst/doc
