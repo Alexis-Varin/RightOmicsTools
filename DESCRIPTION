@@ -12,7 +12,6 @@ RoxygenNote: 7.3.1
 Imports: 
     Seurat (>= 5.0.0),
     SeuratObject (>= 5.0.0),
-    SeuratData,
     data.table,
     ggplot2,
     patchwork,
@@ -25,8 +24,6 @@ Imports:
     stats,
     ComplexHeatmap,
     colorRamp2
-Remotes: 
-    satijalab/seurat-data
 URL: https://github.com/Alexis-Varin/RightSeuratTools
 BugReports: https://github.com/Alexis-Varin/RightSeuratTools/issues
 Depends: 

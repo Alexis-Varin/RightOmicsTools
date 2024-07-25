@@ -45,7 +45,6 @@
 #'
 #' @import Seurat
 #' @import SeuratObject
-#' @import SeuratData
 #' @export
 
 Right_DietSeurat = function(seurat_object,
