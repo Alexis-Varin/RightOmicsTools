@@ -7,3 +7,4 @@
 RightSeuratTools.Rproj
 Rbuildignore
 .Rbuildignore
+inst/doc

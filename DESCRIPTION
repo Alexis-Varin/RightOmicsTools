@@ -12,6 +12,7 @@ RoxygenNote: 7.3.1
 Imports: 
     Seurat (>= 5.0.0),
     SeuratObject (>= 5.0.0),
+    SeuratData,
     data.table,
     ggplot2,
     patchwork,
@@ -29,3 +30,7 @@ BugReports: https://github.com/Alexis-Varin/RightSeuratTools/issues
 Depends: 
     R (>= 2.10)
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

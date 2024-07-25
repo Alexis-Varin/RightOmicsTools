@@ -1,0 +1,52 @@
+---
+title: "Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This tutorial will guide you through the main functions of the `RightSeuratTools` package. The package is designed to provide complementary tools to the `Seurat` package, such as plotting, data manipulation, and more. The package is still under development, and new functions will be added in the future.
+
+# Installation
+
+You can install the `RightSeuratTools` package from GitHub using the `devtools` package. If you don't have the `devtools` package installed, you can install it using the following command:
+
+> install.packages("devtools")
+
+Once you have `devtools` installed, you can install the `RightSeuratTools` package using the following command:
+
+> devtools::install_github("Alexis-Varin/RightSeuratTools")
+
+# Loading the package
+
+```{r}
+library(RightSeuratTools)
+```
+
+# Data loading and preprocessing
+
+For this tutorial, we will use the `pbmc3k` dataset from the `SeuratData` package. The `pbmc3k` dataset contains single-cell RNA-seq data from peripheral blood mononuclear cells (PBMCs). We will load the dataset and preprocess it using the `Seurat` package.
+
+```{r}
+library(Seurat)
+library(SeuratData)
+
+# Load the pbmc3k dataset
+InstallData("pbmc3k")
+data(pbmc3k)
+pbmc3k = UpdateSeuratObject(pbmc3k)
+pbmc3k
+
+# To be continued...
+```
