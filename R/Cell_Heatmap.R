@@ -132,6 +132,22 @@ Cell_Heatmap = function(seurat_object,
                         output.data = FALSE,
                         ...) {
 
+  if (isFALSE(any(Assays(seurat_object) %in% assay))) {
+    message("Assay '",assay,"' was not found in the Seurat object, using 'RNA' instead")
+    assay = "RNA"
+  }
+
+  if (isFALSE(any(Layers(seurat_object[[assay]]) %in% layer))) {
+    if (isTRUE(any(Layers(seurat_object[[assay]]) %in% "data"))) {
+      message("Layer '",layer,"' was not found in the Seurat object's '",assay,"' assay, using 'data' instead")
+      layer = "data"
+    }
+    else {
+      message("Layer '",layer,"' was not found in the Seurat object's '",assay,"' assay, using 'counts' instead")
+      layer = "counts"
+    }
+  }
+
   if (!is.character(split.by)) {
     ident = "ident"
   }
@@ -144,10 +160,10 @@ Cell_Heatmap = function(seurat_object,
   if (is.character(idents)) {
     ident.1 = ident.1[ident.1 %in% idents]
     if (length(ident.1) == 0) {
-      stop("None of the identities supplied to idents were found, please check the spelling")
+      stop("None of the identities supplied to idents were found")
     }
     if (length(ident.1) < length(idents)) {
-      message("The following identities supplied to idents were not found, please check the spelling:\n", paste0(setdiff(idents, ident.1), collapse = ", "))
+      message("The following identities supplied to idents were not found:\n", paste0(setdiff(idents, ident.1), collapse = ", "))
     }
   }
   if (is.character(order.idents) | is.numeric(order.idents)) {
@@ -164,7 +180,7 @@ Cell_Heatmap = function(seurat_object,
         ident.1 = rev(ident.1)
       }
       else {
-        stop("order.idents needs to be either 'reverse' or a character or numeric vector of same length as the number of identities")
+        stop("order.idents needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
       }
     }
   }
@@ -180,8 +196,9 @@ Cell_Heatmap = function(seurat_object,
   features.removed = setdiff(features, colnames(data))
   if (is.character(split.by)) {
     if (!split.by %in% colnames(data)) {
-      message("The split.by identity was not found in the meta.data slot, data will not be split, please check the spelling")
+      message("The split.by identity was not found in the meta.data slot, data will not be split")
       split.by = NULL
+      ident.3 = ident.1
     }
     else {
       Idents(seurat_object) = split.by
@@ -189,10 +206,10 @@ Cell_Heatmap = function(seurat_object,
       if (is.character(split.idents)) {
         ident.2 = ident.2[ident.2 %in% split.idents]
         if (length(ident.2) == 0) {
-          stop("None of the identities supplied to split.idents were found, please check the spelling")
+          stop("None of the identities supplied to split.idents were found")
         }
         if (length(ident.2) < length(split.idents)) {
-          message("The following identities supplied to split.idents were not found, please check the spelling:\n", paste0(setdiff(split.idents, ident.2), collapse = ", "))
+          message("The following identities supplied to split.idents were not found:\n", paste0(setdiff(split.idents, ident.2), collapse = ", "))
         }
       }
       if (is.character(order.split) | is.numeric(order.split)) {
@@ -209,7 +226,7 @@ Cell_Heatmap = function(seurat_object,
             ident.2 = rev(ident.2)
           }
           else {
-            stop("order.split needs to be either 'reverse' or a character or numeric vector of same length as the number of identities")
+            stop("order.split needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
           }
         }
       }
@@ -239,10 +256,10 @@ Cell_Heatmap = function(seurat_object,
   mat = mat[ , colSums(mat) > 0, drop = FALSE]
   features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   if (ncol(mat) == 0) {
-    stop("None of the features were found or expressed in any cells, please check the spelling")
+    stop("None of the features were found or expressed in any cells")
   }
   if (length(features.removed) > 0) {
-    message("The following features were removed as they were not found or were not expressed in any cells, please check the spelling:\n",paste0(features.removed, collapse = ", "))
+    message("The following features were removed as they were not found or were not expressed in any cells:\n",paste0(features.removed, collapse = ", "))
   }
   if (isTRUE(scale)) {
     mat = scale(mat)
@@ -347,17 +364,19 @@ Cell_Heatmap = function(seurat_object,
         }
       }
     }
-    if (is.character(order.split) & is.character(split.by)) {
+    if (is.character(split.by)) {
       if (!is.null(names(split.colors))) {
         split.colors = split.colors[ident.2]
       }
-      if (length(order.split) > 1) {
-        names(split.colors) = ident.2
-        split.colors = split.colors[order.split]
-      }
-      else {
-        if (order.split == "reverse") {
-          split.colors = rev(split.colors)
+      if (is.character(order.split)) {
+        if (length(order.split) > 1) {
+          names(split.colors) = ident.2
+          split.colors = split.colors[order.split]
+        }
+        else {
+          if (order.split == "reverse") {
+            split.colors = rev(split.colors)
+          }
         }
       }
     }

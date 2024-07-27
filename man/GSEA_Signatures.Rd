@@ -38,7 +38,7 @@ GSEA_Signatures(
 
 \item{min.features}{Numeric. The minimum number of features present in the \pkg{Seurat} object for a pathway to be considered.}
 
-\item{signatures.names}{Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use \code{only.features} = \code{TRUE} and set \code{signatures.names} = 'name' or 'id' to get the number of signatures you need to provide names for.}
+\item{signatures.names}{Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of custom names to be used as signatures names in the Seurat object, whose length must match the number of pathways. If multiple results are found for a pathway, the function will append a number to the corresponding signature name for each result.}
 
 \item{method}{Character. The method you want to use to calculate the module scores, either 'UCell' or 'Seurat'.}
 

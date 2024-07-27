@@ -49,35 +49,58 @@ Grid_VlnPlot = function(seurat_object,
 
   ident = NULL
 
-  if (!is.character(idents)) {
-    ident.1 = levels(Idents(seurat_object))
+  if (isFALSE(any(Assays(seurat_object) %in% assay))) {
+    message("Assay '",assay,"' was not found in the Seurat object, using 'RNA' instead")
+    assay = "RNA"
   }
-  else {
-    ident.1 = idents
+
+  if (isFALSE(any(Layers(seurat_object[[assay]]) %in% layer))) {
+    if (isTRUE(any(Layers(seurat_object[[assay]]) %in% "data"))) {
+      message("Layer '",layer,"' was not found in the Seurat object's '",assay,"' assay, using 'data' instead")
+      layer = "data"
+    }
+    else {
+      message("Layer '",layer,"' was not found in the Seurat object's '",assay,"' assay, using 'counts' instead")
+      layer = "counts"
+    }
   }
-  if (!is.null(order.idents)) {
-    if (is.character(order.idents)) {
-      if (length(order.idents) > 1) {
-        ident.1 = ident.1[order.idents]
+
+  ident.1 = levels(Idents(seurat_object))
+
+  if (is.character(idents)) {
+    ident.1 = ident.1[ident.1 %in% idents]
+    if (length(ident.1) == 0) {
+      stop("None of the identities supplied to idents were found")
+    }
+    if (length(ident.1) < length(idents)) {
+      message("The following identities supplied to idents were not found:\n", paste0(setdiff(idents, ident.1), collapse = ", "))
+    }
+  }
+  if (is.character(order.idents) | is.numeric(order.idents)) {
+    if (length(order.idents) == length(ident.1)) {
+      if (is.character(order.idents)) {
+        ident.1 = ident.1[order(match(ident.1, order.idents))]
       }
       else {
-        if (order.idents == "reverse") {
-          ident.1 = rev(ident.1)
-        }
-        else {
-          stop("order.idents needs to be either 'reverse' or a character vector")
-        }
+        ident.1 = ident.1[order.idents]
       }
     }
     else {
-      stop("order.idents needs to be either 'reverse' or a character vector")
+      if (order.idents == "reverse") {
+        ident.1 = rev(ident.1)
+      }
+      else {
+        stop("order.idents needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
+      }
     }
   }
 
   DefaultAssay(seurat_object) = assay
-  data = FetchData(object = seurat_object, vars = c("ident",features), layer = layer)
+  data = suppressWarnings(FetchData(object = seurat_object, vars = c("ident",features), layer = layer))
+  features.removed = setdiff(features, colnames(data))
   data = data[data$ident %in% ident.1, ]
   data = melt(setDT(data), variable.name = "gene", value.name = "expression", id.vars = 1)
+  data$ident = factor(data$ident, levels = ident.1)
   if (!is.character(colors)) {
     SeuratColors = function(n = 6, h = c(0, 360) + 15){
       if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
@@ -86,6 +109,9 @@ Grid_VlnPlot = function(seurat_object,
     colors = SeuratColors(n = length(ident.1))
   }
   if (isTRUE(order.colors)) {
+    if (!is.null(names(colors))) {
+      colors = colors[ident.1]
+    }
     if (is.character(order.idents)) {
       if (length(order.idents) > 1) {
         names(colors) = ident.1
