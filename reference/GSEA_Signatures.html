@@ -97,7 +97,7 @@
 
 
 <dt id="arg-signatures-names">signatures.names<a class="anchor" aria-label="anchor" href="#arg-signatures-names"></a></dt>
-<dd><p>Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of names to be used as signatures, whose length must match the number of pathways found and kept. It is recommended to use <code>only.features</code> = <code>TRUE</code> and set <code>signatures.names</code> = 'name' or 'id' to get the number of signatures you need to provide names for.</p></dd>
+<dd><p>Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of custom names to be used as signatures names in the Seurat object, whose length must match the number of pathways. If multiple results are found for a pathway, the function will append a number to the corresponding signature name for each result.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
