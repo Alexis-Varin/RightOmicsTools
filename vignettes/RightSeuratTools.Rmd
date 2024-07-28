@@ -33,7 +33,7 @@ Once you have `devtools` installed, you can install the `RightSeuratTools` packa
 ## Loading the package
 
 ```{r}
-library(RightSeuratTools)
+suppressPackageStartupMessages(library(RightSeuratTools))
 ```
 
 ## Data loading and preprocessing
@@ -43,14 +43,22 @@ For this tutorial, we will use the `pbmc3k` dataset, which contains single-cell 
 We will also build on `Seurat`'s tutorial for `pbmc3k` to preprocess the data, available for reference [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial).
 
 ```{r}
-library(Seurat)
-library(SeuratData)
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(SeuratData))
 
 # Load the pbmc3k dataset
-InstallData("pbmc3k")
+suppressWarnings(InstallData("pbmc3k"))
 data(pbmc3k)
+# To be able to use it, we first need to update it to the latest Seurat version
 pbmc3k <- UpdateSeuratObject(pbmc3k)
 pbmc3k
 
-# To be continued...
+VlnPlot(pbmc3k, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+```
+
+Since the object seems to have already been preprocessed to some extent, as it contains a 'data' layer and we are unsure of which other functions have been used, we will start by testing our first function from `RightSeuratTools` to start from scratch, Right_DietSeurat(), which will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay. We will also choose to remove all meta.data columns except for the 'orig.ident' column.
+
+```{r}
+pbmc <- Right_DietSeurat(pbmc3k)
+pbmc
 ```
