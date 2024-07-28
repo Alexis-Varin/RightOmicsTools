@@ -1,5 +1,5 @@
 Package: RightSeuratTools
-Title: A collection of tools to manipulate and visualize Seurat objects data
+Title: Complementary tools to Seurat to manipulate and visualize single-cell RNA-seq data
 Version: 1.1.0
 Authors@R: 
     person(given = "Alexis", family = "Varin", email = "alexis.varin@inserm.fr", role = c("aut", "cre"),

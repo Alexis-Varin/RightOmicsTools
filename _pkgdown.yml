@@ -1,4 +1,5 @@
 url: https://alexis-varin.github.io/RightSeuratTools/
 template:
   bootstrap: 5
-
+  bootswatch: cerulean
+  light-switch: true
