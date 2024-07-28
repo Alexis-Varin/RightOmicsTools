@@ -2,8 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
-  Tutorial: Tutorial.html
-last_built: 2024-07-28T11:55Z
+  RightSeuratTools: RightSeuratTools.html
+last_built: 2024-07-28T16:02Z
 urls:
   reference: https://alexis-varin.github.io/RightSeuratTools/reference
   article: https://alexis-varin.github.io/RightSeuratTools/articles
