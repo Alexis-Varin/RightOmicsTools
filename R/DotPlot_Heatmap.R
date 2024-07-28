@@ -196,6 +196,9 @@ DotPlot_Heatmap = function(seurat_object,
       }
     }
   }
+  if (length(ident.1) == 1 & is.null(split.by)) {
+    stop("Only one identity in the active.ident identity, cannot compare features expression")
+  }
 
   if (is.character(split.by)) {
     vars = c("ident",split.by,features)
@@ -250,6 +253,9 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
     }
+    if (length(ident.3) == 1) {
+      stop("Only one identity in the active.ident and split.by identities, cannot compare features expression")
+    }
   }
   else {
     ident.3 = ident.1
@@ -257,6 +263,9 @@ DotPlot_Heatmap = function(seurat_object,
   if (is.character(split.by)) {
     data$ident = paste(data$ident, "in", data[ , 2])
     data[ , 2] = NULL
+  }
+  if (ncol(data) == 1) {
+    stop("None of the features were found")
   }
   mat = list()
   dot = list()
@@ -281,21 +290,26 @@ DotPlot_Heatmap = function(seurat_object,
     mat[[i-1]] = do.call(rbind, avg)
     dot[[i-1]] = do.call(rbind, pct)
   }
-  mat = as.matrix(as.data.frame(mat))[ident.3, ]
-  dot = as.matrix(as.data.frame(dot))[ident.3, ]
+  mat = as.matrix(as.data.frame(mat))[ident.3, , drop = FALSE]
+  colnames(mat) = colnames(data)[2:ncol(data)]
+  dot = as.matrix(as.data.frame(dot))[ident.3, , drop = FALSE]
+  colnames(dot) = colnames(data)[2:ncol(data)]
   if (isTRUE(data.are.log) & layer == "data") {
     mat = log1p(mat)
   }
   dot = dot[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
   mat = mat[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
+  if (nrow(mat) < 2) {
+    stop("Less than two identities left, cannot compare features expression")
+  }
   idents.removed = setdiff(ident.3, rownames(mat))
   dot = dot[ , colSums(mat) > 0, drop = FALSE]
   mat = mat[ , colSums(mat) > 0, drop = FALSE]
+  if (ncol(mat) == 0) {
+    stop("None of the features were expressed in any cells")
+  }
   features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   features.removed = features.removed[!features.removed == "ident"]
-  if (ncol(mat) == 0) {
-    stop("None of the features were found or expressed in any cells")
-  }
   if (length(features.removed) > 0) {
     message("The following features were removed as they were not found or were not expressed in any cells:\n",paste0(features.removed, collapse = ", "))
   }

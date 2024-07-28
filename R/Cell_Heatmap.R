@@ -184,6 +184,9 @@ Cell_Heatmap = function(seurat_object,
       }
     }
   }
+  if (length(ident.1) == 1 & is.null(split.by)) {
+    stop("Only one identity in the active.ident identity, cannot compare features expression")
+  }
 
   if (is.character(split.by)) {
     vars = c("ident",split.by,features)
@@ -238,6 +241,9 @@ Cell_Heatmap = function(seurat_object,
         }
       }
     }
+    if (length(ident.3) == 1) {
+      stop("Only one identity in the active.ident and split.by identities, cannot compare features expression")
+    }
   }
   else {
     ident.3 = ident.1
@@ -246,18 +252,24 @@ Cell_Heatmap = function(seurat_object,
     data$ident = paste(data$ident, "in", data[ , 2])
     data[ , 2] = NULL
   }
+  if (ncol(data) == 1) {
+    stop("None of the features were found")
+  }
   cell.idents = data$ident
   names(cell.idents) = rownames(data)
   data$ident = NULL
   mat = as.matrix(data)
   mat = mat[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
   cell.idents = cell.idents[names(cell.idents) %in% rownames(mat)]
+  if (length(unique(cell.idents)) < 2) {
+    stop("Less than two identities left, cannot compare features expression")
+  }
   idents.removed = setdiff(ident.3, unique(cell.idents))
   mat = mat[ , colSums(mat) > 0, drop = FALSE]
-  features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   if (ncol(mat) == 0) {
-    stop("None of the features were found or expressed in any cells")
+    stop("None of the features were expressed in any cells")
   }
+  features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   if (length(features.removed) > 0) {
     message("The following features were removed as they were not found or were not expressed in any cells:\n",paste0(features.removed, collapse = ", "))
   }
@@ -292,12 +304,12 @@ Cell_Heatmap = function(seurat_object,
     rownames(mats[[i]]) = paste(mats[[i]]$cell.idents, rownames(mats[[i]]), sep = "_")
     mats[[i]]$cell.idents = NULL
     if (isTRUE(shuffle.cells) & isFALSE(cluster.cells)) {
-      mats[[i]] = t(mats[[i]][sample(nrow(mats[[i]])), ])
+      mats[[i]] = t(mats[[i]][sample(nrow(mats[[i]])), , drop = FALSE])
     }
     else {
       if (isTRUE(cluster.cells)) {
       hc = hclust(dist(mats[[i]]))
-      mats[[i]] = mats[[i]][hc$order, ]
+      mats[[i]] = mats[[i]][hc$order, , drop = FALSE]
       }
       mats[[i]] = t(mats[[i]])
     }

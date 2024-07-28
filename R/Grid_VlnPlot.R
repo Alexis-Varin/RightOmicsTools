@@ -97,6 +97,9 @@ Grid_VlnPlot = function(seurat_object,
 
   DefaultAssay(seurat_object) = assay
   data = suppressWarnings(FetchData(object = seurat_object, vars = c("ident",features), layer = layer))
+  if (ncol(data) == 1) {
+    stop("None of the features were found or expressed in any cells")
+  }
   features.removed = setdiff(features, colnames(data))
   data = data[data$ident %in% ident.1, ]
   data = melt(setDT(data), variable.name = "gene", value.name = "expression", id.vars = 1)
