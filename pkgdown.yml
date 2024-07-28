@@ -3,7 +3,7 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   Tutorial: Tutorial.html
-last_built: 2024-07-28T11:29Z
+last_built: 2024-07-28T11:55Z
 urls:
   reference: https://alexis-varin.github.io/RightSeuratTools/reference
   article: https://alexis-varin.github.io/RightSeuratTools/articles
