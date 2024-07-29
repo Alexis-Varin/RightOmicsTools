@@ -2,14 +2,14 @@
 % Please edit documentation in R/Find_Annotation_Markers.R
 \name{Find_Annotation_Markers}
 \alias{Find_Annotation_Markers}
-\title{Find_Annotation_Markers}
+\title{Get the top markers for each identity in a Seurat object}
 \usage{
 Find_Annotation_Markers(
   seurat_object,
   ident.1 = NULL,
   ident.2 = NULL,
   min.pct = 0.25,
-  top.markers = 10,
+  top.markers = 5,
   unique.markers = TRUE,
   filter.mito = TRUE,
   filter.ribo = TRUE,
@@ -17,7 +17,7 @@ Find_Annotation_Markers(
   species = "human",
   parallelized = FALSE,
   BPPARAM = NULL,
-  output.df = TRUE,
+  output.df = FALSE,
   output.list = FALSE,
   verbose = TRUE,
   ...

@@ -1,4 +1,4 @@
-#' @title Find_Annotation_Markers
+#' @title Get the top markers for each identity in a Seurat object
 #'
 #' @description This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
 #'
@@ -49,7 +49,7 @@ Find_Annotation_Markers = function(seurat_object,
                                    ident.1 = NULL,
                                    ident.2 = NULL,
                                    min.pct = 0.25,
-                                   top.markers = 10,
+                                   top.markers = 5,
                                    unique.markers = TRUE,
                                    filter.mito = TRUE,
                                    filter.ribo = TRUE,
@@ -57,7 +57,7 @@ Find_Annotation_Markers = function(seurat_object,
                                    species = "human",
                                    parallelized = FALSE,
                                    BPPARAM = NULL,
-                                   output.df = TRUE,
+                                   output.df = FALSE,
                                    output.list = FALSE,
                                    verbose = TRUE,
                                    ...) {
@@ -173,7 +173,7 @@ Find_Annotation_Markers = function(seurat_object,
     all.markers2[[i]] = all.markers2[[i]][order(all.markers2[[i]]$avg_log2FC, decreasing = T),]
 
     if (isTRUE(filter.ncRNA)) {
-      all.markers2[[i]] = setdiff(all.markers2[[i]], all.markers2[[i]][which(all.markers2[[i]] %in% to.remove)])
+      all.markers2[[i]] = all.markers2[[i]][!all.markers2[[i]]$feature %in% to.remove,]
       if (species == "human") {
         all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$feature),]
       }
@@ -201,20 +201,13 @@ Find_Annotation_Markers = function(seurat_object,
 
     if (!is.infinite(top.markers)) {
       if (isFALSE(unique.markers)) {
-        top.markers.df = rbind(top.markers.df,all.markers2[[i]][1:length(top.markers[,1]),])
+        select.top.markers = all.markers2[[i]]
       }
-      if (isTRUE(unique.markers)) {
-        j = 1
-        k = 0
-        while (j < top.markers+1) {
-          k = k + 1
-          if (isFALSE(any(grepl(all.markers2[[i]]$feature[k],top.markers.df)))) {
-            top.markers.df = rbind(top.markers.df,all.markers2[[i]][k,])
-            j = j + 1
-          }
-        }
+      else {
+        select.top.markers = all.markers2[[i]][setdiff(all.markers2[[i]]$feature,top.markers.df$feature),]
       }
-      all.markers2[[i]] = top.markers.df[length(top.markers.df[,1])-(top.markers-1):length(top.markers.df[,1]),]
+      top.markers.df = rbind(top.markers.df,select.top.markers[1:top.markers,])
+      all.markers2[[i]] = select.top.markers[1:top.markers,]
     }
   }
 
@@ -227,7 +220,6 @@ Find_Annotation_Markers = function(seurat_object,
     }
     return(final.list)
   }
-
   if (isTRUE(output.df) & isFALSE(output.list)) {
     if (!is.infinite(top.markers)) {
       return(top.markers.df)
@@ -236,7 +228,6 @@ Find_Annotation_Markers = function(seurat_object,
       return(all.markers)
     }
   }
-
   if (isFALSE(output.df) & isTRUE(output.list)) {
     if (!is.infinite(top.markers)) {
       final.list = list("features" = top.markers.df$feature, "list" = all.markers2)
@@ -246,8 +237,7 @@ Find_Annotation_Markers = function(seurat_object,
     }
     return(final.list)
   }
-
-  if (isFALSE(output.df) & isFALSE(output.list)) {
+  else {
     if (!is.infinite(top.markers)) {
       return(top.markers.df$feature)
     }
