@@ -96,24 +96,31 @@ GSEA_Signatures = function(seurat_object,
         if (length(signatures.names) == 1) {
           if (signatures.names == "id") {
             pathways.found = unique(as.vector(features.from.pathways.list[[i]]$gs_exact_source))
-            pathways.names = c(pathways.names,pathways.found)
+            sig.name = pathways.found
           }
           else if (signatures.names == "name") {
             pathways.found = unique(as.vector(features.from.pathways.list[[i]]$gs_name))
-            pathways.names = c(pathways.names,pathways.found)
+            sig.name = pathways.found
           }
           else {
-            pathways.names = signatures.names
+            pathways.found = unique(as.vector(features.from.pathways.list[[i]]$gs_name))
+            sig.name = signatures.names
           }
         }
         else {
           pathways.found = unique(as.vector(features.from.pathways.list[[i]]$gs_name))
+          sig.name = signatures.names[i]
         }
         if (length(pathways.found) > 1) {
           if (isTRUE(verbose)) {
             message("'",pathways[i],"' has returned multiple results")
           }
-          pathways.names = c(pathways.names,paste0(signatures.names[i],"_",1:length(pathways.found)))
+          if (length(signatures.names) > 1) {
+            pathways.names = c(pathways.names,paste0(sig.name,"_",1:length(pathways.found)))
+          }
+          else {
+            pathways.names = sig.name
+          }
           features.multiple.pathways = list()
           found.multiple.pathways = list()
           for (j in 1:length(pathways.found)) {
@@ -130,7 +137,7 @@ GSEA_Signatures = function(seurat_object,
           found.features.list[[i]] = found.multiple.pathways
         }
         else {
-          pathways.names = c(pathways.names,signatures.names[i])
+          pathways.names = c(pathways.names,sig.name)
           features.from.pathways.list[[i]] = list(unique(as.vector(t(features.from.pathways.list[[i]]$human_gene_symbol))))
           found.features.list[[i]] = list(intersect(features.from.pathways.list[[i]][[1]],rownames(LayerData(seurat_object, assay = assay, layer = layer))))
           names(features.from.pathways.list[[i]]) = pathways.found
