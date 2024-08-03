@@ -83,11 +83,11 @@ This function generates a barplot of the proportion of cells from a \pkg{Seurat}
 \examples{
 \dontshow{
 suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
-suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
-suppressWarnings(suppressMessages(InstallData("pbmc3k")))
-suppressWarnings(suppressMessages(data(pbmc3k)))
-pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
-pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
+suppressWarnings(suppressMessages(download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz", destfile = "pbmc3k_filtered_gene_bc_matrices.tar.gz")))
+suppressWarnings(suppressMessages(untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")))
+pbmc3k = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
+pbmc = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k, project = "pbmc3k", min.cells = 3, min.features = 200)))
+suppressWarnings(suppressMessages(unlink(c("pbmc3k_filtered_gene_bc_matrices.tar.gz","filtered_gene_bc_matrices"), recursive = TRUE)))
 
 pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
 
