@@ -1,4 +1,4 @@
-#' @title Get the top markers for each identity in a Seurat object
+#' @title Get the top markers for fast annotation
 #'
 #' @description This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
 #'
@@ -12,7 +12,7 @@
 #' @param filter.ribo Logical. If \code{TRUE}, ribosomal features will be filtered out.
 #' @param filter.ncRNA Logical. If \code{TRUE}, non-coding RNA features will be filtered out.
 #' @param species Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named ncRNA_human built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightSeuratTools} and may be checked for more information.
-#' @param parallelized Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}.
+#' @param parallelized Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your system operating system (Windows users might not see a gain or might even experience a slowdown).
 #' @param BPPARAM A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.
 #' @param output.df Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.
 #' @param output.list Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.
@@ -22,24 +22,64 @@
 #' @return A data frame or a list of data frames with features names and associated statistics, or a character vector or a list of character vectors with features names.
 #'
 #' @examples
-#' library(Seurat)
+#' \dontshow{
+#' suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+#' suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+#' suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+#' suppressWarnings(suppressMessages(data(pbmc3k)))
+#' pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+#' pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
 #'
-#' # Original object from SeuratObject:
+#' pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
 #'
-#' pbmc_small
+#' pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+#'                  nFeature_RNA < 2500 &
+#'                  percent.mt < 10)))
 #'
-#' # Example of parallelized FindAllMarkers
-#' # (provided you set your future::plan() to multisession or multicore):
+#' pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+#' pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+#' new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+#'                      "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+#' names(new.cluster.ids) <- levels(Idents(pbmc))
+#' pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+#' }
+#' # Timer function
 #'
-#' Find_Annotation_Markers(pbmc_small,
-#'                        min.pct = 0.01,
-#'                        top.markers = Inf,
-#'                        unique.markers = FALSE,
-#'                        filter.mito = FALSE,
-#'                        filter.ribo = FALSE,
-#'                        filter.ncRNA = FALSE,
-#'                        parallelized = TRUE,
-#'                        output.list = FALSE)
+#' time.it = function(fun) {
+#'   start.time = Sys.time()
+#'   fun
+#'   print(Sys.time()-start.time)
+#'   return(fun)
+#' }
+#'
+#' # Example 1: default parameters
+#'
+#' pbmc.markers = time.it(Find_Annotation_Markers(pbmc))
+#'
+#' head(pbmc.markers, 5)
+#'
+#' # Example 2: parallelized FindAllMarkers
+#'
+#' BPPARAM = BiocParallel::registered()[[1]]
+#' if (BPPARAM$workers > 4) BPPARAM$workers = 4
+#'
+#' pbmc.markers = time.it(Find_Annotation_Markers(pbmc,
+#'                                        min.pct = 0.01,
+#'                                        top.markers = Inf,
+#'                                        unique.markers = FALSE,
+#'                                        filter.mito = FALSE,
+#'                                        filter.ribo = FALSE,
+#'                                        filter.ncRNA = FALSE,
+#'                                        parallelized = TRUE,
+#'                                        BPPARAM = BPPARAM,
+#'                                        output.df = TRUE))
+#'
+#' head(pbmc.markers, 5)
 #' @import Seurat
 #' @import SeuratObject
 #' @import BiocParallel
@@ -81,34 +121,34 @@ Find_Annotation_Markers = function(seurat_object,
     if (is.null(ident.1) & is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",x," against all other clusters","\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = x, min.pct = min.pct, ...)
-      }, BPPARAM = BPPARAM)
+      }, BPPARAM = BPPARAM))
     }
 
     if (is.null(ident.1) & !is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",x," against cluster ",ident.2,"\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = x, ident.2 = ident.2, min.pct = min.pct, ...)
-      }, BPPARAM = BPPARAM)
+      }, BPPARAM = BPPARAM))
     }
 
     if (is.null(ident.2) & !is.null(ident.1)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
         if (isTRUE(verbose)) {
           cat("Finding markers for cluster ",ident.1," against cluster ",x,"\n",sep="")
         }
         FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = x, min.pct = min.pct, ...)
-      }, BPPARAM = BPPARAM)
+      }, BPPARAM = BPPARAM))
     }
 
     if (!is.null(ident.2) & !is.null(ident.1)) {
@@ -170,30 +210,36 @@ Find_Annotation_Markers = function(seurat_object,
   for (i in 1:length(all.markers2)) {
     all.markers2[[i]]$cluster = levels(Idents(seurat_object))[i]
     all.markers2[[i]]$feature = gsub("\\..[0-9]*","",rownames(all.markers2[[i]]))
-    all.markers2[[i]] = all.markers2[[i]][order(all.markers2[[i]]$avg_log2FC, decreasing = T),]
+    tmp1 = all.markers2[[i]][all.markers2[[i]]$avg_log2FC >= 0 & all.markers2[[i]]$p_val_adj < 0.05, , drop = FALSE]
+    tmp11 = all.markers2[[i]][all.markers2[[i]]$avg_log2FC >= 0 & all.markers2[[i]]$p_val_adj >= 0.05, , drop = FALSE]
+    tmp1 = tmp1[order(-tmp1$avg_log2FC), ]
+    tmp2 = all.markers2[[i]][all.markers2[[i]]$p_val_adj < 0 & all.markers2[[i]]$p_val_adj < 0.05, , drop = FALSE]
+    tmp21 = all.markers2[[i]][all.markers2[[i]]$p_val_adj < 0 & all.markers2[[i]]$p_val_adj >= 0.05, , drop = FALSE]
+    tmp2 = tmp2[order(-tmp2$avg_log2FC), ]
+    all.markers2[[i]] = rbind(tmp1,tmp11,tmp21,tmp2)
 
     if (isTRUE(filter.ncRNA)) {
-      all.markers2[[i]] = all.markers2[[i]][!all.markers2[[i]]$feature %in% to.remove,]
+      all.markers2[[i]] = all.markers2[[i]][!all.markers2[[i]]$feature %in% to.remove, , drop = FALSE]
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$feature),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
     }
 
     if (isTRUE(filter.mito)) {
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^MT-", x = all.markers2[[i]]$feature),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^MT-", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
       if (species == "mouse") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^mt-", x = all.markers2[[i]]$feature),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^mt-", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
     }
 
     if (isTRUE(filter.ribo)) {
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^RP[SL]", x = all.markers2[[i]]$feature),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^RP[SL]", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
       if (species == "mouse") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^Rp[sl]", x = all.markers2[[i]]$feature),]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^Rp[sl]", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
     }
 
@@ -204,10 +250,10 @@ Find_Annotation_Markers = function(seurat_object,
         select.top.markers = all.markers2[[i]]
       }
       else {
-        select.top.markers = all.markers2[[i]][setdiff(all.markers2[[i]]$feature,top.markers.df$feature),]
+        select.top.markers = all.markers2[[i]][setdiff(all.markers2[[i]]$feature,top.markers.df$feature), , drop = FALSE]
       }
-      top.markers.df = rbind(top.markers.df,select.top.markers[1:top.markers,])
-      all.markers2[[i]] = select.top.markers[1:top.markers,]
+      top.markers.df = rbind(top.markers.df,select.top.markers[1:top.markers, ])
+      all.markers2[[i]] = select.top.markers[1:top.markers, , drop = FALSE]
     }
   }
 

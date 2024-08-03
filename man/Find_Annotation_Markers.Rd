@@ -2,7 +2,7 @@
 % Please edit documentation in R/Find_Annotation_Markers.R
 \name{Find_Annotation_Markers}
 \alias{Find_Annotation_Markers}
-\title{Get the top markers for each identity in a Seurat object}
+\title{Get the top markers for fast annotation}
 \usage{
 Find_Annotation_Markers(
   seurat_object,
@@ -44,7 +44,7 @@ Find_Annotation_Markers(
 
 \item{species}{Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named ncRNA_human built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named pseudogenes_mouse and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightSeuratTools} and may be checked for more information.}
 
-\item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}.}
+\item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your system operating system (Windows users might not see a gain or might even experience a slowdown).}
 
 \item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
@@ -63,22 +63,62 @@ A data frame or a list of data frames with features names and associated statist
 This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
 }
 \examples{
-library(Seurat)
+\dontshow{
+suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+suppressWarnings(suppressMessages(data(pbmc3k)))
+pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
 
-# Original object from SeuratObject:
+pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
 
-pbmc_small
+pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+                 nFeature_RNA < 2500 &
+                 percent.mt < 10)))
 
-# Example of parallelized FindAllMarkers
-# (provided you set your future::plan() to multisession or multicore):
+pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+names(new.cluster.ids) <- levels(Idents(pbmc))
+pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+}
+# Timer function
 
-Find_Annotation_Markers(pbmc_small,
-                       min.pct = 0.01,
-                       top.markers = Inf,
-                       unique.markers = FALSE,
-                       filter.mito = FALSE,
-                       filter.ribo = FALSE,
-                       filter.ncRNA = FALSE,
-                       parallelized = TRUE,
-                       output.list = FALSE)
+time.it = function(fun) {
+  start.time = Sys.time()
+  fun
+  print(Sys.time()-start.time)
+  return(fun)
+}
+
+# Example 1: default parameters
+
+pbmc.markers = time.it(Find_Annotation_Markers(pbmc))
+
+head(pbmc.markers, 5)
+
+# Example 2: parallelized FindAllMarkers
+
+BPPARAM = BiocParallel::registered()[[1]]
+if (BPPARAM$workers > 4) BPPARAM$workers = 4
+
+pbmc.markers = time.it(Find_Annotation_Markers(pbmc,
+                                       min.pct = 0.01,
+                                       top.markers = Inf,
+                                       unique.markers = FALSE,
+                                       filter.mito = FALSE,
+                                       filter.ribo = FALSE,
+                                       filter.ncRNA = FALSE,
+                                       parallelized = TRUE,
+                                       BPPARAM = BPPARAM,
+                                       output.df = TRUE))
+
+head(pbmc.markers, 5)
 }
