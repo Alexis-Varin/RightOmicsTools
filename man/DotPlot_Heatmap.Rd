@@ -2,7 +2,7 @@
 % Please edit documentation in R/DotPlot_Heatmap.R
 \name{DotPlot_Heatmap}
 \alias{DotPlot_Heatmap}
-\title{DotPlot_Heatmap}
+\title{Dot plot or heatmap of average gene expression in each identity}
 \usage{
 DotPlot_Heatmap(
   seurat_object,
@@ -205,4 +205,40 @@ A \code{\link[ComplexHeatmap]{Heatmap}} object, either as a dotplot, or a heatma
 }
 \description{
 This function generates a dotplot or a heatmap to visualize the average expression of features in each identity of a \pkg{Seurat} object. Credits to \pkg{Seurat}'s dev team for the original \code{\link[Seurat]{DotPlot}} from which data processing of this function is derived from and to \href{https://divingintogeneticsandgenomics.com/post/clustered-dotplot-for-single-cell-rnaseq/}{Ming Tang} for the initial idea to use \pkg{ComplexHeatmap} to draw a dotplot and the \code{layer_fun} function that draws the dots. Various new parameters were added to offer more flexibility and customization.
+}
+\examples{
+\dontshow{
+suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+suppressWarnings(suppressMessages(data(pbmc3k)))
+pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
+
+pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
+
+pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+                 nFeature_RNA < 2500 &
+                 percent.mt < 10)))
+
+pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+names(new.cluster.ids) <- levels(Idents(pbmc))
+pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+}
+pbmc.markers = c("CCR7", "TCF7", "CD14",
+                 "CD79A", "CD8A", "CDKN1C",
+                 "GZMB", "CLEC10A")
+
+# Example 1: default parameters
+
+DotPlot_Heatmap(pbmc,
+                features = pbmc.markers)
 }

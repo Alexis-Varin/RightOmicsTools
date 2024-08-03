@@ -2,7 +2,7 @@
 % Please edit documentation in R/Barplot_Cell_Proportion.R
 \name{Barplot_Cell_Proportion}
 \alias{Barplot_Cell_Proportion}
-\title{Barplot_Cell_Proportion}
+\title{Bar plot of the proportion of cells in each identity}
 \usage{
 Barplot_Cell_Proportion(
   seurat_object,
@@ -79,4 +79,36 @@ A ggplot object, a list of ggplot objects, a patchwork of ggplot objects or a li
 }
 \description{
 This function generates a barplot of the proportion of cells from a \pkg{Seurat} object.
+}
+\examples{
+\dontshow{
+suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+suppressWarnings(suppressMessages(data(pbmc3k)))
+pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
+
+pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
+
+pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+                 nFeature_RNA < 2500 &
+                 percent.mt < 10)))
+
+pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+names(new.cluster.ids) <- levels(Idents(pbmc))
+pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+}
+# Example 1: default parameters
+
+Barplot_Cell_Proportion(pbmc,
+                        percent = FALSE)
 }

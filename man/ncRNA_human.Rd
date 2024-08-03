@@ -3,7 +3,7 @@
 \docType{data}
 \name{ncRNA_human}
 \alias{ncRNA_human}
-\title{ncRNA_human}
+\title{Human non-coding genes}
 \format{
 \subsection{ncRNA_human}{
 

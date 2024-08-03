@@ -2,7 +2,7 @@
 % Please edit documentation in R/Cell_Heatmap.R
 \name{Cell_Heatmap}
 \alias{Cell_Heatmap}
-\title{Cell_Heatmap}
+\title{Heatmap of gene expression in each cell}
 \usage{
 Cell_Heatmap(
   seurat_object,
@@ -52,9 +52,9 @@ Cell_Heatmap(
   data.legend.direction = "horizontal",
   data.legend.position = "topcenter",
   data.legend.width = 5,
-  idents.legend.name = "Active identities",
+  idents.legend.name = "Clusters",
   show.idents.legend = TRUE,
-  split.legend.name = "Split identities",
+  split.legend.name = split.by,
   show.split.legend = TRUE,
   legend.title.size = 10,
   legend.text.size = 10,
@@ -187,4 +187,42 @@ A \code{\link[ComplexHeatmap]{Heatmap}} object, or a matrix of the cell expressi
 }
 \description{
 This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to replicate \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.
+}
+\examples{
+\dontshow{
+suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+suppressWarnings(suppressMessages(data(pbmc3k)))
+pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
+
+pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
+
+pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+                 nFeature_RNA < 2500 &
+                 percent.mt < 10)))
+
+pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+names(new.cluster.ids) <- levels(Idents(pbmc))
+pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+pbmc = suppressWarnings(suppressMessages(subset(pbmc, idents = "DC", invert = TRUE)))
+}
+pbmc.markers = c("CCR7", "TCF7", "S100A9", "CD14",
+                 "CD40LG", "CD2", "CD79A", "TCL1A",
+                 "CCL5", "CD8A", "CDKN1C", "MS4A4A",
+                 "GNLY", "GZMB")
+
+# Example 1: default parameters
+
+Cell_Heatmap(pbmc,
+             features = pbmc.markers)
 }

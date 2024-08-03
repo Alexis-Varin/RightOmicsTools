@@ -2,7 +2,7 @@
 % Please edit documentation in R/Grid_VlnPlot.R
 \name{Grid_VlnPlot}
 \alias{Grid_VlnPlot}
-\title{Grid_VlnPlot}
+\title{Square stacked violin plot of gene expression in each identity}
 \usage{
 Grid_VlnPlot(
   seurat_object,
@@ -64,4 +64,41 @@ A ggplot object.
 }
 \description{
 This function is a stacked violin plot optimized to display features expression in a \pkg{Seurat} object in a grid fashion (square) instead of a single column like other stacked violin functions available in other packages, resulting in nicer plots and easier to include in publications.
+}
+\examples{
+\dontshow{
+suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
+suppressWarnings(suppressPackageStartupMessages(library(SeuratData)))
+suppressWarnings(suppressMessages(InstallData("pbmc3k")))
+suppressWarnings(suppressMessages(data(pbmc3k)))
+pbmc3k = suppressWarnings(suppressMessages(UpdateSeuratObject(pbmc3k)))
+pbmc = suppressWarnings(suppressMessages(Right_DietSeurat(pbmc3k, idents = "orig.ident")))
+
+pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
+
+pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
+                 nFeature_RNA < 2500 &
+                 percent.mt < 10)))
+
+pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
+pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
+names(new.cluster.ids) <- levels(Idents(pbmc))
+pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+}
+pbmc.markers = c("CCR7", "TCF7", "S100A9", "CD14",
+                 "CD40LG", "CD2", "CD79A", "TCL1A",
+                 "CCL5", "CD8A", "CDKN1C", "MS4A4A",
+                 "GNLY", "GZMB", "FCER1A", "CLEC10A")
+
+# Example 1: default parameters
+
+Grid_VlnPlot(pbmc,
+             features = pbmc.markers)
 }

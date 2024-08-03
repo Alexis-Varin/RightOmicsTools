@@ -3,7 +3,7 @@
 \docType{data}
 \name{pseudogenes_mouse}
 \alias{pseudogenes_mouse}
-\title{pseudogenes_mouse}
+\title{Mouse pseudogenes}
 \format{
 \subsection{pseudogenes_mouse}{
 

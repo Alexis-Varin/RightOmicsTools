@@ -2,7 +2,7 @@
 % Please edit documentation in R/Right_DietSeurat.R
 \name{Right_DietSeurat}
 \alias{Right_DietSeurat}
-\title{Right_DietSeurat}
+\title{Reduce the size of a Seurat object}
 \usage{
 Right_DietSeurat(
   seurat_object,
@@ -49,31 +49,4 @@ A \pkg{Seurat} object, hopefully smaller, with class Assay5 RNA assay and specif
 }
 \description{
 As of \pkg{Seurat} v5 release, \code{\link[Seurat]{DietSeurat}} does not remove data and scale.data layers, resulting in objects with little to no reduction in size. This function was created with the purpose to restore \code{\link[Seurat]{DietSeurat}}'s proper behavior until the function is fixed by \pkg{Seurat}'s dev team, as well as to offer a few new options such as the ability to subset cells or keep variable features.
-}
-\examples{
-library(Seurat)
-
-# Original object from SeuratObject:
-
-pbmc_small
-
-# Example 1:
-
-Right_DietSeurat(pbmc_small,
-                idents = c("letter.idents","groups"),
-                features = c("CD3D", "NOSIP", "SAFB2",
-                 "CD2", "IL7R", "PIK3IP1", "MAL"),
-                graphs = "RNA_snn",
-                split.counts.layer = "letter.idents")
-
-# Example 2:
-
-pbmc_cells = WhichCells(pbmc_small, idents = c("0","1"))
-
-Right_DietSeurat(pbmc_small,
-                cells = pbmc_cells,
-                variable.features = TRUE,
-                dimreducs = "pca",
-                data.layer = TRUE)
-
 }

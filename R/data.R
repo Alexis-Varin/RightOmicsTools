@@ -1,4 +1,4 @@
-#' @title ncRNA_human
+#' @title Human non-coding genes
 #'
 #' @description A character vector containing all identified non coding RNA symbols in the human genome as of may 10th 2024.
 #'
@@ -8,7 +8,7 @@
 #' @source <https://www.genenames.org/data/genegroup/#!/group/475>
 "ncRNA_human"
 
-#' @title pseudogenes_mouse
+#' @title Mouse pseudogenes
 #'
 #' @description A character vector containing all identified pseudogenes in the mouse genome as of may 10th 2024.
 #'
