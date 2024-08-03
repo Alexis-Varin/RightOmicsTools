@@ -82,6 +82,7 @@
 #' head(pbmc.markers, 5)
 #' @import Seurat
 #' @import SeuratObject
+#' @import SeuratData
 #' @import BiocParallel
 #' @export
 
