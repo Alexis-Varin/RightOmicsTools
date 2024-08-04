@@ -149,28 +149,10 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Timer function</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1: default parameters</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">time.it</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">fun</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">start.time</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">fun</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n"</span>,<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="va">start.time</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example 1: default parameters</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pbmc.markers</span> <span class="op">=</span> <span class="fu">time.it</span><span class="op">(</span><span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pbmc.markers</span> <span class="op">=</span> <span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For a (much!) faster implementation of the Wilcoxon Rank Sum Test,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (default method for FindMarkers) please install the presto package</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> install.packages('devtools')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> devtools::install_github('immunogenomics/presto')</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> After installation of presto, Seurat will automatically use the more </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> efficient implementation (no further action necessary).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This message will be shown once per session</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster B against all other clusters</span>
@@ -178,8 +160,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  47.42803</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc.markers</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CCR7"    "LEF1"    "MAL"     "PIK3IP1" "TCF7"   </span>
@@ -189,7 +169,7 @@
 <span class="r-in"><span><span class="va">BPPARAM</span> <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">registered</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">BPPARAM</span><span class="op">$</span><span class="va">workers</span> <span class="op">&gt;</span> <span class="fl">4</span><span class="op">)</span> <span class="va">BPPARAM</span><span class="op">$</span><span class="va">workers</span> <span class="op">=</span> <span class="fl">4</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">pbmc.markers</span> <span class="op">=</span> <span class="fu">time.it</span><span class="op">(</span><span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc</span>,</span></span>
+<span class="r-in"><span><span class="va">pbmc.markers</span> <span class="op">=</span> <span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc</span>,</span></span>
 <span class="r-in"><span>                                       min.pct <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
 <span class="r-in"><span>                                       top.markers <span class="op">=</span> <span class="cn">Inf</span>,</span></span>
 <span class="r-in"><span>                                       unique.markers <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
@@ -198,7 +178,7 @@
 <span class="r-in"><span>                                       filter.ncRNA <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                                       parallelized <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                                       BPPARAM <span class="op">=</span> <span class="va">BPPARAM</span>,</span></span>
-<span class="r-in"><span>                                       output.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                       output.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
@@ -207,8 +187,6 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4.857585</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc.markers</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                p_val avg_log2FC pct.1 pct.2    p_val_adj     cluster feature</span>
