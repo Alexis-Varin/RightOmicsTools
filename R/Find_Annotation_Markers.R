@@ -47,19 +47,11 @@
 #'                      "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
 #' names(new.cluster.ids) <- levels(Idents(pbmc))
 #' pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
+#' presto.remove <- suppressWarnings(suppressMessages(Find_Annotation_Markers(pbmc, verbose = FALSE)))
 #' }
-#' # Timer function
-#'
-#' time.it = function(fun) {
-#'   start.time = Sys.time()
-#'   fun
-#'   cat("\n",Sys.time()-start.time)
-#'   return(fun)
-#' }
-#'
 #' # Example 1: default parameters
 #'
-#' pbmc.markers = time.it(Find_Annotation_Markers(pbmc))
+#' pbmc.markers = Find_Annotation_Markers(pbmc)
 #'
 #' head(pbmc.markers, 5)
 #'
@@ -68,7 +60,7 @@
 #' BPPARAM = BiocParallel::registered()[[1]]
 #' if (BPPARAM$workers > 4) BPPARAM$workers = 4
 #'
-#' pbmc.markers = time.it(Find_Annotation_Markers(pbmc,
+#' pbmc.markers = Find_Annotation_Markers(pbmc,
 #'                                        min.pct = 0.01,
 #'                                        top.markers = Inf,
 #'                                        unique.markers = FALSE,
@@ -77,7 +69,7 @@
 #'                                        filter.ncRNA = FALSE,
 #'                                        parallelized = TRUE,
 #'                                        BPPARAM = BPPARAM,
-#'                                        output.df = TRUE))
+#'                                        output.df = TRUE)
 #'
 #' head(pbmc.markers, 5)
 #' @import Seurat
