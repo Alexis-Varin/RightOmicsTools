@@ -1,9 +1,9 @@
 ---
 title: "Getting Started with RightSeuratTools"
-output: rmarkdown::html_vignette
+output: html_document
 vignette: >
   %\VignetteIndexEntry{Getting Started with RightSeuratTools}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

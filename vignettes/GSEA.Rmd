@@ -1,9 +1,9 @@
 ---
 title: "Creating gene signatures from GSEA pathways"
-output: rmarkdown::html_vignette
+output: html_document
 vignette: >
   %\VignetteIndexEntry{Creating gene signatures from GSEA pathways}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

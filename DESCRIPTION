@@ -32,5 +32,6 @@ Depends:
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    markdown
 VignetteBuilder: knitr
