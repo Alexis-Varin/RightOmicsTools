@@ -1,9 +1,9 @@
 ---
 title: "Advanced Data Visualization"
-output: html_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Advanced Data Visualization}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 

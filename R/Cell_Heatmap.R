@@ -106,7 +106,6 @@
 #' @import grid
 #' @import stats
 #' @import ComplexHeatmap
-#' @import magick
 #' @import grDevices
 #' @import colorRamp2
 #' @export
