@@ -164,7 +164,7 @@ Cell_Heatmap = function(seurat_object,
                         legend.title.size = 10,
                         legend.text.size = 10,
                         legend.gap = 10,
-                        raster = TRUE,
+                        raster = ifelse(ncol(seurat_object) > 3000, TRUE, FALSE),
                         raster.quality = 10,
                         output.data = FALSE,
                         ...) {

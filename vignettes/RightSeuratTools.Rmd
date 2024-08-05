@@ -214,20 +214,11 @@ for (i in 1:length(levels(Idents(pbmc)))) {
 
 These markers may then be directly used for plotting. Since the `Seurat` tutorial uses [DoHeatmap](https://satijalab.org/seurat/reference/doheatmap), we will compare it to its equivalent in `RightSeuratTools`, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html), which is reworked using `ComplexHeatmap` instead of `ggplot2`:
 
-```{r heatmap_code, eval = FALSE}
-# We will disable some parameters to be as close as possible from Seurat's DoHeatmap
+```{r heatmap, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
 Cell_Heatmap(pbmc,
              features = annotation.markers,
              cluster.features = FALSE,
              show.idents.legend = FALSE)
-```
-
-```{r heatmap, warning = FALSE, message = FALSE, echo = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
-Cell_Heatmap(pbmc,
-             features = annotation.markers,
-             cluster.features = FALSE,
-             show.idents.legend = FALSE,
-             raster = FALSE)
 ```
 
 Let's compare it to `Seurat`'s default heatmap function:
