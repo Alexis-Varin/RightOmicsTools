@@ -14,8 +14,7 @@
 
 This package is a set of various tools to facilitate the use of `Seurat`
 objects in R. It is currently in development and will be updated
-regularly with new functions and improvements, so be sure to check
-regularly for updates on this page.
+regularly with new functions and improvements.
 
 ## Quick start
 
@@ -36,7 +35,7 @@ pathways](https://alexis-varin.github.io/RightSeuratTools/articles/GSEA.html).
 
 ## Reference
 
-All functions from the package are [documented on
+All functions are [documented on
 GitHub](https://alexis-varin.github.io/RightSeuratTools/reference/index.html)
 and help may also be accessed using the `?` operator in R.
 

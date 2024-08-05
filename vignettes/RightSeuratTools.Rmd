@@ -20,13 +20,13 @@ This tutorial will guide you through the main functions of the `RightSeuratTools
 
 ## Installation
 
-You may install the `RightSeuratTools` package from GitHub using the `devtools` package, which, if you don't have it, may be installed using the following command:
+You may install the package from GitHub using the `devtools` package, which, if you don't have it, may be installed using the following command:
 
 ```{r devtools, eval = FALSE}
 install.packages("devtools")
 ```
 
-Once installed, you may install the `RightSeuratTools` package, as well as another package called `SeuratData` which will be used to load the dataset, using the following command:
+Once installed, you may install `RightSeuratTools`, as well as another package called `SeuratData` which will be used to load the dataset, using the following command:
 
 ```{r install, eval = FALSE}
 devtools::install_github("Alexis-Varin/RightSeuratTools")
@@ -47,13 +47,13 @@ Let's start by loading all the packages we will be using in this vignette:
 ```{r lib, warning = FALSE, message = FALSE}
 library(RightSeuratTools)
 library(Seurat)
-#library(SeuratData)
+library(SeuratData)
 library(ggplot2)
 ```
 
 Next, we will load the `pbmc3k` dataset from `SeuratData` and check its contents:
 
-```{r load, warning = FALSE, message = FALSE, results = 'hide', eval = FALSE}
+```{r load, warning = FALSE, message = FALSE, results = 'hide'}
 # Loading the data from SeuratData
 InstallData("pbmc3k")
 data(pbmc3k)
@@ -67,12 +67,6 @@ colnames(pbmc3k@meta.data)
 ```
 
 ```{r pbmc3k_res, echo = FALSE}
-download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz", destfile = "pbmc3k_filtered_gene_bc_matrices.tar.gz")
-untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")
-pbmc3k = Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
-pbmc3k = CreateSeuratObject(counts = pbmc3k, project = "pbmc3k", min.cells = 3, min.features = 200)
-unlink(c("pbmc3k_filtered_gene_bc_matrices.tar.gz","filtered_gene_bc_matrices"), recursive = TRUE)
-
 pbmc3k
 ```
 

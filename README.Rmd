@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![](https://img.shields.io/github/last-commit/Alexis-Varin/RightSeuratTools.svg)](https://github.com/Alexis-Varin/RightSeuratTools/commits/main)
 <!-- badges: end -->
 
-This package is a set of various tools to facilitate the use of `Seurat` objects in R. It is currently in development and will be updated regularly with new functions and improvements, so be sure to check regularly for updates on this page.
+This package is a set of various tools to facilitate the use of `Seurat` objects in R. It is currently in development and will be updated regularly with new functions and improvements.
 
 ## Quick start
 
@@ -35,7 +35,7 @@ The package also contains two other vignettes, currently under construction, one
 
 ## Reference
 
-All functions from the package are [documented on GitHub](https://alexis-varin.github.io/RightSeuratTools/reference/index.html) and help may also be accessed using the `?` operator in R.
+All functions are [documented on GitHub](https://alexis-varin.github.io/RightSeuratTools/reference/index.html) and help may also be accessed using the `?` operator in R.
 
 ## Citation
 
