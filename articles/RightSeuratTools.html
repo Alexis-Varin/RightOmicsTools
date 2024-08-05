@@ -90,14 +90,14 @@ functions will be added in the future.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You may install the <code>RightSeuratTools</code> package from GitHub
-using the <code>devtools</code> package, which, if you don’t have it,
-may be installed using the following command:</p>
+<p>You may install the package from GitHub using the
+<code>devtools</code> package, which, if you don’t have it, may be
+installed using the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span></code></pre></div>
-<p>Once installed, you may install the <code>RightSeuratTools</code>
-package, as well as another package called <code>SeuratData</code> which
-will be used to load the dataset, using the following command:</p>
+<p>Once installed, you may install <code>RightSeuratTools</code>, as
+well as another package called <code>SeuratData</code> which will be
+used to load the dataset, using the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Alexis-Varin/RightSeuratTools"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -118,13 +118,13 @@ vignette:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexis-varin.github.io/RightSeuratTools/">RightSeuratTools</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="co">#library(SeuratData)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.satijalab.org/seurat" class="external-link">SeuratData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <p>Next, we will load the <code>pbmc3k</code> dataset from
 <code>SeuratData</code> and check its contents:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Loading the data from SeuratData</span></span>
-<span><span class="fu">InstallData</span><span class="op">(</span><span class="st">"pbmc3k"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/InstallData.html" class="external-link">InstallData</a></span><span class="op">(</span><span class="st">"pbmc3k"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># We need to update the dataset to the latest Seurat version</span></span>
@@ -133,13 +133,12 @@ vignette:</p>
 <span><span class="co"># Checking the contents of the object</span></span>
 <span><span class="va">pbmc3k</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Warning: Feature names cannot have underscores ('_'), replacing with dashes</span></span>
-<span><span class="co">#&gt; ('-')</span></span>
-<span><span class="co">#&gt; An object of class Seurat </span></span>
+<pre><code><span><span class="co">#&gt; An object of class Seurat </span></span>
 <span><span class="co">#&gt; 13714 features across 2700 samples within 1 assay </span></span>
 <span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
-<span><span class="co">#&gt;  1 layer present: counts</span></span></code></pre>
-<pre><code><span><span class="co">#&gt; [1] "orig.ident"   "nCount_RNA"   "nFeature_RNA"</span></span></code></pre>
+<span><span class="co">#&gt;  2 layers present: counts, data</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] "orig.ident"         "nCount_RNA"         "nFeature_RNA"      </span></span>
+<span><span class="co">#&gt; [4] "seurat_annotations"</span></span></code></pre>
 <p>Since the object seems to contain a ‘data’ layer as well as cell
 annotations, and we are unsure to what extent is has been preprocessed
 and processed, we will start by testing our first function from
