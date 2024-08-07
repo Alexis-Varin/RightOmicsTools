@@ -1,6 +1,6 @@
 #' @title Human non-coding genes
 #'
-#' @description A character vector containing all identified non coding RNA symbols in the human genome as of may 10th 2024.
+#' @description A character vector containing all known non-coding RNA genes in the human genome as of may 10th 2024.
 #'
 #' @format ## ncRNA_human
 #' A character vector with 14574 elements.
@@ -10,7 +10,7 @@
 
 #' @title Mouse pseudogenes
 #'
-#' @description A character vector containing all identified pseudogenes in the mouse genome as of may 10th 2024.
+#' @description A character vector containing all known pseudogenes in the mouse genome as of may 10th 2024.
 #'
 #' @format ## pseudogenes_mouse
 #' A character vector with 3663 elements.

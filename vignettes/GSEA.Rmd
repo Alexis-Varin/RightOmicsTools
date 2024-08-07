@@ -1,8 +1,8 @@
 ---
-title: "Creating gene signatures from GSEA pathways"
+title: "Gene signatures from GSEA"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating gene signatures from GSEA pathways}
+  %\VignetteIndexEntry{Gene signatures from GSEA}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

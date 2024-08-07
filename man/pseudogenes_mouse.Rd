@@ -17,6 +17,6 @@ A character vector with 3663 elements.
 pseudogenes_mouse
 }
 \description{
-A character vector containing all identified pseudogenes in the mouse genome as of may 10th 2024.
+A character vector containing all known pseudogenes in the mouse genome as of may 10th 2024.
 }
 \keyword{datasets}

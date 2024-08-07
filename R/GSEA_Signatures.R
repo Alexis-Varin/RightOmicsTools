@@ -1,4 +1,4 @@
-#' @title Compute gene signatures from GSEA pathways
+#' @title Compute gene signatures from GSEA
 #'
 #' @description This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from features found in the \pkg{Seurat} object and extracted from supplied MSigDB's pathways.
 #'

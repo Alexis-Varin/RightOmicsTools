@@ -2,7 +2,7 @@
 % Please edit documentation in R/GSEA_Signatures.R
 \name{GSEA_Signatures}
 \alias{GSEA_Signatures}
-\title{Compute gene signatures from GSEA pathways}
+\title{Compute gene signatures from GSEA}
 \usage{
 GSEA_Signatures(
   seurat_object,

@@ -17,6 +17,6 @@ A character vector with 14574 elements.
 ncRNA_human
 }
 \description{
-A character vector containing all identified non coding RNA symbols in the human genome as of may 10th 2024.
+A character vector containing all known non-coding RNA genes in the human genome as of may 10th 2024.
 }
 \keyword{datasets}
