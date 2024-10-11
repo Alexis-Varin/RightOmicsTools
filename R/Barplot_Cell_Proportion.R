@@ -10,6 +10,7 @@
 #' @param order.group Character. A vector specifying either 'reverse' or the levels of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.
 #' @param order.split Character. A vector specifying either 'reverse' or the levels of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.
 #' @param order.colors Logical. If \code{TRUE}, the colors for the active.ident identity, the \code{group.by} identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents}, \code{order.group} and \code{order.split}. Ignored if \code{order.idents}, \code{order.group} and \code{order.split} are \code{NULL}.
+#' @param alpha Numeric. The transparency of the bars colors. A value between 0 and 1.
 #' @param show.cellsum.label Logical. If \code{TRUE}, the cell sum of each identity will be shown at the top of each bar.
 #' @param cellsum.label.size Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.
 #' @param axis.text.size Numeric. The font size of the identities names and cell percent or numbers.
@@ -74,6 +75,7 @@ Barplot_Cell_Proportion = function(seurat_object,
                                    order.group = NULL,
                                    order.split = NULL,
                                    order.colors = TRUE,
+                                   alpha = 1,
                                    show.cellsum.label = TRUE,
                                    cellsum.label.size = 3,
                                    axis.text.size = 9,
@@ -220,7 +222,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           if (isTRUE(j == levels(Idents(seurat_object))[1])) {
             if (isTRUE(show.cellsum.label)) {
                 proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                  geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                  geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                      x = j,
                                                                                      y="Relative number of cells") +
                   theme_bw() +
@@ -241,7 +243,7 @@ Barplot_Cell_Proportion = function(seurat_object,
             }
             else {
             proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=percent, x=ident2, fill = ident1)) +
-              geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+              geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                  x = j,
                                                                                  y="Relative number of cells") +
               theme_bw() +
@@ -258,7 +260,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           else {
             if (isTRUE(show.cellsum.label)) {
               proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    x = j,
                                                                                    y="Relative number of cells") +
                 theme_bw() +
@@ -279,7 +281,7 @@ Barplot_Cell_Proportion = function(seurat_object,
             }
             else {
               proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    x = j,
                                                                                    y="Relative number of cells") +
                 theme_bw() +
@@ -297,7 +299,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         else {
           if (isTRUE(show.cellsum.label)) {
           proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=nbcells, x=ident2, fill = ident1)) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                x = j,
                                                                                y="Number of cells") +
             theme_bw() +
@@ -317,7 +319,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
           else {
             proportion.plot[[i]][[j]] = ggplot(table.list[[i]][[j]], aes(y=nbcells, x=ident2, fill = ident1)) +
-              geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+              geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                  x = j,
                                                                                  y="Number of cells") +
               theme_bw() +
@@ -337,7 +339,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       if (isTRUE(percent)) {
         if (isTRUE(show.cellsum.label)) {
             proportion.plot[[i]] = ggplot(table.df, aes(fill=ident1, y=percent, x=factor(ident2, levels = order.group))) +
-              geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+              geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                  y="Relative number of cells") +
               geom_text(data = sum.df, aes(label = sum, x = ident2, y = sumpercent), stat = "summary",
                         fun = sum, vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size,
@@ -355,7 +357,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
         proportion.plot[[i]] = ggplot(table.df, aes(fill=ident1, y=percent, x=factor(ident2, levels = order.group))) +
-          geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+          geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                              y="Relative number of cells") +
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -372,7 +374,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       else {
         if (isTRUE(show.cellsum.label)) {
           proportion.plot[[i]] = ggplot(table.df, aes(fill=ident1, y=nbcells, x=factor(ident2, levels = order.group))) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                y="Number of cells") +
             geom_text(data = sum.df, aes(label = sum, x = ident2, y = sum), stat = "summary",
                       fun = sum, vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size,
@@ -390,7 +392,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
         proportion.plot[[i]] = ggplot(table.df, aes(fill=ident1, y=nbcells, x=factor(ident2, levels = order.group))) +
-          geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+          geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                              y="Number of cells") +
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -440,7 +442,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       if (isTRUE(percent)) {
         if (isTRUE(show.cellsum.label)) {
           proportion.plot[[i]] = ggplot(table.list[[i]], aes(y=percent, x=ident1, fill = ident1)) +
-            geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
+            geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
             geom_text(aes(label = nbcells, x = ident1, y = percent), stat = "identity",
                       vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size)+
             theme_bw() +
@@ -457,7 +459,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
           proportion.plot[[i]] = ggplot(table.list[[i]], aes(y=percent, x=ident1, fill = ident1)) +
-            geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
+            geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -474,7 +476,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       else {
         if (isTRUE(show.cellsum.label)) {
           proportion.plot[[i]] = ggplot(table.list[[i]], aes(y=nbcells, x=ident1, fill = ident1)) +
-            geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
+            geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
             geom_text(aes(label = nbcells, x = ident1, y = nbcells), stat = "identity",
                       vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size)+
             theme_bw() +
@@ -491,7 +493,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
           proportion.plot[[i]] = ggplot(table.list[[i]], aes(y=nbcells, x=ident1, fill = ident1)) +
-            geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
+            geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -651,7 +653,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           if (isTRUE(j == levels(Idents(seurat_object))[1])) {
             if (isTRUE(show.cellsum.label)) {
               proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    y="Relative number of cells") +
                 theme_bw() +
                 theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -670,7 +672,7 @@ Barplot_Cell_Proportion = function(seurat_object,
             }
             else {
               proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    y="Relative number of cells") +
                 theme_bw() +
                 theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -686,7 +688,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           else {
             if (isTRUE(show.cellsum.label)) {
               proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    y="Relative number of cells") +
                 theme_bw() +
                 theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -705,7 +707,7 @@ Barplot_Cell_Proportion = function(seurat_object,
             }
             else {
               proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=percent, x=ident2, fill = ident1)) +
-                geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+                geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                    y="Relative number of cells") +
                 theme_bw() +
                 theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -722,7 +724,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         else {
           if (isTRUE(show.cellsum.label)) {
             proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=nbcells, x=ident2, fill = ident1)) +
-              geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+              geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                  y="Number of cells") +
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -740,7 +742,7 @@ Barplot_Cell_Proportion = function(seurat_object,
           }
           else {
             proportion.plot[[j]] = ggplot(table.list[[j]], aes(y=nbcells, x=ident2, fill = ident1)) +
-              geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+              geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                  y="Number of cells") +
               theme_bw() +
               theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -771,7 +773,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       if (isTRUE(percent)) {
         if (isTRUE(show.cellsum.label)) {
           proportion.plot = ggplot(table.df, aes(fill=ident1, y=percent, x=factor(ident2, levels = order.group))) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                y="Relative number of cells") +
             geom_text(data = sum.df, aes(label = sum, x = ident2, y = sumpercent), stat = "summary",
                       fun = sum, vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size,
@@ -788,7 +790,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
           proportion.plot = ggplot(table.df, aes(fill=ident1, y=percent, x=factor(ident2, levels = order.group))) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                y="Relative number of cells") +
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -804,7 +806,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       else {
         if (isTRUE(show.cellsum.label)) {
           proportion.plot = ggplot(table.df, aes(fill=ident1, y=nbcells, x=factor(ident2, levels = order.group))) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                y="Number of cells") +
             geom_text(data = sum.df, aes(label = sum, x = ident2, y = sum), stat = "summary",
                       fun = sum, vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size,
@@ -821,7 +823,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         }
         else {
           proportion.plot = ggplot(table.df, aes(fill=ident1, y=nbcells, x=factor(ident2, levels = order.group))) +
-            geom_bar(position="stack", stat="identity", color = "black")+ labs(fill="",
+            geom_bar(alpha = alpha, position="stack", stat="identity", color = "black")+ labs(fill="",
                                                                                y="Number of cells") +
             theme_bw() +
             theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -877,7 +879,7 @@ Barplot_Cell_Proportion = function(seurat_object,
     if (isTRUE(percent)) {
       if (isTRUE(show.cellsum.label)) {
         proportion.plot = ggplot(table.df, aes(y=percent, x=ident1, fill = ident1)) +
-          geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
+          geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
           geom_text(aes(label = nbcells, x = ident1, y = percent), stat = "identity",
                     vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size)+
           theme_bw() +
@@ -893,7 +895,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       }
       else {
         proportion.plot = ggplot(table.df, aes(y=percent, x=ident1, fill = ident1)) +
-          geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
+          geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Relative number of cells") +
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -909,7 +911,7 @@ Barplot_Cell_Proportion = function(seurat_object,
     else {
       if (isTRUE(show.cellsum.label)) {
         proportion.plot = ggplot(table.df, aes(y=nbcells, x=ident1, fill = ident1)) +
-          geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
+          geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
           geom_text(aes(label = nbcells, x = ident1, y = nbcells), stat = "identity",
                     vjust = -0.5, position = position_dodge(width = 1), size = cellsum.label.size)+
           theme_bw() +
@@ -925,7 +927,7 @@ Barplot_Cell_Proportion = function(seurat_object,
       }
       else {
         proportion.plot = ggplot(table.df, aes(y=nbcells, x=ident1, fill = ident1)) +
-          geom_bar(position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
+          geom_bar(alpha = alpha, position= "stack", stat = "identity", color = "black")+ labs(y="Number of cells") +
           theme_bw() +
           theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
