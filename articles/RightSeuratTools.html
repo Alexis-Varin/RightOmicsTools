@@ -128,9 +128,11 @@ which handles all data preparation for us, and check its contents:</p>
 <span><span class="co"># Checking the contents of the object</span></span>
 <span><span class="va">pbmc3k</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Available datasets:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">"pbmc3k"</span>   a Seurat v4 object of 2700 cells by 13714 features</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; An object of class Seurat </span></span>
-<span><span class="co">#&gt; 16634 features across 2700 samples within 1 assay </span></span>
-<span><span class="co">#&gt; Active assay: RNA (16634 features, 0 variable features)</span></span>
+<span><span class="co">#&gt; 13714 features across 2700 samples within 1 assay </span></span>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
 <span><span class="co">#&gt;  2 layers present: counts, data</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; [1] "orig.ident"         "nCount_RNA"         "nFeature_RNA"      </span></span>
 <span><span class="co">#&gt; [4] "seurat_annotations"</span></span></code></pre>
@@ -144,16 +146,16 @@ the counts layer from the RNA assay. We will also remove all meta.data
 columns except for the ‘orig.ident’ metadata to truly start anew. <a href="https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html">Right_DietSeurat</a>
 is highly customizable, check the documentation for more
 information:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Reducing the object to the counts layer and the 'orig.ident' metadata</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Right_DietSeurat.html">Right_DietSeurat</a></span><span class="op">(</span><span class="va">pbmc3k</span>, idents <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Right_DietSeurat.html">Right_DietSeurat</a></span><span class="op">(</span><span class="va">pbmc3k</span>, idents <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Checking the contents of the object</span></span>
-<span><span class="va">pbmc</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc3k</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; An object of class Seurat </span></span>
-<span><span class="co">#&gt; 16634 features across 2700 samples within 1 assay </span></span>
-<span><span class="co">#&gt; Active assay: RNA (16634 features, 0 variable features)</span></span>
+<span><span class="co">#&gt; 13714 features across 2700 samples within 1 assay </span></span>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
 <span><span class="co">#&gt;  1 layer present: counts</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; [1] "orig.ident"   "nCount_RNA"   "nFeature_RNA"</span></span></code></pre>
 </div>
@@ -166,15 +168,15 @@ information:</p>
 <p>We will now move on to preprocessing. We start by calculating the
 percentage of mitochondrial genes and plot these results alongside the
 number of genes (nFeature_RNA) and counts (nCount_RNA) per cell:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate percentage of mitochondrial genes</span></span>
-<span><span class="va">pbmc</span><span class="op">[[</span><span class="st">"percent.mt"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html" class="external-link">PercentageFeatureSet</a></span><span class="op">(</span><span class="va">pbmc</span>, pattern <span class="op">=</span> <span class="st">"^MT-"</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span><span class="op">[[</span><span class="st">"percent.mt"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html" class="external-link">PercentageFeatureSet</a></span><span class="op">(</span><span class="va">pbmc3k</span>, pattern <span class="op">=</span> <span class="st">"^MT-"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot QC</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nCount_RNA</span>, y <span class="op">=</span> <span class="va">nFeature_RNA</span>, col <span class="op">=</span> <span class="va">percent.mt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nCount_RNA</span>, y <span class="op">=</span> <span class="va">nFeature_RNA</span>, col <span class="op">=</span> <span class="va">percent.mt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_color_gradientn</a></span><span class="op">(</span>colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>,<span class="st">"blue"</span>,<span class="st">"green3"</span>,<span class="st">"yellow3"</span>,<span class="st">"red3"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"pbmc QC metrics"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"pbmc3k QC metrics"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Log10(counts)"</span>, y <span class="op">=</span> <span class="st">"Log10(number of genes)"</span>, col <span class="op">=</span> <span class="st">"% mito"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -187,17 +189,17 @@ number of genes (nFeature_RNA) and counts (nCount_RNA) per cell:</p>
 <p>Based on the plot above, we will filter out cells with more than 10%
 mitochondrial genes as well as cells with less than 400 or more than
 2500 genes:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter cells</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pbmc</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">400</span> <span class="op">&amp;</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pbmc3k</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">400</span> <span class="op">&amp;</span></span>
 <span>                              <span class="va">nFeature_RNA</span> <span class="op">&lt;</span> <span class="fl">2500</span> <span class="op">&amp;</span></span>
 <span>                              <span class="va">percent.mt</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Checking the contents of the object</span></span>
-<span><span class="va">pbmc</span></span></code></pre></div>
+<span><span class="va">pbmc3k</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; An object of class Seurat </span></span>
-<span><span class="co">#&gt; 16634 features across 2595 samples within 1 assay </span></span>
-<span><span class="co">#&gt; Active assay: RNA (16634 features, 0 variable features)</span></span>
+<span><span class="co">#&gt; 13714 features across 2595 samples within 1 assay </span></span>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
 <span><span class="co">#&gt;  1 layer present: counts</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -207,15 +209,15 @@ mitochondrial genes as well as cells with less than 400 or more than
 step, which is normalizing, scaling the data and identifying highly
 variable genes. For convenience, we use the same parameters as in the
 <code>Seurat</code> tutorial:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Normalizing the data with default parameters</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Find highly variable genes with default parameters</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Scaling all genes, by default it only scales the variable features</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">pbmc3k</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dimensionality-reduction">Dimensionality reduction<a class="anchor" aria-label="anchor" href="#dimensionality-reduction"></a>
@@ -223,21 +225,21 @@ variable genes. For convenience, we use the same parameters as in the
 <p>Next, we will perform dimensionality reduction and unsupervised
 clustering. We again use the same parameters as in the
 <code>Seurat</code> tutorial:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Perform PCA</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Clustering</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">pbmc</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span><span class="va">pbmc</span>, resolution <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">pbmc3k</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span><span class="va">pbmc3k</span>, resolution <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># UMAP</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">pbmc</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">pbmc3k</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we will plot the UMAP, which concludes the preprocessing
 steps:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot UMAP</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/umap-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Interestingly, compared to the <code>Seurat</code> tutorial, we are
 missing the platelet cluster, which is likely due to the fact that we
@@ -269,16 +271,13 @@ mitochondrial, ribosomal and non-coding genes excluded, in order to
 maximize the chances of finding canonical markers in an unsupervised
 manner. It also provides many more parameters which can be used to
 tailor the function to your specific needs:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Find markers</span></span>
-<span><span class="va">annotation.markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Find_Annotation_Markers.html">Find_Annotation_Markers</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Top 5 markers for each cluster, we will name each marker with cluster identity</span></span>
+<span><span class="va">annotation.markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Find_Annotation_Markers.html">Find_Annotation_Markers</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
+<span>                                              name.features <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Display markers for each cluster, only for visualization in the vignette</span></span>
-<span><span class="va">j</span> <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Cluster"</span>, <span class="va">i</span><span class="op">-</span><span class="fl">1</span>, <span class="st">":"</span>, <span class="va">annotation.markers</span><span class="op">[</span><span class="va">j</span><span class="op">:</span><span class="op">(</span><span class="va">j</span><span class="op">+</span><span class="fl">4</span><span class="op">)</span><span class="op">]</span>,<span class="st">"\n"</span><span class="op">)</span></span>
-<span>  <span class="va">j</span> <span class="op">=</span> <span class="va">j</span> <span class="op">+</span> <span class="fl">5</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="co"># Display markers for each cluster</span></span>
+<span><span class="va">annotation.markers</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Finding markers for cluster 0 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 1 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 2 against all other clusters</span></span>
@@ -287,30 +286,29 @@ tailor the function to your specific needs:</p>
 <span><span class="co">#&gt; Finding markers for cluster 5 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 6 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 7 against all other clusters</span></span></code></pre>
-<pre><code><span><span class="co">#&gt; Cluster 0 : CCR7 LEF1 MAL PIK3IP1 TCF7 </span></span>
-<span><span class="co">#&gt; Cluster 1 : FOLR3 S100A12 S100A8 S100A9 CD14 </span></span>
-<span><span class="co">#&gt; Cluster 2 : AQP3 CD40LG CD2 TRAT1 TRADD </span></span>
-<span><span class="co">#&gt; Cluster 3 : VPREB3 CD79A TCL1A FCRLA FCER2 </span></span>
-<span><span class="co">#&gt; Cluster 4 : GZMK GZMH CCL5 CD8A KLRG1 </span></span>
-<span><span class="co">#&gt; Cluster 5 : CKB CDKN1C MS4A4A HES4 BATF3 </span></span>
-<span><span class="co">#&gt; Cluster 6 : AKR1C3 GNLY GZMB SH2D1B SPON2 </span></span>
-<span><span class="co">#&gt; Cluster 7 : SERPINF1 FCER1A CLIC2 CLEC10A ENHO</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1] "CCR7"     "LEF1"     "MAL"      "PIK3IP1"  "TCF7"     "FOLR3"   </span></span>
+<span><span class="co">#&gt;  [7] "S100A12"  "S100A8"   "S100A9"   "CD14"     "AQP3"     "CD40LG"  </span></span>
+<span><span class="co">#&gt; [13] "CORO1B"   "CD2"      "TRAT1"    "VPREB3"   "CD79A"    "TCL1A"   </span></span>
+<span><span class="co">#&gt; [19] "FCRLA"    "FCER2"    "GZMK"     "GZMH"     "CCL5"     "CD8A"    </span></span>
+<span><span class="co">#&gt; [25] "KLRG1"    "CKB"      "CDKN1C"   "MS4A4A"   "HES4"     "BATF3"   </span></span>
+<span><span class="co">#&gt; [31] "AKR1C3"   "GNLY"     "GZMB"     "SH2D1B"   "SPON2"    "SERPINF1"</span></span>
+<span><span class="co">#&gt; [37] "FCER1A"   "CLIC2"    "ENHO"     "CLEC10A"</span></span></code></pre>
 <p>These markers may then be directly used for plotting. Since the
 <code>Seurat</code> tutorial uses <a href="https://satijalab.org/seurat/reference/doheatmap" class="external-link">DoHeatmap</a>,
 we will compare it to its equivalent in <code>RightSeuratTools</code>,
 <a href="https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html">Cell_Heatmap</a>,
 which is reworked using <code>ComplexHeatmap</code> instead of
 <code>ggplot2</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Cell_Heatmap.html">Cell_Heatmap</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Cell_Heatmap.html">Cell_Heatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
 <span>             cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>             show.idents.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/heatmap-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Let’s compare it to <code>Seurat</code>’s default heatmap
 function:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>          features <span class="op">=</span> <span class="va">annotation.markers</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/doheatmap-1.png" width="768" style="display: block; margin: auto;"></p>
@@ -325,19 +323,19 @@ identities by another metadata…</p>
 </h3>
 <p>We will now annotate each cluster with its corresponding cell type
 and display the UMAP:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Annotate clusters</span></span>
 <span><span class="va">new.cluster.ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive CD4 T"</span>, <span class="st">"CD14+ Mono"</span>, <span class="st">"Memory CD4 T"</span>,</span>
 <span>                     <span class="st">"B"</span>, <span class="st">"CD8 T"</span>, <span class="st">"FCGR3A+ Mono"</span>, <span class="st">"NK"</span>, <span class="st">"DC"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">new.cluster.ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">RenameIdents</a></span><span class="op">(</span><span class="va">pbmc</span>, <span class="va">new.cluster.ids</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">new.cluster.ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
+<span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">RenameIdents</a></span><span class="op">(</span><span class="va">pbmc3k</span>, <span class="va">new.cluster.ids</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add metadata to Seurat object</span></span>
-<span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">named_clusters</span> <span class="op">&lt;-</span> <span class="va">pbmc</span><span class="op">@</span><span class="va">active.ident</span></span>
+<span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">named_clusters</span> <span class="op">&lt;-</span> <span class="va">pbmc3k</span><span class="op">@</span><span class="va">active.ident</span></span>
 <span></span>
 <span><span class="co"># Plot UMAP with cell types</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/annotation-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
@@ -352,8 +350,8 @@ introduces <a href="https://alexis-varin.github.io/RightSeuratTools/reference/Ba
 which automates cell proportion and conveniently displays a bar plot,
 with the possibility to group and/or split based on other metadata, and
 many other parameters:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Barplot_Cell_Proportion.html">Barplot_Cell_Proportion</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Barplot_Cell_Proportion.html">Barplot_Cell_Proportion</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>                        percent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/proportion-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
@@ -367,10 +365,10 @@ and <a href="https://alexis-varin.github.io/RightSeuratTools/reference/Grid_VlnP
 which is a stacked version of <a href="https://satijalab.org/seurat/reference/vlnplot" class="external-link">VlnPlot</a> in a
 square grid, both also offering many more options than their
 <code>Seurat</code> counterparts:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We will disable some parameters to be as close as possible from Seurat's DotPlot</span></span>
 <span><span class="co"># Due to the number of features, we will also lower dots size and flip the axis</span></span>
-<span><span class="fu"><a href="../reference/DotPlot_Heatmap.html">DotPlot_Heatmap</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
+<span><span class="fu"><a href="../reference/DotPlot_Heatmap.html">DotPlot_Heatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>                features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
 <span>                dots.size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -378,15 +376,16 @@ square grid, both also offering many more options than their
 <span>                rotate.axis <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/dotplot-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Comparing it to <code>Seurat</code>’s default dotplot function:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
-<span>        features <span class="op">=</span> <span class="va">annotation.markers</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Seurat's DotPlot function does not work well with named features, we will remove names</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
+<span>        features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">annotation.markers</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">RotatedAxis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/dotplot_seurat_display-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>And finally, the grid violin plot:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Grid_VlnPlot.html">Grid_VlnPlot</a></span><span class="op">(</span><span class="va">pbmc</span>,</span>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Grid_VlnPlot.html">Grid_VlnPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/grid_vln-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>

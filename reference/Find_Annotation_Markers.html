@@ -67,6 +67,7 @@
 <span>  species <span class="op">=</span> <span class="st">"human"</span>,</span>
 <span>  parallelized <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  name.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output.df <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output.list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -126,6 +127,10 @@
 <dd><p>A <code><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">BiocParallelParam</a></code> object to be used for parallelization. If <code>NULL</code>, the function will set this parameter to <code><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></code>, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if <code>parallelized</code> = <code>FALSE</code>.</p></dd>
 
 
+<dt id="arg-name-features">name.features<a class="anchor" aria-label="anchor" href="#arg-name-features"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, and if <code>output.df</code> and <code>output.list</code> are <code>FALSE</code>, each feature will be named with the corresponding cluster identity.</p></dd>
+
+
 <dt id="arg-output-df">output.df<a class="anchor" aria-label="anchor" href="#arg-output-df"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, a data frame of features names and associated statistics will be returned. If <code>FALSE</code>, a character vector of features names will be returned.</p></dd>
 
@@ -162,10 +167,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelet against all other clusters</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc3k.markers</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T Memory CD4 T </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       "CCR7"       "LEF1"        "MAL"    "PIK3IP1"       "TCF7"       "AQP3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CCR7"    "LEF1"    "MAL"     "PIK3IP1" "TCF7"    "AQP3"   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: parallelized FindAllMarkers</span></span></span>
 <span class="r-in"><span><span class="va">BPPARAM</span> <span class="op">&lt;-</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">registered</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
@@ -180,23 +183,22 @@
 <span class="r-in"><span>                                          parallelized <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                                          BPPARAM <span class="op">=</span> <span class="va">BPPARAM</span>,</span></span>
 <span class="r-in"><span>                                          output.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelet against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster B against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD8 T against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc3k.markers</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                p_val avg_log2FC pct.1 pct.2    p_val_adj     cluster feature</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GTSCR1  1.775576e-08   7.160140 0.016 0.000 2.953493e-04 Naive CD4 T  GTSCR1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REG4    4.669320e-10   5.898509 0.022 0.000 7.766948e-06 Naive CD4 T    REG4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NOG     1.637607e-12   4.837083 0.034 0.002 2.723996e-08 Naive CD4 T     NOG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> MMP28   1.780334e-07   4.377688 0.016 0.000 2.961408e-03 Naive CD4 T   MMP28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2orf40 9.105216e-08   3.854181 0.020 0.001 1.514562e-03 Naive CD4 T C2orf40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ADTRP   9.636983e-23   2.926739 0.099 0.017 1.603016e-18 Naive CD4 T   ADTRP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GTSCR1  1.989750e-08   7.150823 0.016 0.000 2.728743e-04 Naive CD4 T  GTSCR1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> REG4    5.397233e-10   5.889242 0.022 0.001 7.401765e-06 Naive CD4 T    REG4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOG     2.006355e-12   4.827114 0.034 0.003 2.751516e-08 Naive CD4 T     NOG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> MMP28   1.977007e-07   4.367551 0.016 0.001 2.711268e-03 Naive CD4 T   MMP28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2orf40 1.025794e-07   3.843510 0.020 0.002 1.406773e-03 Naive CD4 T C2orf40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ADTRP   1.534399e-22   2.916404 0.099 0.017 2.104275e-18 Naive CD4 T   ADTRP</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
