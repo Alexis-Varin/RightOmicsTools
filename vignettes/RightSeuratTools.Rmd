@@ -26,14 +26,10 @@ You may install the package from GitHub using the `devtools` package, which, if 
 install.packages("devtools")
 ```
 
-Once installed, you may install `RightSeuratTools`, as well as another package called `SeuratData` which will be used to load the dataset, using the following command:
+Once installed, you may install `RightSeuratTools` using the following command:
 
 ```{r install, eval = FALSE}
 devtools::install_github("Alexis-Varin/RightSeuratTools")
-```
-
-```{r seuratdata, eval = FALSE}
-devtools::install_github("satijalab/seurat-data")
 ```
 
 ## Data loading
@@ -47,19 +43,17 @@ Let's start by loading all the packages we will be using in this vignette:
 ```{r lib, warning = FALSE, message = FALSE}
 library(RightSeuratTools)
 library(Seurat)
-library(SeuratData)
 library(ggplot2)
 ```
 
-Next, we will load the `pbmc3k` dataset from `SeuratData` and check its contents:
+Next, we will load the `pbmc3k` dataset using our first function from `RightSeuratTools`, [Right_Data](https://alexis-varin.github.io/RightSeuratTools/reference/Right_Data.html), which handles all data preparation for us, and check its contents:
 
 ```{r load, warning = FALSE, message = FALSE, results = 'hide'}
-# Loading the data from SeuratData
-InstallData("pbmc3k")
-data(pbmc3k)
+# Checking available datasets
+Right_Data(list.datasets = TRUE)
 
-# We need to update the dataset to the latest Seurat version
-pbmc3k <- UpdateSeuratObject(pbmc3k)
+# Loading the data
+pbmc3k <- Right_Data("pbmc3k")
 
 # Checking the contents of the object
 pbmc3k
@@ -74,7 +68,7 @@ pbmc3k
 colnames(pbmc3k@meta.data)
 ```
 
-Since the object seems to contain a 'data' layer as well as cell annotations, and we are unsure to what extent is has been preprocessed and processed, we will start by testing our first function from `RightSeuratTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay. We will also remove all meta.data columns except for the 'orig.ident' metadata to trully start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
+Since the object seems to contain a 'data' layer as well as cell annotations, and we are unsure to what extent is has been preprocessed and processed, we will also test another function from `RightSeuratTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay. We will also remove all meta.data columns except for the 'orig.ident' metadata to truly start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
 
 ```{r right_dietseurat, warning = FALSE, message = FALSE, results = 'hide'}
 # Reducing the object to the counts layer and the 'orig.ident' metadata
@@ -180,7 +174,7 @@ Interestingly, compared to the `Seurat` tutorial, we are missing the platelet cl
 
 A growing number of methods exist to label single-cell clusters, from using reference datasets with `SingleR` package or [Azimuth](https://azimuth.hubmapconsortium.org/), to querying ChatGPT with `GPTCelltype` package, via using canonical markers from the scientific literature. The vast majority of these methods need a set of genes as input, and determining the most differentially expressed genes (DEG) in each cluster is a common first step.
 
-For this purpose, we are going to use our second function from `RightSeuratTools`, [Find_Annotation_Markers](https://alexis-varin.github.io/RightSeuratTools/reference/Find_Annotation_Markers.html), which is a wrapper function around [FindMarkers](https://satijalab.org/seurat/reference/findmarkers). It is designed by default to conveniently output a character vector of the top 5 markers, chosen based on the highest average log fold change in genes expressed in at least 25% of cells in each cluster, and with mitochondrial, ribosomal and non-coding genes excluded, in order to maximize the chances of finding canonical markers in an unsupervised manner. It also provides many more parameters which can be used to tailor the function to your specific needs:
+For this purpose, we are going to use a function from `RightSeuratTools`, [Find_Annotation_Markers](https://alexis-varin.github.io/RightSeuratTools/reference/Find_Annotation_Markers.html), which is a wrapper function around [FindMarkers](https://satijalab.org/seurat/reference/findmarkers). It is designed by default to conveniently output a character vector of the top 5 markers, chosen based on the highest average log fold change in genes expressed in at least 25% of cells in each cluster, and with mitochondrial, ribosomal and non-coding genes excluded, in order to maximize the chances of finding canonical markers in an unsupervised manner. It also provides many more parameters which can be used to tailor the function to your specific needs:
 
 ```{r DEG, warning = FALSE, message = FALSE, results = 'hide'}
 # Find markers
@@ -223,7 +217,7 @@ DoHeatmap(pbmc,
   NoLegend()
 ```
 
-While both heatmaps look similar aside from colors, which is on purpose with default parameters, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html) trully shines in complexity by offering more customization options, such as the possibility to cluster features, apply k-means, or split identities by another metadata...
+While both heatmaps look similar aside from colors, which is on purpose with default parameters, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html) truly shines in complexity by offering more customization options, such as the possibility to cluster features, apply k-means, or split identities by another metadata...
 
 ### Cell annotation
 

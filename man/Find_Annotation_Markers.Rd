@@ -65,52 +65,27 @@ This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows 
 \examples{
 \dontshow{
 suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
-suppressWarnings(suppressMessages(download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz", destfile = "pbmc3k_filtered_gene_bc_matrices.tar.gz")))
-suppressWarnings(suppressMessages(untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")))
-pbmc3k = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
-pbmc = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k, project = "pbmc3k", min.cells = 3, min.features = 200)))
-suppressWarnings(suppressMessages(unlink(c("pbmc3k_filtered_gene_bc_matrices.tar.gz","filtered_gene_bc_matrices"), recursive = TRUE)))
-
-pbmc[["percent.mt"]] <- suppressWarnings(suppressMessages(PercentageFeatureSet(pbmc, pattern = "^MT-")))
-
-pbmc <- suppressWarnings(suppressMessages(subset(pbmc, subset = nFeature_RNA > 400 &
-                 nFeature_RNA < 2500 &
-                 percent.mt < 10)))
-
-pbmc <- suppressWarnings(suppressMessages(NormalizeData(pbmc, verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(FindVariableFeatures(pbmc, verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(ScaleData(pbmc, features = rownames(pbmc), verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(RunPCA(pbmc, verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(FindNeighbors(pbmc, dims = 1:10, verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(FindClusters(pbmc, resolution = 0.5, verbose = FALSE)))
-pbmc <- suppressWarnings(suppressMessages(RunUMAP(pbmc, dims = 1:10, verbose = FALSE)))
-new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
-                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
-names(new.cluster.ids) <- levels(Idents(pbmc))
-pbmc <- suppressWarnings(suppressMessages(RenameIdents(pbmc, new.cluster.ids)))
-presto.remove <- suppressWarnings(suppressMessages(Find_Annotation_Markers(pbmc, verbose = FALSE)))
+options(Seurat.presto.wilcox.msg = FALSE)
 }
+# Prepare data
+pbmc3k <- Right_Data("pbmc3k")
+
 # Example 1: default parameters
-
-pbmc.markers = Find_Annotation_Markers(pbmc)
-
-head(pbmc.markers, 5)
+pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)
+head(pbmc3k.markers)
 
 # Example 2: parallelized FindAllMarkers
-
-BPPARAM = BiocParallel::registered()[[1]]
-if (BPPARAM$workers > 4) BPPARAM$workers = 4
-
-pbmc.markers = Find_Annotation_Markers(pbmc,
-                                       min.pct = 0.01,
-                                       top.markers = Inf,
-                                       unique.markers = FALSE,
-                                       filter.mito = FALSE,
-                                       filter.ribo = FALSE,
-                                       filter.ncRNA = FALSE,
-                                       parallelized = TRUE,
-                                       BPPARAM = BPPARAM,
-                                       output.df = TRUE)
-
-head(pbmc.markers, 5)
+BPPARAM <- BiocParallel::registered()[[1]]
+if (BPPARAM$workers > 4) BPPARAM$workers <- 4
+pbmc3k.markers <- Find_Annotation_Markers(pbmc3k,
+                                          min.pct = 0.01,
+                                          top.markers = Inf,
+                                          unique.markers = FALSE,
+                                          filter.mito = FALSE,
+                                          filter.ribo = FALSE,
+                                          filter.ncRNA = FALSE,
+                                          parallelized = TRUE,
+                                          BPPARAM = BPPARAM,
+                                          output.df = TRUE)
+head(pbmc3k.markers)
 }
