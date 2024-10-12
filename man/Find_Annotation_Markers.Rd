@@ -17,6 +17,7 @@ Find_Annotation_Markers(
   species = "human",
   parallelized = FALSE,
   BPPARAM = NULL,
+  name.features = FALSE,
   output.df = FALSE,
   output.list = FALSE,
   verbose = TRUE,
@@ -48,6 +49,8 @@ Find_Annotation_Markers(
 
 \item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
+\item{name.features}{Logical. If \code{TRUE}, and if \code{output.df} and \code{output.list} are \code{FALSE}, each feature will be named with the corresponding cluster identity.}
+
 \item{output.df}{Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.}
 
 \item{output.list}{Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.}
@@ -69,6 +72,9 @@ options(Seurat.presto.wilcox.msg = FALSE)
 }
 # Prepare data
 pbmc3k <- Right_Data("pbmc3k")
+\dontshow{
+pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
+}
 
 # Example 1: default parameters
 pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)

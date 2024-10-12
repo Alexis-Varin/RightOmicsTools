@@ -21,4 +21,5 @@ This function downloads and prepares data used for vignettes, such as \code{Seur
 Right_Data(list.datasets = TRUE)
 
 pbmc3k = Right_Data("pbmc3k")
+pbmc3k
 }

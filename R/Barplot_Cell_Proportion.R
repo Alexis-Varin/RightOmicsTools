@@ -34,6 +34,9 @@
 #' }
 #' # Prepare data
 #' pbmc3k <- Right_Data("pbmc3k")
+#' \dontshow{
+#' pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
+#' }
 #'
 #' # Example 1: default parameters
 #' Barplot_Cell_Proportion(pbmc3k,

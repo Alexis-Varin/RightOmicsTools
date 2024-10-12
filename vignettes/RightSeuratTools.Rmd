@@ -60,6 +60,10 @@ pbmc3k
 colnames(pbmc3k@meta.data)
 ```
 
+```{r pbmc3k_listdataset, echo = FALSE}
+Right_Data(list.datasets = TRUE)
+```
+
 ```{r pbmc3k_res, echo = FALSE}
 pbmc3k
 ```
@@ -72,19 +76,19 @@ Since the object seems to contain a 'data' layer as well as cell annotations, an
 
 ```{r right_dietseurat, warning = FALSE, message = FALSE, results = 'hide'}
 # Reducing the object to the counts layer and the 'orig.ident' metadata
-pbmc <- Right_DietSeurat(pbmc3k, idents = "orig.ident")
+pbmc3k <- Right_DietSeurat(pbmc3k, idents = "orig.ident")
 
 # Checking the contents of the object
-pbmc
-colnames(pbmc@meta.data)
+pbmc3k
+colnames(pbmc3k@meta.data)
 ```
 
 ```{r pbmc_res, echo = FALSE}
-pbmc
+pbmc3k
 ```
 
 ```{r pbmc_metadata, echo = FALSE}
-colnames(pbmc@meta.data)
+colnames(pbmc3k@meta.data)
 ```
 
 ## Data preprocessing
@@ -95,13 +99,13 @@ We will now move on to preprocessing. We start by calculating the percentage of 
 
 ```{r mito, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 7}
 # Calculate percentage of mitochondrial genes
-pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+pbmc3k[["percent.mt"]] <- PercentageFeatureSet(pbmc3k, pattern = "^MT-")
 
 # Plot QC
-ggplot(pbmc@meta.data, aes(x = nCount_RNA, y = nFeature_RNA, col = percent.mt)) + 
+ggplot(pbmc3k@meta.data, aes(x = nCount_RNA, y = nFeature_RNA, col = percent.mt)) + 
   geom_point(size=0.5) + 
   scale_color_gradientn(colors=c("black","blue","green3","yellow3","red3")) +
-  ggtitle("pbmc QC metrics") +
+  ggtitle("pbmc3k QC metrics") +
   labs(x = "Log10(counts)", y = "Log10(number of genes)", col = "% mito") +
   scale_y_log10() +
   scale_x_log10() +
@@ -116,16 +120,16 @@ Based on the plot above, we will filter out cells with more than 10% mitochondri
 
 ```{r filter, warning = FALSE, message = FALSE, results = 'hide'}
 # Filter cells
-pbmc <- subset(pbmc, subset = nFeature_RNA > 400 &
+pbmc3k <- subset(pbmc3k, subset = nFeature_RNA > 400 &
                               nFeature_RNA < 2500 &
                               percent.mt < 10)
 
 # Checking the contents of the object
-pbmc
+pbmc3k
 ```
 
 ```{r pbmc_filter_res, echo = FALSE}
-pbmc
+pbmc3k
 ```
 
 ### Normalization
@@ -134,13 +138,13 @@ Now that we have filtered the cells, we will move on to the next step, which is 
 
 ```{r norm_hvg_scale, warning = FALSE, message = FALSE}
 # Normalizing the data with default parameters
-pbmc <- NormalizeData(pbmc)
+pbmc3k <- NormalizeData(pbmc3k)
 
 # Find highly variable genes with default parameters
-pbmc <- FindVariableFeatures(pbmc)
+pbmc3k <- FindVariableFeatures(pbmc3k)
 
 # Scaling all genes, by default it only scales the variable features
-pbmc <- ScaleData(pbmc, features = rownames(pbmc))
+pbmc3k <- ScaleData(pbmc3k, features = rownames(pbmc3k))
 ```
 
 ### Dimensionality reduction
@@ -149,21 +153,21 @@ Next, we will perform dimensionality reduction and unsupervised clustering. We a
 
 ```{r dimred, warning = FALSE, message = FALSE, results = 'hide'}
 # Perform PCA
-pbmc <- RunPCA(pbmc)
+pbmc3k <- RunPCA(pbmc3k)
 
 # Clustering
-pbmc <- FindNeighbors(pbmc, dims = 1:10)
-pbmc <- FindClusters(pbmc, resolution = 0.5)
+pbmc3k <- FindNeighbors(pbmc3k, dims = 1:10)
+pbmc3k <- FindClusters(pbmc3k, resolution = 0.5)
 
 # UMAP
-pbmc <- RunUMAP(pbmc, dims = 1:10)
+pbmc3k <- RunUMAP(pbmc3k, dims = 1:10)
 ```
 
 Finally, we will plot the UMAP, which concludes the preprocessing steps:
 
 ```{r umap, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 7}
 # Plot UMAP
-DimPlot(pbmc, reduction = "umap", pt.size = 0.5)
+DimPlot(pbmc3k)
 ```
 
 Interestingly, compared to the `Seurat` tutorial, we are missing the platelet cluster, which is likely due to the fact that we have a more drastic cutoff for the number of genes per cell, at 400 versus 200. This is a good example of how the preprocessing steps can influence the clustering results.
@@ -177,33 +181,26 @@ A growing number of methods exist to label single-cell clusters, from using refe
 For this purpose, we are going to use a function from `RightSeuratTools`, [Find_Annotation_Markers](https://alexis-varin.github.io/RightSeuratTools/reference/Find_Annotation_Markers.html), which is a wrapper function around [FindMarkers](https://satijalab.org/seurat/reference/findmarkers). It is designed by default to conveniently output a character vector of the top 5 markers, chosen based on the highest average log fold change in genes expressed in at least 25% of cells in each cluster, and with mitochondrial, ribosomal and non-coding genes excluded, in order to maximize the chances of finding canonical markers in an unsupervised manner. It also provides many more parameters which can be used to tailor the function to your specific needs:
 
 ```{r DEG, warning = FALSE, message = FALSE, results = 'hide'}
-# Find markers
-annotation.markers <- Find_Annotation_Markers(pbmc)
+# Top 5 markers for each cluster, we will name each marker with cluster identity
+annotation.markers <- Find_Annotation_Markers(pbmc3k,
+                                              name.features = TRUE)
 
-# Display markers for each cluster, only for visualization in the vignette
-j = 1
-for (i in 1:length(levels(Idents(pbmc)))) {
-  cat("Cluster", i-1, ":", annotation.markers[j:(j+4)],"\n")
-  j = j + 5
-}
+# Display markers for each cluster
+annotation.markers
 ```
 
 ```{r DEG_res, echo = FALSE}
-annotation.markers <- Find_Annotation_Markers(pbmc)
+annotation.markers <- Find_Annotation_Markers(pbmc3k)
 ```
 
 ```{r DEG_display, echo = FALSE}
-j = 1
-for (i in 1:length(levels(Idents(pbmc)))) {
-  cat("Cluster", i-1, ":", annotation.markers[j:(j+4)],"\n")
-  j = j + 5
-}
+annotation.markers
 ```
 
 These markers may then be directly used for plotting. Since the `Seurat` tutorial uses [DoHeatmap](https://satijalab.org/seurat/reference/doheatmap), we will compare it to its equivalent in `RightSeuratTools`, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html), which is reworked using `ComplexHeatmap` instead of `ggplot2`:
 
 ```{r heatmap, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
-Cell_Heatmap(pbmc,
+Cell_Heatmap(pbmc3k,
              features = annotation.markers,
              cluster.features = FALSE,
              show.idents.legend = FALSE)
@@ -212,7 +209,7 @@ Cell_Heatmap(pbmc,
 Let's compare it to `Seurat`'s default heatmap function:
 
 ```{r doheatmap, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
-DoHeatmap(pbmc,
+DoHeatmap(pbmc3k,
           features = annotation.markers) + 
   NoLegend()
 ```
@@ -228,14 +225,14 @@ We will now annotate each cluster with its corresponding cell type and display t
 new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
                      "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
 
-names(new.cluster.ids) <- levels(pbmc)
-pbmc <- RenameIdents(pbmc, new.cluster.ids)
+names(new.cluster.ids) <- levels(pbmc3k)
+pbmc3k <- RenameIdents(pbmc3k, new.cluster.ids)
 
 # Add metadata to Seurat object
-pbmc@meta.data$named_clusters <- pbmc@active.ident
+pbmc3k@meta.data$named_clusters <- pbmc3k@active.ident
 
 # Plot UMAP with cell types
-DimPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) +
+DimPlot(pbmc3k, reduction = "umap", label = TRUE, pt.size = 0.5) +
   NoLegend()
 ```
 
@@ -244,7 +241,7 @@ DimPlot(pbmc, reduction = "umap", label = TRUE, pt.size = 0.5) +
 Following cell annotation, one often want to visualize the proportion of each cell type. While using [table](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table) on the identities gives this information, it is often tedious to organize these data for plotting; `RightSeuratTools` introduces [Barplot_Cell_Proportion](https://alexis-varin.github.io/RightSeuratTools/reference/Barplot_Cell_Proportion.html), which automates cell proportion and conveniently displays a bar plot, with the possibility to group and/or split based on other metadata, and many other parameters:
 
 ```{r proportion, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 6, fig.height = 6}
-Barplot_Cell_Proportion(pbmc,
+Barplot_Cell_Proportion(pbmc3k,
                         percent = FALSE)
 ```
 
@@ -255,7 +252,7 @@ We will conclude by showing the last two visualization functions; [DotPlot_Heatm
 ```{r dotplot, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 10}
 # We will disable some parameters to be as close as possible from Seurat's DotPlot
 # Due to the number of features, we will also lower dots size and flip the axis
-DotPlot_Heatmap(pbmc,
+DotPlot_Heatmap(pbmc3k,
                 features = annotation.markers,
                 dots.size = 2,
                 cluster.features = FALSE,
@@ -266,15 +263,16 @@ DotPlot_Heatmap(pbmc,
 Comparing it to `Seurat`'s default dotplot function:
 
 ```{r dotplot_seurat, warning = FALSE, message = FALSE, results = 'hide', fig.keep = 'none'}
-DotPlot(pbmc,
-        features = annotation.markers) + 
+# Seurat's DotPlot function does not work well with named features, we will remove names
+DotPlot(pbmc3k,
+        features = unname(annotation.markers)) + 
   RotatedAxis() + 
   coord_flip()
 ```
 
 ```{r dotplot_seurat_display, echo = FALSE, fig.align = 'center', fig.width = 8, fig.height = 10}
-DotPlot(pbmc,
-        features = annotation.markers) + 
+DotPlot(pbmc3k,
+        features = unname(annotation.markers)) + 
   RotatedAxis() + 
   coord_flip() + 
   theme(plot.background = element_rect(fill = "white"))
@@ -283,7 +281,7 @@ DotPlot(pbmc,
 And finally, the grid violin plot:
 
 ```{r grid_vln, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
-Grid_VlnPlot(pbmc,
+Grid_VlnPlot(pbmc3k,
              features = annotation.markers)
 ```
 

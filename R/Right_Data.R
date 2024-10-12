@@ -11,6 +11,7 @@
 #' Right_Data(list.datasets = TRUE)
 #'
 #' pbmc3k = Right_Data("pbmc3k")
+#' pbmc3k
 #' @import utils
 #' @import Seurat
 #' @import SeuratObject
@@ -36,7 +37,7 @@ Right_Data = function(dataset = NULL,
     pbmc3k.data = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
     colnames(pbmc3k.data) = suppressWarnings(suppressMessages(gsub("-1$","",colnames(pbmc3k.data))))
     options(Seurat.object.assay.version = "v3")
-    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.data, project = "pbmc3k", min.cells = 1, min.features = 1)))
+    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.data, project = "pbmc3k", min.cells = 3, min.features = 200)))
     pbmc3k@meta.data$seurat_annotations = pbmc3k.anno
     Idents(pbmc3k) = "seurat_annotations"
     pbmc3k = suppressWarnings(suppressMessages(NormalizeData(pbmc3k, verbose = FALSE)))
