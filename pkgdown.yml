@@ -1,11 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   GSEA: GSEA.html
   RightSeuratTools: RightSeuratTools.html
   Visualization: Visualization.html
-last_built: 2024-08-07T10:58Z
+last_built: 2024-10-12T17:39Z
 urls:
   reference: https://alexis-varin.github.io/RightSeuratTools/reference
   article: https://alexis-varin.github.io/RightSeuratTools/articles

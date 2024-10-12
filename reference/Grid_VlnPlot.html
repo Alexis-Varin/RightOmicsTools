@@ -154,15 +154,16 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pbmc.markers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CCR7"</span>, <span class="st">"TCF7"</span>, <span class="st">"S100A9"</span>, <span class="st">"CD14"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Prepare data</span></span></span>
+<span class="r-in"><span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="Right_Data.html">Right_Data</a></span><span class="op">(</span><span class="st">"pbmc3k"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pbmc3k.markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CCR7"</span>, <span class="st">"TCF7"</span>, <span class="st">"S100A9"</span>, <span class="st">"CD14"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"CD40LG"</span>, <span class="st">"CD2"</span>, <span class="st">"CD79A"</span>, <span class="st">"TCL1A"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"CCL5"</span>, <span class="st">"CD8A"</span>, <span class="st">"CDKN1C"</span>, <span class="st">"MS4A4A"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"GNLY"</span>, <span class="st">"GZMB"</span>, <span class="st">"FCER1A"</span>, <span class="st">"CLEC10A"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 1: default parameters</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">Grid_VlnPlot</span><span class="op">(</span><span class="va">pbmc</span>,</span></span>
-<span class="r-in"><span>             features <span class="op">=</span> <span class="va">pbmc.markers</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Grid_VlnPlot</span><span class="op">(</span><span class="va">pbmc3k</span>,</span></span>
+<span class="r-in"><span>             features <span class="op">=</span> <span class="va">pbmc3k.markers</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Grid_VlnPlot-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -175,7 +176,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
