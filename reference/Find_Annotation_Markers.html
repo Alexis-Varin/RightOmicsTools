@@ -160,15 +160,16 @@
 <span class="r-in"><span><span class="co"># Example 1: default parameters</span></span></span>
 <span class="r-in"><span><span class="va">pbmc3k.markers</span> <span class="op">&lt;-</span> <span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster B against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD8 T against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelets against all other clusters</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc3k.markers</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CCR7"    "LEF1"    "MAL"     "PIK3IP1" "TCF7"    "AQP3"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CCR7"    "LEF1"    "MAL"     "PIK3IP1" "TCF7"    "FOLR3"  </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: parallelized FindAllMarkers</span></span></span>
 <span class="r-in"><span><span class="va">BPPARAM</span> <span class="op">&lt;-</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">registered</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
@@ -183,22 +184,23 @@
 <span class="r-in"><span>                                          parallelized <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                                          BPPARAM <span class="op">=</span> <span class="va">BPPARAM</span>,</span></span>
 <span class="r-in"><span>                                          output.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster B against all other clusters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD8 T against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster FCGR3A+ Mono against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster NK against all other clusters</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelets against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster B against all other clusters</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD8 T against all other clusters</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pbmc3k.markers</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                p_val avg_log2FC pct.1 pct.2    p_val_adj     cluster feature</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GTSCR1  1.989750e-08   7.150823 0.016 0.000 2.728743e-04 Naive CD4 T  GTSCR1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REG4    5.397233e-10   5.889242 0.022 0.001 7.401765e-06 Naive CD4 T    REG4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NOG     2.006355e-12   4.827114 0.034 0.003 2.751516e-08 Naive CD4 T     NOG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> MMP28   1.977007e-07   4.367551 0.016 0.001 2.711268e-03 Naive CD4 T   MMP28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C2orf40 1.025794e-07   3.843510 0.020 0.002 1.406773e-03 Naive CD4 T C2orf40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ADTRP   1.534399e-22   2.916404 0.099 0.017 2.104275e-18 Naive CD4 T   ADTRP</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GTSCR1  1.720280e-08   7.163733 0.016 0.000 2.359193e-04 Naive CD4 T  GTSCR1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> REG4    4.484775e-10   5.902153 0.022 0.000 6.150421e-06 Naive CD4 T    REG4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C2orf40 1.024936e-10   5.644114 0.023 0.000 1.405597e-06 Naive CD4 T C2orf40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> MMP28   1.729283e-07   4.380462 0.016 0.000 2.371539e-03 Naive CD4 T   MMP28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOG     5.025979e-10   4.148065 0.032 0.003 6.892627e-06 Naive CD4 T     NOG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FAM153A 8.848417e-08   3.880304 0.020 0.001 1.213472e-03 Naive CD4 T FAM153A</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

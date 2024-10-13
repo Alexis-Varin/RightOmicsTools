@@ -132,8 +132,9 @@ which handles all data preparation for us, and check its contents:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">"pbmc3k"</span>   a Seurat v4 object of 2700 cells by 13714 features</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; An object of class Seurat </span></span>
 <span><span class="co">#&gt; 13714 features across 2700 samples within 1 assay </span></span>
-<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
-<span><span class="co">#&gt;  2 layers present: counts, data</span></span></code></pre>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 2000 variable features)</span></span>
+<span><span class="co">#&gt;  2 layers present: counts, data</span></span>
+<span><span class="co">#&gt;  1 dimensional reduction calculated: umap</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; [1] "orig.ident"         "nCount_RNA"         "nFeature_RNA"      </span></span>
 <span><span class="co">#&gt; [4] "seurat_annotations"</span></span></code></pre>
 <p>Since the object seems to contain a ‘data’ layer as well as cell
@@ -335,7 +336,7 @@ and display the UMAP:</p>
 <span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">named_clusters</span> <span class="op">&lt;-</span> <span class="va">pbmc3k</span><span class="op">@</span><span class="va">active.ident</span></span>
 <span></span>
 <span><span class="co"># Plot UMAP with cell types</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/annotation-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
