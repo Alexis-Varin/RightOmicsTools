@@ -75,12 +75,9 @@
 #' }
 #' # Prepare data
 #' pbmc3k <- Right_Data("pbmc3k")
-#' \dontshow{
-#' pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
-#' }
-#' pbmc3k.markers = c("CCR7", "TCF7", "CD14",
-#'                  "CD79A", "CD8A", "CDKN1C",
-#'                  "GZMB", "CLEC10A")
+#' pbmc3k.markers <- c("CCR7", "CD14", "CD40LG",
+#'                     "CD79A", "CD8A", "CDKN1C",
+#'                     "GNLY", "CLEC10A", "PPBP")
 #'
 #' # Example 1: default parameters
 #' DotPlot_Heatmap(pbmc3k,
@@ -204,7 +201,7 @@ DotPlot_Heatmap = function(seurat_object,
       }
     }
     else {
-      if (order.idents == "reverse") {
+      if (length(order.idents) == 1 & any(order.idents == "reverse")) {
         ident.1 = rev(ident.1)
       }
       else {
@@ -253,7 +250,7 @@ DotPlot_Heatmap = function(seurat_object,
           }
         }
         else {
-          if (order.split == "reverse") {
+          if (length(order.split) == 1 & any(order.split == "reverse")) {
             ident.2 = rev(ident.2)
           }
           else {

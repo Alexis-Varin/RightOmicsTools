@@ -11,12 +11,28 @@ pseudogenes_mouse = data.frame(data.table::fread("'dreamBase-Expressions_of_psed
 pseudogenes_mouse = rownames(pseudogenes_mouse)
 usethis::use_data(pseudogenes_mouse)
 
-# 62 cells in Seurat's pbmc3k do not have annotations (because these cells were removed in Seurat tutorial due to high mito percent), randomly assigning cell types to these cells so that various functions used as examples do not throw an error with NA
-library(Seurat)
-library(SeuratData)
-InstallData("pbmc3k")
-data("pbmc3k")
-pbmc3k = UpdateSeuratObject(pbmc3k)
-pbmc3k.anno = pbmc3k$seurat_annotations
-pbmc3k.anno[is.na(pbmc3k.anno)] = sample(levels(pbmc3k.anno), 1)
-usethis::use_data(pbmc3k.anno, internal = TRUE)
+# Data preparation for pbmc3k, to speed up data loading with Right_Data
+utils::download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz",
+                     destfile = "pbmc3k_filtered_gene_bc_matrices.tar.gz", quiet = TRUE)
+utils::untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")
+pbmc3k.mat = Seurat::Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
+colnames(pbmc3k.mat) = gsub("-1$","",colnames(pbmc3k.mat))
+pbmc3k = Seurat::CreateSeuratObject(counts = pbmc3k.mat, project = "pbmc3k", min.cells = 3, min.features = 200)
+unlink(c("pbmc3k_filtered_gene_bc_matrices.tar.gz","filtered_gene_bc_matrices"), recursive = TRUE)
+pbmc3k = Seurat::NormalizeData(pbmc3k)
+pbmc3k = Seurat::FindVariableFeatures(pbmc3k)
+pbmc3k = Seurat::ScaleData(pbmc3k, features = rownames(pbmc3k))
+pbmc3k = Seurat::RunPCA(pbmc3k)
+pbmc3k = Seurat::FindNeighbors(pbmc3k, dims = 1:10)
+pbmc3k = Seurat::FindClusters(pbmc3k, resolution = 0.5)
+pbmc3k = Seurat::RunUMAP(pbmc3k, dims = 1:10)
+pbmc3k.markers = RightSeuratTools::Find_Annotation_Markers(pbmc3k)
+RightSeuratTools::DotPlot_Heatmap(pbmc3k, features = pbmc3k.markers, cluster.idents = FALSE, cluster.features = FALSE)
+new.cluster.ids = c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
+                     "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC", "Platelets")
+names(new.cluster.ids) = levels(pbmc3k)
+pbmc3k = Seurat::RenameIdents(pbmc3k, new.cluster.ids)
+pbmc3k.data = list(anno = pbmc3k@active.ident,
+                   hvg = Seurat::VariableFeatures(pbmc3k),
+                   umap = pbmc3k[["umap"]])
+usethis::use_data(pbmc3k.data, internal = TRUE)

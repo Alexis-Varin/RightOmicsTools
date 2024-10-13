@@ -34,13 +34,15 @@ Right_Data = function(dataset = NULL,
     }, add = TRUE)
     suppressWarnings(suppressMessages(download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz", destfile = "pbmc3k_filtered_gene_bc_matrices.tar.gz", quiet = TRUE)))
     suppressWarnings(suppressMessages(untar("pbmc3k_filtered_gene_bc_matrices.tar.gz")))
-    pbmc3k.data = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
-    colnames(pbmc3k.data) = suppressWarnings(suppressMessages(gsub("-1$","",colnames(pbmc3k.data))))
+    pbmc3k.mat = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
+    colnames(pbmc3k.mat) = suppressWarnings(suppressMessages(gsub("-1$","",colnames(pbmc3k.mat))))
     options(Seurat.object.assay.version = "v3")
-    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.data, project = "pbmc3k", min.cells = 3, min.features = 200)))
-    pbmc3k@meta.data$seurat_annotations = pbmc3k.anno
-    Idents(pbmc3k) = "seurat_annotations"
+    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.mat, project = "pbmc3k", min.cells = 3, min.features = 200)))
     pbmc3k = suppressWarnings(suppressMessages(NormalizeData(pbmc3k, verbose = FALSE)))
+    pbmc3k@meta.data$seurat_annotations = pbmc3k.data$anno
+    VariableFeatures(pbmc3k) = pbmc3k.data$hvg
+    pbmc3k[["umap"]] = pbmc3k.data$umap
+    Idents(pbmc3k) = "seurat_annotations"
     return(pbmc3k)
   }
 }

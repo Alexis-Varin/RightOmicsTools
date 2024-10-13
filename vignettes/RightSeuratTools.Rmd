@@ -232,7 +232,7 @@ pbmc3k <- RenameIdents(pbmc3k, new.cluster.ids)
 pbmc3k@meta.data$named_clusters <- pbmc3k@active.ident
 
 # Plot UMAP with cell types
-DimPlot(pbmc3k, reduction = "umap", label = TRUE, pt.size = 0.5) +
+DimPlot(pbmc3k) +
   NoLegend()
 ```
 

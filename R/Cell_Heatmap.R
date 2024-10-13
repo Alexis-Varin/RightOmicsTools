@@ -70,7 +70,7 @@
 #' # Prepare data
 #' pbmc3k <- Right_Data("pbmc3k")
 #' \dontshow{
-#' pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
+#' pbmc3k = suppressWarnings(suppressPackageStartupMessages(subset(pbmc3k, idents = c("DC", "Platelets"), invert = TRUE)))
 #' }
 #' pbmc3k.markers = c("CCR7", "TCF7", "S100A9", "CD14",
 #'                  "CD40LG", "CD2", "CD79A", "TCL1A",
@@ -193,7 +193,7 @@ Cell_Heatmap = function(seurat_object,
       }
     }
     else {
-      if (order.idents == "reverse") {
+      if (length(order.idents) == 1 & any(order.idents == "reverse")) {
         ident.1 = rev(ident.1)
       }
       else {
@@ -242,7 +242,7 @@ Cell_Heatmap = function(seurat_object,
           }
         }
         else {
-          if (order.split == "reverse") {
+          if (length(order.split) == 1 & any(order.split == "reverse")) {
             ident.2 = rev(ident.2)
           }
           else {

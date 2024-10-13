@@ -72,9 +72,6 @@ options(Seurat.presto.wilcox.msg = FALSE)
 }
 # Prepare data
 pbmc3k <- Right_Data("pbmc3k")
-\dontshow{
-pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
-}
 
 # Example 1: default parameters
 pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)

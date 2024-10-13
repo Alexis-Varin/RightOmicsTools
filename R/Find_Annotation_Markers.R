@@ -29,9 +29,6 @@
 #' }
 #' # Prepare data
 #' pbmc3k <- Right_Data("pbmc3k")
-#' \dontshow{
-#' pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
-#' }
 #'
 #' # Example 1: default parameters
 #' pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)
@@ -193,7 +190,7 @@ Find_Annotation_Markers = function(seurat_object,
     if (isTRUE(filter.ncRNA)) {
       all.markers2[[i]] = all.markers2[[i]][!all.markers2[[i]]$feature %in% to.remove, , drop = FALSE]
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC", x = all.markers2[[i]]$feature), , drop = FALSE]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC|^RP[0-9]", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
     }
 

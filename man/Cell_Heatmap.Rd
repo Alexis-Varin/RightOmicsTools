@@ -195,7 +195,7 @@ suppressWarnings(suppressPackageStartupMessages(library(Seurat)))
 # Prepare data
 pbmc3k <- Right_Data("pbmc3k")
 \dontshow{
-pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
+pbmc3k = suppressWarnings(suppressPackageStartupMessages(subset(pbmc3k, idents = c("DC", "Platelets"), invert = TRUE)))
 }
 pbmc3k.markers = c("CCR7", "TCF7", "S100A9", "CD14",
                  "CD40LG", "CD2", "CD79A", "TCL1A",

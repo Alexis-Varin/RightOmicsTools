@@ -34,9 +34,6 @@
 #' }
 #' # Prepare data
 #' pbmc3k <- Right_Data("pbmc3k")
-#' \dontshow{
-#' pbmc3k = subset(pbmc3k, idents = "Platelet", invert = TRUE)
-#' }
 #'
 #' # Example 1: default parameters
 #' Barplot_Cell_Proportion(pbmc3k,
@@ -121,7 +118,7 @@ Barplot_Cell_Proportion = function(seurat_object,
         seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
       }
       else {
-        if (order.split == "reverse") {
+        if (length(order.split) == 1 & any(order.split == "reverse")) {
           order.split = rev(levels(Idents(seurat_object)))
           seurat_object@active.ident = factor(seurat_object@active.ident, levels = order.split)
         }
