@@ -20,8 +20,8 @@ regularly with new functions and improvements.
 
 You can get started with `RightSeuratTools` by following the [tutorial
 vignette](https://alexis-varin.github.io/RightSeuratTools/articles/RightSeuratTools.html)
-which will guide you through package installation as well as briefly
-showing some basic examples of the functions available.
+which will guide you through package installation as well as showing
+some examples of the functions available.
 
 ## Vignettes
 
@@ -37,7 +37,7 @@ pathways](https://alexis-varin.github.io/RightSeuratTools/articles/GSEA.html).
 
 All functions are [documented on
 GitHub](https://alexis-varin.github.io/RightSeuratTools/reference/index.html)
-and help may also be accessed using the `?` operator in R.
+and help may also be accessed using `?` in R.
 
 ## Citation
 

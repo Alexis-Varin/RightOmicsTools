@@ -36,7 +36,7 @@ devtools::install_github("Alexis-Varin/RightSeuratTools")
 
 For this tutorial, we will use the `pbmc3k` dataset, which contains single-cell RNA-seq data from peripheral blood mononuclear cells (PBMCs), and made available by [10X Genomics](https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0).
 
-We will also build on `Seurat`'s tutorial for the `pbmc3k` dataset to preprocess it, available for reference [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial).
+We will also build on `Seurat`'s `pbmc3k` tutorial to preprocess it, available for reference [here](https://satijalab.org/seurat/articles/pbmc3k_tutorial).
 
 Let's start by loading all the packages we will be using in this vignette:
 
@@ -72,7 +72,8 @@ pbmc3k
 colnames(pbmc3k@meta.data)
 ```
 
-Since the object seems to contain a 'data' layer as well as cell annotations, and we are unsure to what extent is has been preprocessed and processed, we will also test another function from `RightSeuratTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay. We will also remove all meta.data columns except for the 'orig.ident' metadata to truly start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
+Since the object seems to contain a 'data' layer, a UMAP reduction and annotations, and we are unsure to what extent is has been preprocessed and processed, we will also test another function from `RightSeuratTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay.
+We will also remove all meta.data columns except for the 'orig.ident' metadata to truly start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
 
 ```{r right_dietseurat, warning = FALSE, message = FALSE, results = 'hide'}
 # Reducing the object to the counts layer and the 'orig.ident' metadata
@@ -190,7 +191,8 @@ annotation.markers
 ```
 
 ```{r DEG_res, echo = FALSE}
-annotation.markers <- Find_Annotation_Markers(pbmc3k)
+annotation.markers <- Find_Annotation_Markers(pbmc3k,
+                                              name.features = TRUE)
 ```
 
 ```{r DEG_display, echo = FALSE}
@@ -232,7 +234,7 @@ pbmc3k <- RenameIdents(pbmc3k, new.cluster.ids)
 pbmc3k@meta.data$named_clusters <- pbmc3k@active.ident
 
 # Plot UMAP with cell types
-DimPlot(pbmc3k) +
+DimPlot(pbmc3k, label = TRUE) +
   NoLegend()
 ```
 
@@ -263,7 +265,7 @@ DotPlot_Heatmap(pbmc3k,
 Comparing it to `Seurat`'s default dotplot function:
 
 ```{r dotplot_seurat, warning = FALSE, message = FALSE, results = 'hide', fig.keep = 'none'}
-# Seurat's DotPlot function does not work well with named features, we will remove names
+# Seurat's DotPlot function doesn't work well with named features, we will remove names
 DotPlot(pbmc3k,
         features = unname(annotation.markers)) + 
   RotatedAxis() + 

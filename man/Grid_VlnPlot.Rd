@@ -18,7 +18,7 @@ Grid_VlnPlot(
   idents.text.size = 9,
   show.idents = FALSE,
   features.text.size = 11,
-  legend.text.size = 12,
+  legend.text.size = 11,
   legend.side = "bottom",
   show.legend = TRUE,
   ncol = "square"

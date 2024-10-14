@@ -49,7 +49,7 @@ Find_Annotation_Markers(
 
 \item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
-\item{name.features}{Logical. If \code{TRUE}, and if \code{output.df} and \code{output.list} are \code{FALSE}, each feature will be named with the corresponding cluster identity.}
+\item{name.features}{Logical. If \code{TRUE}, and if \code{output.df} = \code{FALSE}, each feature will be named with the corresponding cluster identity.}
 
 \item{output.df}{Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.}
 
@@ -75,7 +75,7 @@ pbmc3k <- Right_Data("pbmc3k")
 
 # Example 1: default parameters
 pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)
-head(pbmc3k.markers)
+pbmc3k.markers
 
 # Example 2: parallelized FindAllMarkers
 BPPARAM <- BiocParallel::registered()[[1]]

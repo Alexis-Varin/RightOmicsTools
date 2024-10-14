@@ -14,7 +14,7 @@
 #' @param species Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named \href{https://alexis-varin.github.io/RightSeuratTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightSeuratTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightSeuratTools} and may be checked for more information.
 #' @param parallelized Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your system operating system (Windows users might not see a gain or might even experience a slowdown).
 #' @param BPPARAM A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.
-#' @param name.features Logical. If \code{TRUE}, and if \code{output.df} and \code{output.list} are \code{FALSE}, each feature will be named with the corresponding cluster identity.
+#' @param name.features Logical. If \code{TRUE}, and if \code{output.df} = \code{FALSE}, each feature will be named with the corresponding cluster identity.
 #' @param output.df Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.
 #' @param output.list Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.
 #' @param verbose Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.
@@ -32,7 +32,7 @@
 #'
 #' # Example 1: default parameters
 #' pbmc3k.markers <- Find_Annotation_Markers(pbmc3k)
-#' head(pbmc3k.markers)
+#' pbmc3k.markers
 #'
 #' # Example 2: parallelized FindAllMarkers
 #' BPPARAM <- BiocParallel::registered()[[1]]
