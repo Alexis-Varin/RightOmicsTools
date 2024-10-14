@@ -107,8 +107,8 @@ the following command:</p>
 contains single-cell RNA-seq data from peripheral blood mononuclear
 cells (PBMCs), and made available by <a href="https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0" class="external-link">10X
 Genomics</a>.</p>
-<p>We will also build on <code>Seurat</code>’s tutorial for the
-<code>pbmc3k</code> dataset to preprocess it, available for reference <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial" class="external-link">here</a>.</p>
+<p>We will also build on <code>Seurat</code>’s <code>pbmc3k</code>
+tutorial to preprocess it, available for reference <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial" class="external-link">here</a>.</p>
 <p>Let’s start by loading all the packages we will be using in this
 vignette:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -137,9 +137,9 @@ which handles all data preparation for us, and check its contents:</p>
 <span><span class="co">#&gt;  1 dimensional reduction calculated: umap</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; [1] "orig.ident"         "nCount_RNA"         "nFeature_RNA"      </span></span>
 <span><span class="co">#&gt; [4] "seurat_annotations"</span></span></code></pre>
-<p>Since the object seems to contain a ‘data’ layer as well as cell
-annotations, and we are unsure to what extent is has been preprocessed
-and processed, we will also test another function from
+<p>Since the object seems to contain a ‘data’ layer, a UMAP reduction
+and annotations, and we are unsure to what extent is has been
+preprocessed and processed, we will also test another function from
 <code>RightSeuratTools</code>, <a href="https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html">Right_DietSeurat</a>,
 which is a reworked version of <a href="https://satijalab.org/seurat/reference/dietseurat" class="external-link">DietSeurat</a>,
 and will remove all the layers and slots from the object, leaving only
@@ -287,13 +287,18 @@ tailor the function to your specific needs:</p>
 <span><span class="co">#&gt; Finding markers for cluster 5 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 6 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 7 against all other clusters</span></span></code></pre>
-<pre><code><span><span class="co">#&gt;  [1] "CCR7"     "LEF1"     "MAL"      "PIK3IP1"  "TCF7"     "FOLR3"   </span></span>
-<span><span class="co">#&gt;  [7] "S100A12"  "S100A8"   "S100A9"   "CD14"     "AQP3"     "CD40LG"  </span></span>
-<span><span class="co">#&gt; [13] "CORO1B"   "CD2"      "TRAT1"    "VPREB3"   "CD79A"    "TCL1A"   </span></span>
-<span><span class="co">#&gt; [19] "FCRLA"    "FCER2"    "GZMK"     "GZMH"     "CCL5"     "CD8A"    </span></span>
-<span><span class="co">#&gt; [25] "KLRG1"    "CKB"      "CDKN1C"   "MS4A4A"   "HES4"     "BATF3"   </span></span>
-<span><span class="co">#&gt; [31] "AKR1C3"   "GNLY"     "GZMB"     "SH2D1B"   "SPON2"    "SERPINF1"</span></span>
-<span><span class="co">#&gt; [37] "FCER1A"   "CLIC2"    "ENHO"     "CLEC10A"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;          0          0          0          0          0          1          1 </span></span>
+<span><span class="co">#&gt;     "CCR7"     "LEF1"      "MAL"  "PIK3IP1"     "TCF7"    "FOLR3"  "S100A12" </span></span>
+<span><span class="co">#&gt;          1          1          1          2          2          2          2 </span></span>
+<span><span class="co">#&gt;   "S100A8"   "S100A9"     "CD14"     "AQP3"   "CD40LG"   "CORO1B"      "CD2" </span></span>
+<span><span class="co">#&gt;          2          3          3          3          3          3          4 </span></span>
+<span><span class="co">#&gt;    "TRAT1"   "VPREB3"    "CD79A"    "TCL1A"    "FCRLA"    "FCER2"     "GZMK" </span></span>
+<span><span class="co">#&gt;          4          4          4          4          5          5          5 </span></span>
+<span><span class="co">#&gt;     "GZMH"     "CCL5"     "CD8A"    "KLRG1"      "CKB"   "CDKN1C"   "MS4A4A" </span></span>
+<span><span class="co">#&gt;          5          5          6          6          6          6          6 </span></span>
+<span><span class="co">#&gt;     "HES4"    "BATF3"   "AKR1C3"     "GNLY"     "GZMB"   "SH2D1B"    "SPON2" </span></span>
+<span><span class="co">#&gt;          7          7          7          7          7 </span></span>
+<span><span class="co">#&gt; "SERPINF1"   "FCER1A"    "CLIC2"     "ENHO"  "CLEC10A"</span></span></code></pre>
 <p>These markers may then be directly used for plotting. Since the
 <code>Seurat</code> tutorial uses <a href="https://satijalab.org/seurat/reference/doheatmap" class="external-link">DoHeatmap</a>,
 we will compare it to its equivalent in <code>RightSeuratTools</code>,
@@ -336,7 +341,7 @@ and display the UMAP:</p>
 <span><span class="va">pbmc3k</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">named_clusters</span> <span class="op">&lt;-</span> <span class="va">pbmc3k</span><span class="op">@</span><span class="va">active.ident</span></span>
 <span></span>
 <span><span class="co"># Plot UMAP with cell types</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightSeuratTools_files/figure-html/annotation-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
@@ -378,7 +383,7 @@ square grid, both also offering many more options than their
 <p><img src="RightSeuratTools_files/figure-html/dotplot-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Comparing it to <code>Seurat</code>’s default dotplot function:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Seurat's DotPlot function does not work well with named features, we will remove names</span></span>
+<code class="sourceCode R"><span><span class="co"># Seurat's DotPlot function doesn't work well with named features, we will remove names</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>        features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">annotation.markers</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">RotatedAxis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
