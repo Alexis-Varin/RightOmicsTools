@@ -159,7 +159,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 1: default parameters and origin of markers</span></span></span>
 <span class="r-in"><span><span class="va">pbmc3k.markers</span> <span class="op">&lt;-</span> <span class="fu">Find_Annotation_Markers</span><span class="op">(</span><span class="va">pbmc3k</span>,</span></span>
-<span class="r-in"><span>                                          named.features <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                          name.features <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Naive CD4 T against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster CD14+ Mono against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Memory CD4 T against all other clusters</span>
@@ -170,14 +170,22 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelets against all other clusters</span>
 <span class="r-in"><span><span class="va">pbmc3k.markers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "CCR7"     "LEF1"     "MAL"      "PIK3IP1"  "TCF7"     "FOLR3"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "S100A12"  "S100A8"   "S100A9"   "CD14"     "CD40LG"   "AQP3"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "SUSD3"    "CD2"      "TRAT1"    "VPREB3"   "CD79A"    "FCRLA"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "TCL1A"    "FCER2"    "GZMK"     "GZMH"     "CD8A"     "CCL5"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "KLRG1"    "CKB"      "CDKN1C"   "MS4A4A"   "HES4"     "BATF3"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "AKR1C3"   "GZMB"     "SH2D1B"   "SPON2"    "FGFBP2"   "SERPINF1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "FCER1A"   "CLIC2"    "CLEC10A"  "ENHO"     "LY6G6F"   "CLDN5"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "GP9"      "ITGA2B"   "SEPT5"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T   CD14+ Mono </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       "CCR7"       "LEF1"        "MAL"    "PIK3IP1"       "TCF7"      "FOLR3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CD14+ Mono   CD14+ Mono   CD14+ Mono   CD14+ Mono Memory CD4 T Memory CD4 T </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    "S100A12"     "S100A8"     "S100A9"       "CD14"     "CD40LG"       "AQP3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Memory CD4 T Memory CD4 T Memory CD4 T            B            B            B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      "SUSD3"        "CD2"      "TRAT1"     "VPREB3"      "CD79A"      "FCRLA" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            B            B        CD8 T        CD8 T        CD8 T        CD8 T </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      "TCL1A"      "FCER2"       "GZMK"       "GZMH"       "CD8A"       "CCL5" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        CD8 T FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      "KLRG1"        "CKB"     "CDKN1C"     "MS4A4A"       "HES4"      "BATF3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           NK           NK           NK           NK           NK           DC </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     "AKR1C3"       "GZMB"     "SH2D1B"      "SPON2"     "FGFBP2"   "SERPINF1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           DC           DC           DC           DC    Platelets    Platelets </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     "FCER1A"      "CLIC2"    "CLEC10A"       "ENHO"     "LY6G6F"      "CLDN5" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Platelets    Platelets    Platelets </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        "GP9"     "ITGA2B"      "SEPT5" </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: parallelized FindAllMarkers</span></span></span>
 <span class="r-in"><span><span class="va">BPPARAM</span> <span class="op">&lt;-</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">registered</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
