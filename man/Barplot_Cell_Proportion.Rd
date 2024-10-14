@@ -69,7 +69,7 @@ Barplot_Cell_Proportion(
 
 \item{split.plot.title.size}{Numeric. The font size of the split plots titles. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{percent}{Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity.}
+\item{percent}{Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity. Ignored if \code{group.by} = \code{NULL}.}
 
 \item{nrow}{Numeric. The number of rows in the patchwork. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.}
 

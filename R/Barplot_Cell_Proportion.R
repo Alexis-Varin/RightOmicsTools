@@ -21,7 +21,7 @@
 #' @param legend.side Character. The side where the legend will be displayed, either 'left', 'right', 'top' or 'bottom'. Ignored if \code{show.legend} = \code{FALSE}.
 #' @param split.plot.title.size Numeric. The font size of the split plots titles. Ignored if \code{split.by} = \code{NULL}.
 #' @param show.legend Logical. If \code{TRUE}, shows the legend.
-#' @param percent Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity.
+#' @param percent Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity. Ignored if \code{group.by} = \code{NULL}.
 #' @param nrow Numeric. The number of rows in the patchwork. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.
 #' @param unique.group.plot Logical. If \code{TRUE}, the stacked barplots will be gathered in a single ggplot object.
 #' @param unique.split.plot Logical. If \code{TRUE}, the ggplot objects will be gathered in a single patchwork.
@@ -71,6 +71,10 @@ Barplot_Cell_Proportion = function(seurat_object,
                                    unique.split.plot = FALSE) {
 
   ident1 = ident2 = sumpercent = nbcells = NULL
+
+  if (is.null(group.by)) {
+    percent = FALSE
+  }
 
   if (is.null(colors)) {
     ggplotColours <- function(n = 6, h = c(0, 360) + 15){

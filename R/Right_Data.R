@@ -22,7 +22,7 @@ Right_Data = function(dataset = NULL,
 
   if (isTRUE(list.datasets)) {
     message("Available datasets:")
-    return(cat(paste0('\033[0;36m"pbmc3k"\033[0m',"   a Seurat v4 object of 2700 cells by 13714 features","\n")))
+    return(cat(paste0('\033[0;36m"pbmc3k"\033[0m',"   a Seurat v4 object of 2700 cells by 13714 genes","\n")))
   }
 
   if (dataset == "pbmc3k") {
