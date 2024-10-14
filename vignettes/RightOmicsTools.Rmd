@@ -1,8 +1,8 @@
 ---
-title: "Getting Started with RightSeuratTools"
+title: "Getting Started with RightOmicsTools"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with RightSeuratTools}
+  %\VignetteIndexEntry{Getting Started with RightOmicsTools}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This tutorial will guide you through the main functions of the `RightSeuratTools` package, designed to provide complementary tools to the `Seurat` package, such as plotting, data manipulation, and more. The package is still under development, and new functions will be added in the future.
+This tutorial will guide you through the main functions of the `RightOmicsTools` package, designed to provide complementary tools to the `Seurat` package, such as plotting, data manipulation, and more. The package is still under development, and new functions will be added in the future.
 
 ## Installation
 
@@ -26,10 +26,10 @@ You may install the package from GitHub using the `devtools` package, which, if 
 install.packages("devtools")
 ```
 
-Once installed, you may install `RightSeuratTools` using the following command:
+Once installed, you may install `RightOmicsTools` using the following command:
 
 ```{r install, eval = FALSE}
-devtools::install_github("Alexis-Varin/RightSeuratTools")
+devtools::install_github("Alexis-Varin/RightOmicsTools")
 ```
 
 ## Data loading
@@ -41,12 +41,12 @@ We will also build on `Seurat`'s `pbmc3k` tutorial to preprocess it, available f
 Let's start by loading all the packages we will be using in this vignette:
 
 ```{r lib, warning = FALSE, message = FALSE}
-library(RightSeuratTools)
+library(RightOmicsTools)
 library(Seurat)
 library(ggplot2)
 ```
 
-Next, we will load the `pbmc3k` dataset using our first function from `RightSeuratTools`, [Right_Data](https://alexis-varin.github.io/RightSeuratTools/reference/Right_Data.html), which handles all data preparation for us, and check its contents:
+Next, we will load the `pbmc3k` dataset using our first function from `RightOmicsTools`, [Right_Data](https://alexis-varin.github.io/RightOmicsTools/reference/Right_Data.html), which handles all data preparation for us, and check its contents:
 
 ```{r load, warning = FALSE, message = FALSE, results = 'hide'}
 # Checking available datasets
@@ -72,8 +72,8 @@ pbmc3k
 colnames(pbmc3k@meta.data)
 ```
 
-Since the object seems to contain a 'data' layer, a UMAP reduction and annotations, and we are unsure to what extent is has been preprocessed and processed, we will also test another function from `RightSeuratTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay.
-We will also remove all meta.data columns except for the 'orig.ident' metadata to truly start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightSeuratTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
+Since the object seems to contain a 'data' layer, a UMAP reduction and annotations, and we are unsure to what extent is has been preprocessed and processed, we will also test another function from `RightOmicsTools`, [Right_DietSeurat](https://alexis-varin.github.io/RightOmicsTools/reference/Right_DietSeurat.html), which is a reworked version of [DietSeurat](https://satijalab.org/seurat/reference/dietseurat), and will remove all the layers and slots from the object, leaving only the counts layer from the RNA assay.
+We will also remove all meta.data columns except for the 'orig.ident' metadata to truly start anew. [Right_DietSeurat](https://alexis-varin.github.io/RightOmicsTools/reference/Right_DietSeurat.html) is highly customizable, check the documentation for more information:
 
 ```{r right_dietseurat, warning = FALSE, message = FALSE, results = 'hide'}
 # Reducing the object to the counts layer and the 'orig.ident' metadata
@@ -179,7 +179,7 @@ Interestingly, compared to the `Seurat` tutorial, we are missing the platelet cl
 
 A growing number of methods exist to label single-cell clusters, from using reference datasets with `SingleR` package or [Azimuth](https://azimuth.hubmapconsortium.org/), to querying ChatGPT with `GPTCelltype` package, via using canonical markers from the scientific literature. The vast majority of these methods need a set of genes as input, and determining the most differentially expressed genes (DEG) in each cluster is a common first step.
 
-For this purpose, we are going to use a function from `RightSeuratTools`, [Find_Annotation_Markers](https://alexis-varin.github.io/RightSeuratTools/reference/Find_Annotation_Markers.html), which is a wrapper function around [FindMarkers](https://satijalab.org/seurat/reference/findmarkers). It is designed by default to conveniently output a character vector of the top 5 markers, chosen based on the highest average log fold change in genes expressed in at least 25% of cells in each cluster, and with mitochondrial, ribosomal and non-coding genes excluded, in order to maximize the chances of finding canonical markers in an unsupervised manner. It also provides many more parameters which can be used to tailor the function to your specific needs:
+For this purpose, we are going to use a function from `RightOmicsTools`, [Find_Annotation_Markers](https://alexis-varin.github.io/RightOmicsTools/reference/Find_Annotation_Markers.html), which is a wrapper function around [FindMarkers](https://satijalab.org/seurat/reference/findmarkers). It is designed by default to conveniently output a character vector of the top 5 markers, chosen based on the highest average log fold change in genes expressed in at least 25% of cells in each cluster, and with mitochondrial, ribosomal and non-coding genes excluded, in order to maximize the chances of finding canonical markers in an unsupervised manner. It also provides many more parameters which can be used to tailor the function to your specific needs:
 
 ```{r DEG, warning = FALSE, message = FALSE, results = 'hide'}
 # Top 5 markers for each cluster, we will name each marker with cluster identity
@@ -199,7 +199,7 @@ annotation.markers <- Find_Annotation_Markers(pbmc3k,
 annotation.markers
 ```
 
-These markers may then be directly used for plotting. Since the `Seurat` tutorial uses [DoHeatmap](https://satijalab.org/seurat/reference/doheatmap), we will compare it to its equivalent in `RightSeuratTools`, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html), which is reworked using `ComplexHeatmap` instead of `ggplot2`:
+These markers may then be directly used for plotting. Since the `Seurat` tutorial uses [DoHeatmap](https://satijalab.org/seurat/reference/doheatmap), we will compare it to its equivalent in `RightOmicsTools`, [Cell_Heatmap](https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.html), which is reworked using `ComplexHeatmap` instead of `ggplot2`:
 
 ```{r heatmap, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 8}
 Cell_Heatmap(pbmc3k,
@@ -216,7 +216,7 @@ DoHeatmap(pbmc3k,
   NoLegend()
 ```
 
-While both heatmaps look similar aside from colors, which is on purpose with default parameters, [Cell_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/Cell_Heatmap.html) truly shines in complexity by offering more customization options, such as the possibility to cluster features, apply k-means, or split identities by another metadata...
+While both heatmaps look similar aside from colors, which is on purpose with default parameters, [Cell_Heatmap](https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.html) truly shines in complexity by offering more customization options, such as the possibility to cluster features, apply k-means, or split identities by another metadata...
 
 ### Cell annotation
 
@@ -240,7 +240,7 @@ DimPlot(pbmc3k, label = TRUE) +
 
 ### Cell proportion
 
-Following cell annotation, one often want to visualize the proportion of each cell type. While using [table](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table) on the identities gives this information, it is often tedious to organize these data for plotting; `RightSeuratTools` introduces [Barplot_Cell_Proportion](https://alexis-varin.github.io/RightSeuratTools/reference/Barplot_Cell_Proportion.html), which automates cell proportion and conveniently displays a bar plot, with the possibility to group and/or split based on other metadata, and many other parameters:
+Following cell annotation, one often want to visualize the proportion of each cell type. While using [table](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table) on the identities gives this information, it is often tedious to organize these data for plotting; `RightOmicsTools` introduces [Barplot_Cell_Proportion](https://alexis-varin.github.io/RightOmicsTools/reference/Barplot_Cell_Proportion.html), which automates cell proportion and conveniently displays a bar plot, with the possibility to group and/or split based on other metadata, and many other parameters:
 
 ```{r proportion, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 6, fig.height = 6}
 Barplot_Cell_Proportion(pbmc3k)
@@ -248,7 +248,7 @@ Barplot_Cell_Proportion(pbmc3k)
 
 ### Other visualizations
 
-We will conclude by showing the last two visualization functions; [DotPlot_Heatmap](https://alexis-varin.github.io/RightSeuratTools/reference/DotPlot_Heatmap.html), which is a reworked version of [DotPlot](https://satijalab.org/seurat/reference/dotplot), also built from `ComplexHeatmap` instead of `ggplot2`, and [Grid_VlnPlot](https://alexis-varin.github.io/RightSeuratTools/reference/Grid_VlnPlot.html), which is a stacked version of [VlnPlot](https://satijalab.org/seurat/reference/vlnplot) in a square grid, both also offering many more options than their `Seurat` counterparts:
+We will conclude by showing the last two visualization functions; [DotPlot_Heatmap](https://alexis-varin.github.io/RightOmicsTools/reference/DotPlot_Heatmap.html), which is a reworked version of [DotPlot](https://satijalab.org/seurat/reference/dotplot), also built from `ComplexHeatmap` instead of `ggplot2`, and [Grid_VlnPlot](https://alexis-varin.github.io/RightOmicsTools/reference/Grid_VlnPlot.html), which is a stacked version of [VlnPlot](https://satijalab.org/seurat/reference/vlnplot) in a square grid, both also offering many more options than their `Seurat` counterparts:
 
 ```{r dotplot, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 8, fig.height = 10}
 # We will disable some parameters to be as close as possible from Seurat's DotPlot
@@ -291,8 +291,8 @@ Grid_VlnPlot(pbmc3k,
 
 ### Advanced data visualization
 
-While we have shown the default parameters of most of the functions of `RightSeuratTools`, there are many more options available in each function; to explore the use cases of most of these, and to see how far they can be customized, check the [advanced data visualization vignette](https://alexis-varin.github.io/RightSeuratTools/articles/Visualization.html).
+While we have shown the default parameters of most of the functions of `RightOmicsTools`, there are many more options available in each function; to explore the use cases of most of these, and to see how far they can be customized, check the [advanced data visualization vignette](https://alexis-varin.github.io/RightOmicsTools/articles/Visualization.html).
 
 ### Gene signatures from GSEA
 
-Another interesting feature of `RightSeuratTools` is the possibility to extract genes from pathways in the Gene Set Enrichment Analysis (GSEA) database to create and visualize signatures. Check the [gene signatures from GSEA vignette](https://alexis-varin.github.io/RightSeuratTools/articles/GSEA.html) to learn more about the various usages of this function.
+Another interesting feature of `RightOmicsTools` is the possibility to extract genes from pathways in the Gene Set Enrichment Analysis (GSEA) database to create and visualize signatures. Check the [gene signatures from GSEA vignette](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html) to learn more about the various usages of this function.

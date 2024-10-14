@@ -4,6 +4,6 @@
 .httr-oauth
 .DS_Store
 .quarto
-RightSeuratTools.Rproj
+RightOmicsTools.Rproj
 inst/doc
 docs

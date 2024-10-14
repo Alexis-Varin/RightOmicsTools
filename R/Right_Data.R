@@ -1,6 +1,6 @@
 #' @title Data loader for vignettes
 #'
-#' @description This function downloads and prepares data used for vignettes, such as \code{Seurat} or \code{SingleCellExperiment} objects. The main advantage of using a data loader is that nothing is stored in the package, therefore it remains lightweight even if you use large objects in your tutorials. Anyone interested in adding a dataset to this function for use in their own package's vignettes (provided the raw data can be downloaded from a reputable source, \href{https://ftp.ncbi.nlm.nih.gov/geo/datasets/}{NCBI's GEO FTP site} for example) can open an \href{https://github.com/Alexis-Varin/RightSeuratTools/issues}{issue on GitHub}.
+#' @description This function downloads and prepares data used for vignettes, such as \code{Seurat} or \code{SingleCellExperiment} objects. The main advantage of using a data loader is that nothing is stored in the package, therefore it remains lightweight even if you use large objects in your tutorials. Anyone interested in adding a dataset to this function for use in their own package's vignettes (provided the raw data can be downloaded from a reputable source, \href{https://ftp.ncbi.nlm.nih.gov/geo/datasets/}{NCBI's GEO FTP site} for example) can open an \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{issue on GitHub}.
 #'
 #' @param dataset Character. The name of the dataset to load.
 #' @param list.datasets Logical. If TRUE, prints the list of available datasets.

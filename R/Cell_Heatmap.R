@@ -59,7 +59,7 @@
 #' @param raster Logical. (from \code{\link[ComplexHeatmap]{Heatmap}} documentation) If \code{TRUE}, the function will render the heatmap body as a raster image. It helps to reduce file size when the matrix is huge.
 #' @param raster.quality Numeric. The quality of the raster image. A higher value will slow rendering but will lower expression smoothing. Ignored if \code{raster} = \code{FALSE}.
 #' @param output.data Logical. If \code{TRUE}, the function will return a matrix of the cell expression data, scaled or not, instead of displaying anything.
-#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightSeuratTools]{Cell_Heatmap}}).
+#' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightOmicsTools]{Cell_Heatmap}}).
 #'
 #' @return A \code{\link[ComplexHeatmap]{Heatmap}} object, or a matrix of the cell expression data, scaled or not.
 #'
