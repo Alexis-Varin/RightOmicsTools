@@ -243,8 +243,7 @@ DimPlot(pbmc3k, label = TRUE) +
 Following cell annotation, one often want to visualize the proportion of each cell type. While using [table](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table) on the identities gives this information, it is often tedious to organize these data for plotting; `RightSeuratTools` introduces [Barplot_Cell_Proportion](https://alexis-varin.github.io/RightSeuratTools/reference/Barplot_Cell_Proportion.html), which automates cell proportion and conveniently displays a bar plot, with the possibility to group and/or split based on other metadata, and many other parameters:
 
 ```{r proportion, warning = FALSE, message = FALSE, fig.align = 'center', fig.width = 6, fig.height = 6}
-Barplot_Cell_Proportion(pbmc3k,
-                        percent = FALSE)
+Barplot_Cell_Proportion(pbmc3k)
 ```
 
 ### Other visualizations

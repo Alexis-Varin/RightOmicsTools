@@ -36,8 +36,7 @@
 #' pbmc3k <- Right_Data("pbmc3k")
 #'
 #' # Example 1: default parameters
-#' Barplot_Cell_Proportion(pbmc3k,
-#'                         percent = FALSE)
+#' Barplot_Cell_Proportion(pbmc3k)
 #' @import Seurat
 #' @import SeuratObject
 #' @import ggplot2
