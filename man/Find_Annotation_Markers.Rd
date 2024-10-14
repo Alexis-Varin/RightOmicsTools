@@ -75,7 +75,7 @@ pbmc3k <- Right_Data("pbmc3k")
 
 # Example 1: default parameters and origin of markers
 pbmc3k.markers <- Find_Annotation_Markers(pbmc3k,
-                                          named.features = TRUE)
+                                          name.features = TRUE)
 pbmc3k.markers
 
 # Example 2: parallelized FindAllMarkers
