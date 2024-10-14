@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![](https://img.shields.io/github/last-commit/Alexis-Varin/RightOmicsTools.svg)](https://github.com/Alexis-Varin/RightOmicsTools/commits/main)
 <!-- badges: end -->
 
-This package is a set of various tools to facilitate the use of `Seurat` objects in R. It is currently in development and will be updated regularly with new functions and improvements.
+This package is a set of tools to facilitate the analysis of single-cell RNA-seq data in R. It is currently in development and will be updated regularly with new functions and improvements.
 
 ## Quick start
 

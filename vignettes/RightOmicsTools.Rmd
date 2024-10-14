@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This tutorial will guide you through the main functions of the `RightOmicsTools` package, designed to provide complementary tools to the `Seurat` package, such as plotting, data manipulation, and more. The package is still under development, and new functions will be added in the future.
+This tutorial will guide you through the main functions of the `RightOmicsTools` package, designed to provide complementary tools to the analysis of single-cell RNA-seq data, such as plotting, data manipulation, and more. The package is still under development, and new functions will be added in the future.
 
 ## Installation
 
