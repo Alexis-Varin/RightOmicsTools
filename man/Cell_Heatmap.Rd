@@ -42,10 +42,10 @@ Cell_Heatmap(
   features.names.size = 9,
   features.names.style = "italic",
   row.names.side = "left",
-  row.names.width = unit(15, "cm"),
+  row.names.width = 15,
   column.names.angle = 45,
   column.names.side = "top",
-  column.names.height = unit(15, "cm"),
+  column.names.height = 15,
   outer.border = TRUE,
   data.legend.name = ifelse(isTRUE(scale), "Z-Score", "Expression"),
   data.legend.side = "bottom",
@@ -68,75 +68,75 @@ Cell_Heatmap(
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. The name of an assay containing the \code{layer} with the expression matrix. If the \code{seurat_object} contains multiple 'RNA' assays, you may specify which one to use (for example, 'RNA2' if you have created a second 'RNA' assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay, such as 'SCT', to pull feature expression from.}
 
-\item{layer}{Character. Formerly known as slot. It is recommended to use 'data'.}
+\item{layer}{Character. The name of a layer (formerly known as slot) which stores the expression matrix. It is recommended to use 'data'.}
 
-\item{features}{Character. A vector of features to plot.}
+\item{features}{Character. The names of one or several features to plot the cell expression from.}
 
-\item{split.by}{Character. The name of an identity in the meta.data slot to split the active.ident identity by.}
+\item{split.by}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the identities of the active.ident metadata by.}
 
-\item{idents}{Character. A vector with one or several identities names in the active.ident identity to use if you only want those (instead of subsetting your object). If \code{NULL}, all identities will be used.}
+\item{idents}{Character. The names of one or several identities in the active.ident metadata to select. If \code{NULL}, all identities are used.}
 
-\item{split.idents}{Character. A vector with one or several identities names in the \code{split.by} identity to use if you only want those. If \code{NULL}, all identities will be used.}
+\item{split.idents}{Character. The names of one or several \code{split.by} identities to select. If \code{NULL}, all identities are used. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{scale}{Logical. If \code{TRUE}, cell expression values for each feature will be scaled using \code{\link[base]{scale}} and default parameters. The resulting values will be Z-scores (mean subtracted values divided by standard deviation) and not positive cell expression values anymore, which is why there will be positive and negative values displayed, depending on if the expression in a particular cell is below or above the mean expression from all cells (which is calculated independently for each feature).}
+\item{scale}{Logical. If \code{TRUE}, cell expression values will be scaled using \code{\link[base]{scale}} and default parameters. The resulting values will be Z-scores (mean subtracted values divided by standard deviation) and not positive cell expression values anymore, which is why there will be positive and negative values displayed, depending on if the expression in a particular cell is below or above the mean expression from all cells (which is calculated independently for each feature).}
 
-\item{rescale}{Logical. If \code{TRUE}, cell expression values will be adjusted using \code{\link[scales]{rescale}} between the first numerical value of the \code{rescale.range} parameter (lowest expression) and the second numerical value (highest expression) for each feature. This is different than \code{\link[base]{scale}} as this doesn't compare values to any mean or standard deviation and is therefore not a Z-score, it only refits each cell expression value (independently for each feature) in order to visualize all features in the same dimension regardless of their differences in levels of expression. Ignored if \code{scale} = \code{TRUE}.}
+\item{rescale}{Logical. If \code{TRUE}, cell expression values will be adjusted using \code{\link[scales]{rescale}} between the first numerical value of \code{rescale.range} (lowest expression) and the second numerical value (highest expression). This is different than \code{\link[base]{scale}} as this doesn't compare values to any mean and standard deviation and is therefore not a Z-score, it only refits each cell expression value (independently for each feature) in order to visualize all \code{features} in the same dimension regardless of their differences in levels of expression. Ignored if \code{scale} = \code{TRUE}.}
 
-\item{rescale.range}{Numeric. A vector specifying the minimum and maximum values to resize the cell expression values and internally passed to \code{\link[scales]{rescale}}. These values are arbitrary and will not change the visualization, only the values in the legend, you need to adjust the \code{col.min} and \code{col.max} parameters to influence the color scale. Ignored if \code{rescale} = \code{FALSE} or \code{scale} = \code{TRUE}.}
+\item{rescale.range}{Numeric. The minimum and maximum values to resize the cell expression values and internally passed to \code{\link[scales]{rescale}}. These values are arbitrary and will not change the visualization, only the values in the legend, you need to adjust \code{col.min} and \code{col.max} to influence the color scale. Ignored if \code{rescale} = \code{FALSE} or \code{scale} = \code{TRUE}.}
 
-\item{rotate.axis}{Logical. If \code{TRUE}, flips the axis, so that features are displayed as columns and identities as rows.}
+\item{rotate.axis}{Logical. If \code{TRUE}, flips the axis, so that \code{features} are displayed as columns and identities as rows.}
 
-\item{col.min}{Character or Numeric. The minimum value for the \code{breaks} parameter internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q5' or 'q10' is useful to reduce the effect of outlier values (e.g. a very low value that significantly alters the color scale range of all other values).}
+\item{col.min}{Character or Numeric. The minimum value for the \code{breaks} internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q5' or 'q10' is useful to reduce the effect of outlier values (i.e. a very low value that significantly alters the color scale range of all other values).}
 
-\item{col.max}{Character or Numeric. The maximum value for the \code{breaks} parameter internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q95' or 'q90' is useful to reduce the effect of outlier values (e.g. a very high value that significantly alters the color scale range of all other values).}
+\item{col.max}{Character or Numeric. The maximum value for the \code{breaks} internally passed to \code{\link[colorRamp2]{colorRamp2}}. If character, must be a quantile in the form 'qX' where X is a number between 0 and 100. A value of 'q95' or 'q90' is useful to reduce the effect of outlier values (i.e. a very high value that significantly alters the color scale range of all other values).}
 
-\item{data.colors}{Character. Either a character vector of exactly 3 colors, corresponding to the lowest, zero (or middle if \code{scale} = \code{FALSE}), and highest values in the expression matrix and internally passed to \code{\link[colorRamp2]{colorRamp2}}, or a single character value corresponding to the name of a palette and internally passed to the \code{hcl_palette} parameter of \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available).}
+\item{data.colors}{Character or Function. Either three color names, corresponding to the lowest, zero (or middle if \code{scale} = \code{FALSE}), and highest values in the expression matrix and internally passed to \code{\link[colorRamp2]{colorRamp2}}, or two color names, corresponding to the lowest and highest values, or the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available), or a custom \code{\link[colorRamp2]{colorRamp2}} function.}
 
 \item{palette.reverse}{Logical. If \code{TRUE} and if \code{data.colors} is a palette (such as 'Viridis'), the function will reverse its colors.}
 
-\item{na.color}{Character. The color to use for missing values (\code{NA}).}
+\item{na.color}{Character. The color name for missing values (\code{NA}).}
 
-\item{idents.colors}{Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity or supplied to the \code{idents} parameter. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
+\item{idents.colors}{Character. The color names for each identity of the active.ident metadata or in \code{idents}. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
-\item{show.idents.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter next to identities names.}
+\item{show.idents.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{idents.colors} next to identity names.}
 
-\item{show.idents.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{idents.colors} parameter on the opposite side of identities names.}
+\item{show.idents.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{idents.colors} on the opposite side of identity names.}
 
-\item{split.colors}{Character. A vector of colors to use for the split.by identity, of same length as the number of identities in the \code{split.by} identity or supplied to the \code{split.idents} parameter. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{split.by} = \code{NULL}.}
+\item{split.colors}{Character. The color names for each \code{split.by} identity or in \code{split.idents}. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{show.split.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter next to identities names. Ignored if \code{split.by} = \code{NULL}.}
+\item{show.split.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} next to identity names. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{show.split.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified by the \code{split.colors} parameter on the opposite side of identities names. Ignored if \code{split.by} = \code{NULL}.}
+\item{show.split.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} on the opposite side of identity names. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.idents}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.}
+\item{order.idents}{Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the cells.}
 
-\item{order.split}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.}
+\item{order.split}{Character or Numeric. Either 'reverse', or the \code{split.by} identities (as names or as numerical values corresponding to the indices) or in \code{split.idents} to order the cells. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
+\item{order.colors}{Logical. If \code{TRUE}, the \code{data.colors} and \code{split.colors} will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
 
-\item{kmeans.repeats}{Numeric. The number of k-means runs to get a consensus k-means clustering. Ignored if \code{features.kmeans} = 1.}
+\item{kmeans.repeats}{Numeric. The number of runs to get a consensus K-means clustering. Ignored if \code{features.kmeans} = 1.}
 
-\item{shuffle.cells}{Logical. If \code{TRUE}, the function will randomize the distribution of cells in each identity. Useful to smooth expression, which limits visible batch effect (cells in a merged \pkg{Seurat} object are typically ordered based on the levels of the 'orig.ident' identity, this might lead to unwanted patterns of expression in another identity). Note that no values are modified, it only changes the order of cells in each identity. Ignored if \code{cluster.cells} = \code{TRUE}.}
+\item{shuffle.cells}{Logical. If \code{TRUE}, the function will randomize the distribution of cells in each identity. Useful to smooth expression, which limits visible batch effect (cells in a merged \pkg{Seurat} object are typically ordered based on the levels of the 'orig.ident' metadata, this might lead to unwanted patterns of expression in another metadata). Note that no values are modified, it only changes the order of cells in each identity. Ignored if \code{cluster.cells} = \code{TRUE}.}
 
-\item{cluster.cells}{Logical. If \code{TRUE}, the function will cluster the cells within each identity. Will have the opposite effect of \code{shuffle.cells}, as it will order cells based on their expression similarity and will therefore increase batch effect. Useful to visualize if, within an identity, a subset of cells are expressing features while the rest of the cells do not, or vice versa. Just like \code{shuffle.cells}, no values are modified, it only changes the order of cells in each identity.}
+\item{cluster.cells}{Logical. If \code{TRUE}, the function will cluster the cells within each identity. Will have the opposite effect of \code{shuffle.cells}, as it will order cells based on their expression similarity and will therefore increase batch effect. Useful to visualize if, within an identity, a subset of cells have high expression while the rest of the cells have low expression, or vice versa. Just like \code{shuffle.cells}, no values are modified, it only changes the order of cells in each identity.}
 
-\item{cluster.features}{Logical or Function. If \code{TRUE}, the function will cluster the features. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.}
+\item{cluster.features}{Logical or Function. If \code{TRUE}, the function will cluster the \code{features}. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.}
 
-\item{features.kmeans}{Numeric. The number of k-means slices to use for features clustering.}
+\item{features.kmeans}{Numeric. The number of slices to use for feature K-means clustering.}
 
-\item{features.kmeans.numbers.size}{Numeric. The font size of the features k-means slices numbers. Set to 0 to remove them.}
+\item{features.kmeans.numbers.size}{Numeric. The font size of the feature K-means slice numbers. Set to 0 to remove them.}
 
-\item{idents.gap}{Numeric. The gap between the identities slices.}
+\item{idents.gap}{Numeric. The gap between the identity slices.}
 
-\item{features.gap}{Numeric. The gap between the features slices. Ignored if \code{features.kmeans} = 1.}
+\item{features.gap}{Numeric. The gap between the feature slices. Ignored if \code{features.kmeans} = 1.}
 
-\item{idents.names.size}{Numeric. The font size of the identities names. Set to 0 to remove them.}
+\item{idents.names.size}{Numeric. The font size of the identity names. Set to 0 to remove them.}
 
-\item{features.names.size}{Numeric. The font size of the features names. Set to 0 to remove them.}
+\item{features.names.size}{Numeric. The font size of the feature names. Set to 0 to remove them.}
 
-\item{features.names.style}{Character. The font face of the features names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that features names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.}
+\item{features.names.style}{Character. The font face of the feature names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that feature names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.}
 
 \item{row.names.side}{Character. The side where the row names will be displayed, either 'left' or 'right'. The dendrogram will be displayed on the opposite side.}
 
@@ -148,7 +148,7 @@ Cell_Heatmap(
 
 \item{column.names.height}{Numeric. The height of the column names. Increase this parameter if your column names are truncated.}
 
-\item{outer.border}{Logical. If \code{TRUE}, the function will display an outer border around each slice.}
+\item{outer.border}{Logical. If \code{TRUE}, the function will display an outer border around the heatmap or around each slice if \code{features.kmeans} > 1.}
 
 \item{data.legend.name}{Character. The name of the data legend.}
 
@@ -160,30 +160,30 @@ Cell_Heatmap(
 
 \item{data.legend.width}{Numeric. How long the data legend will be, only affects the data legend if \code{data.legend.direction} = 'horizontal'.}
 
-\item{idents.legend.name}{Character. The name of the active.ident identity legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
+\item{idents.legend.name}{Character. The name of the active.ident metadata legend. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident identity. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
+\item{show.idents.legend}{Logical. If \code{TRUE}, the function will display a legend for the active.ident metadata identities or \code{idents}. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.}
 
-\item{split.legend.name}{Character. The name of the split.by identity legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
+\item{split.legend.name}{Character. The name of the \code{split.by} legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
-\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the split.by identity. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
+\item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for the \code{split.by} identities or \code{split.idents}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
 \item{legend.title.size}{Numeric. The font size of all legend titles.}
 
 \item{legend.text.size}{Numeric. The font size of all legend texts.}
 
-\item{legend.gap}{Numeric. The gap between the legends and the plot. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{\link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::ht_opt(RESET = \code{TRUE}) to restore default parameters.}
+\item{legend.gap}{Numeric. The gap between the legends and the heatmap. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{\link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::\code{\link[ComplexHeatmap]{ht_opt}}(RESET = \code{TRUE}) to restore default parameters.}
 
 \item{raster}{Logical. (from \code{\link[ComplexHeatmap]{Heatmap}} documentation) If \code{TRUE}, the function will render the heatmap body as a raster image. It helps to reduce file size when the matrix is huge.}
 
 \item{raster.quality}{Numeric. The quality of the raster image. A higher value will slow rendering but will lower expression smoothing. Ignored if \code{raster} = \code{FALSE}.}
 
-\item{output.data}{Logical. If \code{TRUE}, the function will return a matrix of the cell expression data, scaled or not, instead of displaying anything.}
+\item{output.data}{Logical. If \code{TRUE}, the function will return a \code{matrix} object of the cell expression data, scaled or not, instead of displaying anything.}
 
 \item{...}{Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightOmicsTools]{Cell_Heatmap}}).}
 }
 \value{
-A \code{\link[ComplexHeatmap]{Heatmap}} object, or a matrix of the cell expression data, scaled or not.
+A \code{\link[ComplexHeatmap]{Heatmap}} object, or a \code{matrix} object of the cell expression data, scaled or not.
 }
 \description{
 This function generates a heatmap to visualize the expression of features in each cell of a \pkg{Seurat} object. Credits to \href{https://divingintogeneticsandgenomics.com/post/enhancement-of-scrnaseq-heatmap-using-complexheatmap/}{Ming Tang} for the initial idea to replicate \code{\link[Seurat]{DoHeatmap}} using \pkg{ComplexHeatmap}. Various new parameters were added to offer more flexibility and customization.

@@ -2,14 +2,17 @@
 % Please edit documentation in R/Barplot_Cell_Proportion.R
 \name{Barplot_Cell_Proportion}
 \alias{Barplot_Cell_Proportion}
-\title{Bar plot of the proportion of cells in each identity}
+\title{Bar plot of the cell proportions in each identity}
 \usage{
 Barplot_Cell_Proportion(
   seurat_object,
   group.by = NULL,
   split.by = NULL,
+  idents = NULL,
+  group.idents = NULL,
+  split.idents = NULL,
   colors = NULL,
-  order.proportion = NULL,
+  order.prop = NULL,
   order.group = NULL,
   order.split = NULL,
   order.colors = TRUE,
@@ -24,40 +27,47 @@ Barplot_Cell_Proportion(
   legend.side = "bottom",
   show.legend = TRUE,
   split.plot.title.size = 24,
-  percent = TRUE,
+  prop.percent = TRUE,
   nrow = 1,
   unique.group.plot = TRUE,
-  unique.split.plot = FALSE
+  unique.split.plot = FALSE,
+  output.data = FALSE
 )
 }
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{group.by}{Character. The name of an identity in the meta.data slot to group the active.ident identity by into a stacked barplot.}
+\item{group.by}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to group the identities of the active.ident metadata by. Returns a stacked bar plot.}
 
-\item{split.by}{Character. The name of an identity in the meta.data slot to split the active.ident identity by into separate ggplot objects.}
+\item{split.by}{Character. The name of a metadata to split the identities of the active.ident metadata by. Returns separate \code{ggplot2} objects.}
 
-\item{colors}{Character. A vector of colors to use for the active.ident identity, of same length as the number of identities in the active.ident identity. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
+\item{idents}{Character. The names of one or several identities in the active.ident metadata to select. If \code{NULL}, all identities are used.}
 
-\item{order.proportion}{Character or Numeric. A vector specifying either 'reverse' or the levels (as character or as numeric values corresponding to the indexes) of the active.ident identity to order the cells.}
+\item{group.idents}{Character. The names of one or several \code{group.by} identities to select. If \code{NULL}, all identities are used. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{order.group}{Character. A vector specifying either 'reverse' or the levels of the \code{group.by} identity to order the cells. Ignored if \code{group.by} = \code{NULL}.}
+\item{split.idents}{Character. The names of one or several \code{split.by} identities to select. If \code{NULL}, all identities are used. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.split}{Character. A vector specifying either 'reverse' or the levels of the \code{split.by} identity to order the cells. Ignored if \code{split.by} = \code{NULL}.}
+\item{colors}{Character. The color names for each identity of the active.ident metadata or in \code{idents}. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
-\item{order.colors}{Logical. If \code{TRUE}, the colors for the active.ident identity, the \code{group.by} identity and the \code{split.by} identity will automatically be ordered according to \code{order.idents}, \code{order.group} and \code{order.split}. Ignored if \code{order.idents}, \code{order.group} and \code{order.split} are \code{NULL}.}
+\item{order.prop}{Character or Numeric. Either 'reverse', or the identities (as names or as numeric values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the cells.}
 
-\item{alpha}{Numeric. The transparency of the bars colors. A value between 0 and 1.}
+\item{order.group}{Character. Either 'reverse', or the names of the \code{group.by} identities or in \code{group.idents} to order the cells. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{show.cellsum.label}{Logical. If \code{TRUE}, the cell sum of each identity will be shown at the top of each bar.}
+\item{order.split}{Character. Either 'reverse', or the names of the \code{split.by} identities or in \code{split.idents} to order the cells. Ignored if \code{split.by} = \code{NULL}.}
+
+\item{order.colors}{Logical. If \code{TRUE}, the \code{colors} will automatically be ordered according to \code{order.prop}. Ignored if \code{order.prop} = \code{NULL}.}
+
+\item{alpha}{Numeric. The transparency of the bar colors. A value between 0 and 1.}
+
+\item{show.cellsum.label}{Logical. If \code{TRUE}, the cell sum will be shown at the top of each bar.}
 
 \item{cellsum.label.size}{Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.}
 
-\item{axis.text.size}{Numeric. The font size of the identities names and cell percent or numbers.}
+\item{axis.text.size}{Numeric. The font size of the identity names and cell percent or count.}
 
-\item{x.axis.angle}{Numeric. The angle of rotation of the identities names.}
+\item{x.axis.angle}{Numeric. The rotation angle of the identity names.}
 
-\item{x.axis.hjust}{Numeric. The horizontal justification of the identities names.}
+\item{x.axis.hjust}{Numeric. The horizontal justification of the identity names.}
 
 \item{y.axis.title.size}{Numeric. The font size of the y axis title.}
 
@@ -67,21 +77,23 @@ Barplot_Cell_Proportion(
 
 \item{show.legend}{Logical. If \code{TRUE}, shows the legend.}
 
-\item{split.plot.title.size}{Numeric. The font size of the split plots titles. Ignored if \code{split.by} = \code{NULL}.}
+\item{split.plot.title.size}{Numeric. The font size of the split plot titles. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{percent}{Logical. If \code{TRUE}, the proportion of cells will be shown as a percentage of total cells for each identity. Ignored if \code{group.by} = \code{NULL}.}
+\item{prop.percent}{Logical. If \code{TRUE}, the cell proportions will be shown as a percentage of total cells for each identity. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{nrow}{Numeric. The number of rows in the patchwork. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.}
+\item{nrow}{Numeric. The number of rows in the \code{patchwork} object. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.}
 
-\item{unique.group.plot}{Logical. If \code{TRUE}, the stacked barplots will be gathered in a single ggplot object.}
+\item{unique.group.plot}{Logical. If \code{TRUE}, the stacked bar plots will be gathered in a single \code{ggplot} object. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{unique.split.plot}{Logical. If \code{TRUE}, the ggplot objects will be gathered in a single patchwork.}
+\item{unique.split.plot}{Logical. If \code{TRUE}, the \code{ggplot} objects will be gathered in a single \code{patchwork}. Ignored if \code{split.by} = \code{NULL}.}
+
+\item{output.data}{Logical. If \code{TRUE}, the function will return a \code{data.frame} object or a \code{list} of \code{data.frame} objects of the cell proportions, instead of displaying anything.}
 }
 \value{
-A ggplot object, a list of ggplot objects, a patchwork of ggplot objects or a list of patchworks of ggplot objects.
+A \code{ggplot} object, a \code{list} of \code{ggplot} objects, a \code{patchwork} object containing \code{ggplot} objects or a \code{list} of \code{patchwork} objects containing \code{ggplot} objects.
 }
 \description{
-This function generates a barplot of the proportion of cells from a \pkg{Seurat} object.
+This function generates a bar plot of the cell proportions from a \pkg{Seurat} object.
 }
 \examples{
 \dontshow{

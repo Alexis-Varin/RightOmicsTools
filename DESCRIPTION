@@ -1,6 +1,6 @@
 Package: RightOmicsTools
 Title: Complementary tools to manipulate and visualize single-cell RNA-seq data
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: 
     person(given = "Alexis", family = "Varin", email = "alexis.varin@inserm.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-3474-7263"))
@@ -13,8 +13,16 @@ Imports:
     utils,
     Seurat (>= 5.0.0),
     SeuratObject (>= 5.0.0),
+    SingleCellExperiment,
+    SummarizedExperiment,
+    S4Vectors,
+    slingshot,
+    tradeSeq,
+    scry,
     data.table,
     ggplot2,
+    ggborderline,
+    scattermore,
     patchwork,
     scales,
     grDevices,
@@ -32,5 +40,6 @@ Depends:
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    magick
 VignetteBuilder: knitr

@@ -2,7 +2,7 @@
 % Please edit documentation in R/GSEA_Signatures.R
 \name{GSEA_Signatures}
 \alias{GSEA_Signatures}
-\title{Compute gene signatures from GSEA}
+\title{Gene signatures from GSEA-MSigDB pathways}
 \usage{
 GSEA_Signatures(
   seurat_object,
@@ -24,35 +24,35 @@ GSEA_Signatures(
 \arguments{
 \item{seurat_object}{A \pkg{Seurat} object.}
 
-\item{assay}{Character. If the \pkg{Seurat} object contains multiple RNA assays, you may specify which one to use (for example 'RNA2' if you have created a second RNA assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay such as 'SCT' to pull features expression from.}
+\item{assay}{Character. The name of an assay containing the \code{layer} with the expression matrix. If the \code{seurat_object} contains multiple 'RNA' assays, you may specify which one to use (for example, 'RNA2' if you have created a second 'RNA' assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay, such as 'SCT', to pull feature expression from.}
 
-\item{layer}{Character. Formerly known as slot. If you have split layers the function will always join them before searching features and adding the signatures.}
+\item{layer}{Character. The name of a layer (formerly known as slot) which stores the expression matrix. If the \code{seurat_object} contains split layers, the function will always join them before searching features and adding the signatures.}
 
-\item{species}{Character. The species name to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_species}} for the list of available species.}
+\item{species}{Character. The species name to be internally passed to \code{\link[msigdbr]{msigdbr}} to build the pathway database. Use \pkg{msigdbr}::\code{\link[msigdbr]{msigdbr_species}} for the names of available species.}
 
-\item{category}{Character. The category or categories to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_collections}} for the list of available categories (gs_cat column). If \code{NULL}, all categories will be used.}
+\item{category}{Character. The names of one or several categories to be internally passed to \code{\link[msigdbr]{msigdbr}} to build the pathway database. Use \pkg{msigdbr}::\code{\link[msigdbr]{msigdbr_collections}} for the names of available categories (gs_cat column). If \code{NULL}, all categories will be used.}
 
-\item{subcategory}{Character. The subcategory or subcategories to be passed to \code{\link[msigdbr]{msigdbr}} to build the pathways database. Use \code{\link[msigdbr]{msigdbr_collections}} for the list of available subcategories (gs_subcat column). If \code{NULL}, all subcategories will be used.}
+\item{subcategory}{Character. The names of one or several subcategories to be internally passed to \code{\link[msigdbr]{msigdbr}} to build the pathway database. Use \pkg{msigdbr}::\code{\link[msigdbr]{msigdbr_collections}} for the names of available subcategories (gs_subcat column). If \code{NULL}, all subcategories will be used.}
 
-\item{pathways}{Character. The names of the pathways to be used to create the signatures. You may provide either a pathway id (for example, 'GO:0006574') or a name matching the pattern found in gs_name column (all caps and underscores between words). Please note that you may also provide a partial match (for example, 'TYPE_I_INTERFERON') and the function will find all pathways containing this partial string. Beware that this may result in a large number of pathways to be added as signatures (using \code{only.features} = \code{TRUE} is highly recommended) but is very handy to explore all pathways of interest in a particular biological process.}
+\item{pathways}{Character. The names of one or several pathways to be searched in the pathway database and added as signatures. You may provide either a pathway id (for example, 'GO:0006574') or a name matching the pattern found in the gs_name column (uppercase letters and underscores between words). Please note that you may also provide a partial match (for example, 'TYPE_I_INTERFERON') and the function will find all pathways containing this partial pattern. Beware that this may result in a large number of pathways to be added as signatures (using \code{only.features} = \code{TRUE} is highly recommended) but is very handy to explore all pathways of interest in a particular biological process.}
 
-\item{min.features}{Numeric. The minimum number of features present in the \pkg{Seurat} object for a pathway to be considered.}
+\item{min.features}{Numeric. The minimum number of features present in the \code{seurat_object} for a pathway to be added as a signature.}
 
-\item{signatures.names}{Character. Either 'id' which will add pathways ids as signatures (e.g. GO:0004657, hsa05200 etc), or 'name' which will add pathways names as signatures, which might be very long. You may also provide a vector of custom names to be used as signatures names in the Seurat object, whose length must match the number of pathways. If multiple results are found for a pathway, the function will append a number to the corresponding signature name for each result.}
+\item{signatures.names}{Character. Either 'id', which will add the ids of the \code{pathways} as signature names (for example, 'GO:0004657', 'hsa05200' etc), or 'name', which will add the names of the \code{pathways} as signature names (for example, 'GOBP_T_CELL_RECEPTOR_SIGNALING_PATHWAY'). You may also provide custom names to be used as signature names, whose length must match the length of \code{pathways} supplied. If multiple results are found for a pathway, the function will append a number to the corresponding custom signature name for each result.}
 
-\item{method}{Character. The method you want to use to calculate the module scores, either 'UCell' or 'Seurat'.}
+\item{method}{Character. The method used to calculate the module scores, either 'UCell' or 'Seurat'.}
 
-\item{only.features}{Logical. If \code{TRUE}, the function will not add any signature to the \pkg{Seurat} object and will only return the \pkg{Seurat} object as well as the features from the pathways found in the \pkg{Seurat} object and the features present in the \pkg{Seurat} object.}
+\item{only.features}{Logical. If \code{TRUE}, the function will not add any signature to the \code{seurat_object} and will only return the feature names from the \code{pathways} found in the \code{seurat_object} and the feature names present in the \code{seurat_object}.}
 
-\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the \pkg{Seurat} object. If the number of signatures found is higher than this number, the function will not add any signature to the \pkg{Seurat} object and will only return the \pkg{Seurat} object as well as the features from the pathways found in the \pkg{Seurat} object and the features present in the \pkg{Seurat} object.}
+\item{fail.safe}{Numeric. The maximum number of signatures the function will attempt to add to the \code{seurat_object}. If the number of signatures found is higher than this number, the function will not add any signature, and will instead return the \code{seurat_object} as well as the feature names from the \code{pathways} found in the \code{seurat_object} and the feature names present in the \code{seurat_object}. This prevents the function from adding a large number of signatures to the \code{seurat_object} by mistake.}
 
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 
-\item{...}{Additional arguments to be passed to \code{\link[UCell]{AddModuleScore_UCell}} or \code{\link[Seurat]{AddModuleScore}}.}
+\item{...}{Additional arguments to be passed to \code{\link[UCell]{AddModuleScore_UCell}} or \code{\link[Seurat]{AddModuleScore}}, such as \code{nbin} or \code{maxRank}.}
 }
 \value{
-A list containing the \pkg{Seurat} object with the added signatures if \code{only.features} = \code{FALSE}, the features from the pathways, the features present in the \pkg{Seurat} object and the names of the signatures in the \pkg{Seurat} object.
+A \code{list} containing the \code{seurat_object} with added signatures, all feature names from the \code{pathways} found in the \code{seurat_object}, the feature names present in the \code{seurat_object} and the signature names. If \code{only.features} = \code{TRUE}, the function will instead return a \code{list} containing the feature names from the \code{pathways} found in the \code{seurat_object} and the feature names present in the \code{seurat_object}.
 }
 \description{
-This function creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from features found in the \pkg{Seurat} object and extracted from supplied MSigDB's pathways.
+Following gene set enrichment analysis (GSEA), one often would like to explore the expression of genes comprised in enriched pathways. For this purpose, this function builds a pathway database from \href{https://www.gsea-msigdb.org/gsea/msigdb}{MSigDB} and creates signatures (module scores calculated from \pkg{UCell} or \pkg{Seurat}'s respective functions) from features found in a \pkg{Seurat} object and extracted from supplied pathways. It also returns the feature names which can be used to visualize their individual expression, using for example \code{\link[RightOmicsTools]{DotPlot_Heatmap}}.
 }

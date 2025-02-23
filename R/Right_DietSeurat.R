@@ -3,19 +3,19 @@
 #' @description As of \pkg{Seurat} v5 release, \code{\link[Seurat]{DietSeurat}} does not remove data and scale.data layers, resulting in objects with little to no reduction in size. This function was created with the purpose to restore \code{\link[Seurat]{DietSeurat}}'s proper behavior until the function is fixed by \pkg{Seurat}'s dev team, as well as to offer a few new options such as the ability to subset cells or keep variable features.
 #'
 #' @param seurat_object A \pkg{Seurat} object.
-#' @param idents Character. A vector with one or several identity names in the meta.data slot to keep in the diet object. If \code{NULL}, all identities will be kept.
-#' @param cells Character. A vector with one or several cell barcodes to keep in the diet object. If \code{NULL}, all cells will be kept.
-#' @param features Character. A vector with one or several feature names to keep in the diet object. If \code{NULL}, all features will be kept.
-#' @param dimreducs Character. A vector with one or several reduction names to keep in the diet object. If \code{NULL}, all DimReducs will be removed. Note that if you subset features and remove all from which PCs were calculated, the PCA will not be kept, even if it is set in this parameter, as the feature.loadings slot will be empty, this is intended behavior.
-#' @param graphs Character. A vector with one or several graph names to keep in the diet object. If \code{NULL}, all Graphs will be removed.
-#' @param variable.features Logical. If \code{TRUE}, the variable features slot will be kept in the diet object. Note that if you keep only a subset of features, the variable features will also be subset, and if you remove all features from which variable features were calculated, the variable features will not be kept even if this parameter is set to \code{TRUE}, this is intended behavior.
+#' @param idents Character. The names of one or several metadata (for example, 'orig.ident', 'seurat_clusters', etc) to keep in the diet object. If \code{NULL}, all metadata will be kept.
+#' @param cells Character. The names of one or several cells to keep in the diet object. If \code{NULL}, all cells will be kept.
+#' @param features Character. The names of one or several features to keep in the diet object. If \code{NULL}, all features will be kept.
+#' @param dimreducs Character. The names of one or several reductions to keep in the diet object. If \code{NULL}, all reductions will be removed. Please note that if you subset features and remove all from which principal components (PC) were calculated, the 'PCA' reduction will not be kept, even if it is provided, as the feature.loadings slot will be empty. This is intended behavior.
+#' @param graphs Character. The names of one or several graphs to keep in the diet object. If \code{NULL}, all graphs will be removed.
+#' @param variable.features Logical. If \code{TRUE}, the variable features slot will be kept in the diet object. Please note that if you keep only a subset of features, the variable features will also be subset, and if you remove all features from which variable features were calculated, the variable features will not be kept even if \code{TRUE}. This is intended behavior.
 #' @param misc Logical. If \code{TRUE}, the misc slot will be kept in the diet object.
-#' @param split.counts.layer Character. The name of an identity in the meta.data slot to split the counts layer by if you need to in your downstream analysis. If \code{NULL}, the diet object will have a single counts layer, even if the original object had split counts layers.
-#' @param data.layer Logical. If \code{TRUE}, the data layer of the RNA assay will be kept in the diet object if it is present. As with the counts layer, if there are split data layers, they will be joined into a single data layer unless the \code{split.counts.layer} parameter is set.
-#' @param scale.layer Logical. If \code{TRUE}, the scale.data layer of the RNA assay will be kept in the diet object if it is present.
-#' @param SCTAssay Logical. If \code{TRUE}, the SCT assay will be kept in the diet object if it is present.
+#' @param split.counts.layer Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the 'counts' layer in the 'RNA' assay by if you need to in your downstream analysis. If \code{NULL}, the diet object will have a single 'counts' layer, even if the original object had split 'counts' layers.
+#' @param data.layer Logical. If \code{TRUE}, the 'data' layer in the 'RNA' assay will be kept in the diet object if it is present. As with the 'counts' layer, if there are split 'data' layers, they will be joined into a single 'data' layer unless \code{split.counts.layer} is provided.
+#' @param scale.layer Logical. If \code{TRUE}, the 'scale.data' layer in the 'RNA' assay will be kept in the diet object if it is present.
+#' @param SCTAssay Logical. If \code{TRUE}, the 'SCT' assay will be kept in the diet object if it is present.
 #'
-#' @return A \pkg{Seurat} object, hopefully smaller, with class Assay5 RNA assay and specified layers and slots.
+#' @return A \pkg{Seurat} object, hopefully smaller, with class Assay5 'RNA' assay and specified layers and slots.
 #'
 #' @import Seurat
 #' @import SeuratObject

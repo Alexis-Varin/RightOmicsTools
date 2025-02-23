@@ -1,11 +1,11 @@
 #' @title Data loader for vignettes
 #'
-#' @description This function downloads and prepares data used for vignettes, such as \code{Seurat} or \code{SingleCellExperiment} objects. The main advantage of using a data loader is that nothing is stored in the package, therefore it remains lightweight even if you use large objects in your tutorials. Anyone interested in adding a dataset to this function for use in their own package's vignettes (provided the raw data can be downloaded from a reputable source, \href{https://ftp.ncbi.nlm.nih.gov/geo/datasets/}{NCBI's GEO FTP site} for example) can open an \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{issue on GitHub}.
+#' @description This function downloads and prepares data used for vignettes. The main advantage of using a data loader is that nothing is stored in the package, therefore it remains lightweight even if you use large objects in your tutorials. Anyone interested in adding a dataset to this function for use in their own package's vignettes (provided the raw data can be downloaded from a reputable source, \href{https://ftp.ncbi.nlm.nih.gov/geo/datasets/}{NCBI's GEO FTP site} for example) can open an \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{issue on GitHub}.
 #'
 #' @param dataset Character. The name of the dataset to load.
-#' @param list.datasets Logical. If TRUE, prints the list of available datasets.
+#' @param list.datasets Logical. If \code{TRUE}, prints the names and descriptions of available datasets.
 #'
-#' @return An object of various classes, depending on the dataset asked, or a message containing the list of available datasets.
+#' @return An object of various classes, depending on the dataset, or a message containing the names and descriptions of available datasets.
 #'
 #' @examples
 #' Right_Data(list.datasets = TRUE)
@@ -37,9 +37,8 @@ Right_Data = function(dataset = NULL,
     pbmc3k.mat = suppressWarnings(suppressMessages(Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")))
     colnames(pbmc3k.mat) = suppressWarnings(suppressMessages(gsub("-1$","",colnames(pbmc3k.mat))))
     options(Seurat.object.assay.version = "v3")
-    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.mat, project = "pbmc3k", min.cells = 3, min.features = 200)))
+    pbmc3k = suppressWarnings(suppressMessages(CreateSeuratObject(counts = pbmc3k.mat, project = "pbmc3k", min.cells = 3, min.features = 200, meta.data = as.data.frame(pbmc3k.data[1:3]))))
     pbmc3k = suppressWarnings(suppressMessages(NormalizeData(pbmc3k, verbose = FALSE)))
-    pbmc3k@meta.data$seurat_annotations = pbmc3k.data$anno
     VariableFeatures(pbmc3k) = pbmc3k.data$hvg
     pbmc3k[["umap"]] = pbmc3k.data$umap
     Idents(pbmc3k) = "seurat_annotations"

@@ -17,7 +17,7 @@ Find_Annotation_Markers(
   species = "human",
   parallelized = FALSE,
   BPPARAM = NULL,
-  name.features = FALSE,
+  name.markers = FALSE,
   output.df = FALSE,
   output.list = FALSE,
   verbose = TRUE,
@@ -33,7 +33,7 @@ Find_Annotation_Markers(
 
 \item{min.pct}{Numeric. (from \code{\link[Seurat]{FindMarkers}} documentation) Only test features that are detected in a minimum fraction of min.pct cells in either of the two populations. Meant to speed up the function by not testing features that are very infrequently expressed.}
 
-\item{top.markers}{Numeric. The number of top markers to return. If set to \code{Inf}, all markers will be returned.}
+\item{top.markers}{Numeric. The number of top markers to return. If \code{Inf}, all markers will be returned.}
 
 \item{unique.markers}{Logical. If \code{TRUE}, unique markers will be returned for each identity in order to prevent features repeated multiple times.}
 
@@ -43,27 +43,27 @@ Find_Annotation_Markers(
 
 \item{filter.ncRNA}{Logical. If \code{TRUE}, non-coding RNA features will be filtered out.}
 
-\item{species}{Character. The species from which to pull data from to filter out features. If 'human', non-coding RNA features will be filtered out from a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database}. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.}
+\item{species}{Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.}
 
-\item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your system operating system (Windows users might not see a gain or might even experience a slowdown).}
+\item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your operating system (Windows users might not see a gain or might even experience a slowdown).}
 
-\item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL}, the function will set this parameter to \code{\link[BiocParallel]{SerialParam}}, which uses a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
+\item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL} and \code{parallelized} = \code{TRUE}, the function will use a \code{\link[BiocParallel]{SerialParam}} object configured to use a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
-\item{name.features}{Logical. If \code{TRUE}, and if \code{output.df} = \code{FALSE}, each feature will be named with the corresponding cluster identity.}
+\item{name.markers}{Logical. If \code{TRUE}, each marker will be named with its associated identity. Ignored if \code{output.df} = \code{TRUE}.}
 
-\item{output.df}{Logical. If \code{TRUE}, a data frame of features names and associated statistics will be returned. If \code{FALSE}, a character vector of features names will be returned.}
+\item{output.df}{Logical. If \code{TRUE}, a \code{data.frame} object containing the \code{\link[Seurat]{FindMarkers}} results, ordered by decreasing log fold change will be returned. If \code{FALSE}, feature names will be returned.}
 
-\item{output.list}{Logical. If \code{TRUE}, a list of data frames for each identity with features names and statistics or a list of character vectors containing features names if \code{output.df} = \code{FALSE} will be returned.}
+\item{output.list}{Logical. If \code{TRUE}, and if \code{output.df} = \code{TRUE}, returns a \code{list} of \code{data.frame} objects containing \code{\link[Seurat]{FindMarkers}} results for each identity, or if \code{output.df} = \code{FALSE}, returns a \code{list} of feature names for each identity.}
 
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 
 \item{...}{Additional arguments to be passed to \code{\link[Seurat]{FindMarkers}}, such as \code{test.use}, or passed to other methods and to specific DE methods.}
 }
 \value{
-A data frame or a list of data frames with features names and associated statistics, or a character vector or a list of character vectors with features names.
+A \code{data.frame} object or a \code{list} of \code{data.frame} objects containing the \code{\link[Seurat]{FindMarkers}} results, or a \code{list} of features names, or feature names.
 }
 \description{
-This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It will also directly return the top X markers for each identity.
+This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It may also directly return the top X markers for each identity.
 }
 \examples{
 \dontshow{
@@ -75,7 +75,7 @@ pbmc3k <- Right_Data("pbmc3k")
 
 # Example 1: default parameters and origin of markers
 pbmc3k.markers <- Find_Annotation_Markers(pbmc3k,
-                                          name.features = TRUE)
+                                          name.markers = TRUE)
 pbmc3k.markers
 
 # Example 2: parallelized FindAllMarkers

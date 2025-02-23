@@ -19,6 +19,8 @@ pbmc3k.mat = Seurat::Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
 colnames(pbmc3k.mat) = gsub("-1$","",colnames(pbmc3k.mat))
 pbmc3k = Seurat::CreateSeuratObject(counts = pbmc3k.mat, project = "pbmc3k", min.cells = 3, min.features = 200)
 unlink(c("pbmc3k_filtered_gene_bc_matrices.tar.gz","filtered_gene_bc_matrices"), recursive = TRUE)
+pbmc3k$orig.ident = factor(sample(c("Donor_1","Donor_2","Donor_3"), ncol(pbmc3k), replace = TRUE))
+pbmc3k@meta.data$treatment = factor(sample(c("Control","Stimulated"), ncol(pbmc3k), replace = TRUE))
 pbmc3k = Seurat::NormalizeData(pbmc3k)
 pbmc3k = Seurat::FindVariableFeatures(pbmc3k)
 pbmc3k = Seurat::ScaleData(pbmc3k, features = rownames(pbmc3k))
@@ -32,7 +34,9 @@ new.cluster.ids = c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
                      "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC", "Platelets")
 names(new.cluster.ids) = levels(pbmc3k)
 pbmc3k = Seurat::RenameIdents(pbmc3k, new.cluster.ids)
-pbmc3k.data = list(anno = pbmc3k@active.ident,
+pbmc3k.data = list(orig.ident = pbmc3k$orig.ident,
+                   seurat_annotations = pbmc3k@active.ident,
+                   treatment = pbmc3k$treatment,
                    hvg = Seurat::VariableFeatures(pbmc3k),
                    umap = pbmc3k[["umap"]])
 usethis::use_data(pbmc3k.data, internal = TRUE)
