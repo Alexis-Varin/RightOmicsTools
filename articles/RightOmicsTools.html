@@ -8,8 +8,8 @@
 <title>Getting Started with RightOmicsTools • RightOmicsTools</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with RightOmicsTools">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,7 +136,7 @@ which handles all data preparation for us, and check its contents:</p>
 <span><span class="co">#&gt;  2 layers present: counts, data</span></span>
 <span><span class="co">#&gt;  1 dimensional reduction calculated: umap</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; [1] "orig.ident"         "nCount_RNA"         "nFeature_RNA"      </span></span>
-<span><span class="co">#&gt; [4] "seurat_annotations"</span></span></code></pre>
+<span><span class="co">#&gt; [4] "seurat_annotations" "treatment"</span></span></code></pre>
 <p>Since the object seems to contain a ‘data’ layer, a UMAP reduction
 and annotations, and we are unsure to what extent is has been
 preprocessed and processed, we will also test another function from
@@ -287,18 +287,13 @@ tailor the function to your specific needs:</p>
 <span><span class="co">#&gt; Finding markers for cluster 5 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 6 against all other clusters</span></span>
 <span><span class="co">#&gt; Finding markers for cluster 7 against all other clusters</span></span></code></pre>
-<pre><code><span><span class="co">#&gt;          0          0          0          0          0          1          1 </span></span>
-<span><span class="co">#&gt;     "CCR7"     "LEF1"      "MAL"  "PIK3IP1"     "TCF7"    "FOLR3"  "S100A12" </span></span>
-<span><span class="co">#&gt;          1          1          1          2          2          2          2 </span></span>
-<span><span class="co">#&gt;   "S100A8"   "S100A9"     "CD14"     "AQP3"   "CD40LG"   "CORO1B"      "CD2" </span></span>
-<span><span class="co">#&gt;          2          3          3          3          3          3          4 </span></span>
-<span><span class="co">#&gt;    "TRAT1"   "VPREB3"    "CD79A"    "TCL1A"    "FCRLA"    "FCER2"     "GZMK" </span></span>
-<span><span class="co">#&gt;          4          4          4          4          5          5          5 </span></span>
-<span><span class="co">#&gt;     "GZMH"     "CCL5"     "CD8A"    "KLRG1"      "CKB"   "CDKN1C"   "MS4A4A" </span></span>
-<span><span class="co">#&gt;          5          5          6          6          6          6          6 </span></span>
-<span><span class="co">#&gt;     "HES4"    "BATF3"   "AKR1C3"     "GNLY"     "GZMB"   "SH2D1B"    "SPON2" </span></span>
-<span><span class="co">#&gt;          7          7          7          7          7 </span></span>
-<span><span class="co">#&gt; "SERPINF1"   "FCER1A"    "CLIC2"     "ENHO"  "CLEC10A"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1] "CCR7"     "LEF1"     "MAL"      "PIK3IP1"  "TCF7"     "FOLR3"   </span></span>
+<span><span class="co">#&gt;  [7] "S100A12"  "S100A8"   "S100A9"   "CD14"     "AQP3"     "CD40LG"  </span></span>
+<span><span class="co">#&gt; [13] "CORO1B"   "CD2"      "TRAT1"    "VPREB3"   "CD79A"    "TCL1A"   </span></span>
+<span><span class="co">#&gt; [19] "FCRLA"    "FCER2"    "GZMK"     "GZMH"     "CCL5"     "CD8A"    </span></span>
+<span><span class="co">#&gt; [25] "KLRG1"    "CKB"      "CDKN1C"   "MS4A4A"   "HES4"     "BATF3"   </span></span>
+<span><span class="co">#&gt; [31] "AKR1C3"   "GNLY"     "GZMB"     "SH2D1B"   "SPON2"    "SERPINF1"</span></span>
+<span><span class="co">#&gt; [37] "FCER1A"   "CLIC2"    "ENHO"     "CLEC10A"</span></span></code></pre>
 <p>These markers may then be directly used for plotting. Since the
 <code>Seurat</code> tutorial uses <a href="https://satijalab.org/seurat/reference/doheatmap" class="external-link">DoHeatmap</a>,
 we will compare it to its equivalent in <code>RightOmicsTools</code>, <a href="https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.html">Cell_Heatmap</a>,
