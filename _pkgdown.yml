@@ -3,22 +3,37 @@ template:
   bootstrap: 5
   light-switch: true
 reference:
-  - title: Visualization
+  - title: Seurat
+  - subtitle: Visualization
   - contents:
     - Barplot_Cell_Proportion
     - DotPlot_Heatmap
     - Cell_Heatmap
     - Grid_VlnPlot
-  - title: Helper Functions
+  - subtitle: Helper Functions
   - contents:
     - Right_DietSeurat
     - GSEA_Signatures
     - Find_Annotation_Markers
+  - title: tradeSeq
+  - subtitle: Visualization
+  - contents:
+    - curveSmoothers
+    - heatmapSmoothers
+  - subtitle: Helper Functions
+  - contents:
+    - tradeSeqPreprocess
+    - tradeSeqTests
+  - title: CIBERSORTx
+  - contents:
+    - Reference_Matrix_Builder
+    - Mixture_File_Builder
   - title: Data
   - contents:
     - Right_Data
     - ncRNA_human
     - pseudogenes_mouse
+
 navbar:
   structure:
     left: [intro, articles, reference, issues, feedbacks, citation, about]
