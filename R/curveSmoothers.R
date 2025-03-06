@@ -125,8 +125,8 @@ curveSmoothers = function(models,
       lst = list(lineages, conditions, genes)
       if (!is.null(names(branch.points)[bp])) {
         lst = lapply(lst, function(vec) {
-          vec = if (any(unlist(strsplit(names(branch.points), "_"))[bp] %in% vec))
-            vec[vec %in% unlist(strsplit(names(branch.points), "_"))[bp]] else vec
+          vec = if (any(unlist(strsplit(names(branch.points)[bp], "_")) %in% vec))
+            vec[vec %in% unlist(strsplit(names(branch.points)[bp], "_"))] else vec
         })
       }
       bp = apply(expand.grid(branch.points[[bp]], lst[[1]], lst[[2]], lst[[3]]), 1, function(vec) paste(vec, collapse = "_"))
