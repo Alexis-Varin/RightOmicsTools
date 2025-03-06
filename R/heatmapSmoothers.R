@@ -84,7 +84,7 @@ heatmapSmoothers = function(sds,
                             return.grob = TRUE,
                             ...) {
 
-  gene = lineage = clusters = xx = yy = count = NULL
+  gene = lineage = xx = yy = count = NULL
 
   if (any(is.na(genes))) {
     stop("Please provide the gene names to plot the smoothed expression from")

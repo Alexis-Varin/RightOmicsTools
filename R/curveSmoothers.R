@@ -67,7 +67,7 @@ curveSmoothers = function(models,
   predictSmooth.df$yhat = log1p(predictSmooth.df$yhat)
 
   mat = assays(models)$counts[genes, , drop = FALSE]
-  mat = as.data.frame(log1p(t(mat)))
+  mat = as.data.frame(log1p(t(as.matrix(mat))))
   mat = cbind(mat, do.call(cbind, lapply(lineages, function(lin) {
     df = as.data.frame(colData(models)$crv[ , grep(lin, colnames(colData(models)$crv)), drop = FALSE])
     df[ , grep("pseudotime", colnames(df))] = ifelse(df[ , grep("cellWeights", colnames(df))] == 0, NA, df[ , grep("pseudotime", colnames(df))])
