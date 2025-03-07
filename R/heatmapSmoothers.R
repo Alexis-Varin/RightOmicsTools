@@ -6,9 +6,9 @@
 #' @param models A \pkg{SingleCellExperiment} object containing the fitted GAM smoothers, computed using \code{\link[tradeSeq]{fitGAM}}, with or without \code{conditions} provided.
 #' @param predictSmooth.df A \code{data.frame} object containing the average fitted GAM smoothers, computed using \code{\link[tradeSeq]{predictSmooth}} with \code{nPoints}, \code{lineages} and \code{tidy} = \code{TRUE}. If \code{NULL}, average fitted GAM smoothers will be internally computed.
 #' @param genes Character. The names of one or several genes to plot the average fitted GAM smoothers from.
-#' @param lineages Numeric. The indices of the lineages (for example, c(1, 5), 2:4 etc) to plot the average fitted GAM smoothers and the pseudotime values from. Please note that for gene clustering, if you would like to use a specific lineage as reference, you need to set it as the first element (for example, if you have six lineages and you would like to cluster genes based on lineage 5, you would input \code{lineages} = c(5, 1:4, 6)). This is due to a limitation in how \pkg{ComplexHeatmap} clusters the rows of concatenated \code{\link[ComplexHeatmap]{Heatmap}} objects (always based on the first element).
+#' @param lineages Numeric. The indices of the lineages (for example, c(1, 5), 2:4 etc) to plot the average fitted GAM smoothers and the pseudotime values from. Please note that for gene clustering, if you would like to use a specific lineage as reference, you need to set it as the first element (for example, if you have six lineages and you would like to cluster genes based on lineage 5, you would input \code{lineages} = c(5, 1:4, 6)). This is due to a limitation in how \pkg{ComplexHeatmap} clusters the rows of concatenated \code{\link[ComplexHeatmap]{HeatmapList}} objects (always based on the first element).
 #' @param lineages.to.remove Numeric. The lineages to exclude from \code{\link[scales]{rescale}}. Useful if you want to remove the influence of other lineages in a comparison.
-#' @param conditions Character. The names of one or several \code{conditions} identities to select. If \code{NULL}, all identities are used, and each unique condition will be plotted, for each of the \code{lineages} provided (for example, if you have four lineages and three conditions, twelve heatmaps will be plotted). Please note that for gene clustering, if you would like to use a specific condition as reference, you need to set it as the first element (for example, if you have three unique conditions (for example, 'control', 'IFNg' and 'TGFb') and you would like to cluster genes based on 'IFNg', you would input \code{conditions} = c('IFNg', 'control', 'TGFb')). This is due to a limitation in how \pkg{ComplexHeatmap} clusters the rows of concatenated \code{\link[ComplexHeatmap]{Heatmap}} objects (always based on the first element). Ignored if the \code{models} object was computed using \code{\link[tradeSeq]{fitGAM}} without \code{conditions}. Please note that if the \code{models} object was computed using \code{\link[tradeSeq]{fitGAM}} with \code{conditions}, it is not possible to plot global lineages (without \code{conditions}), you would need to compute a new \code{models} object using \code{\link[tradeSeq]{fitGAM}} without \code{conditions}. This is due to a limitation in how \code{\link[tradeSeq]{predictSmooth}} returns average fitted GAM smoothers (if the \code{models} object was computed with \code{conditions}, the function will always mean the fitted GAM smoothers for each lineage and each condition independently).
+#' @param conditions Character. The names of one or several \code{conditions} identities to select. If \code{NULL}, all identities are used, and each unique condition will be plotted, for each of the \code{lineages} provided (for example, if you have four lineages and three conditions, twelve heatmaps will be plotted). Please note that for gene clustering, if you would like to use a specific condition as reference, you need to set it as the first element (for example, if you have three unique conditions (for example, 'control', 'IFNg' and 'TGFb') and you would like to cluster genes based on 'IFNg', you would input \code{conditions} = c('IFNg', 'control', 'TGFb')). This is due to a limitation in how \pkg{ComplexHeatmap} clusters the rows of concatenated \code{\link[ComplexHeatmap]{HeatmapList}} objects (always based on the first element). Ignored if the \code{models} object was computed using \code{\link[tradeSeq]{fitGAM}} without \code{conditions}. Please note that if the \code{models} object was computed using \code{\link[tradeSeq]{fitGAM}} with \code{conditions}, it is not possible to plot global lineages (without \code{conditions}), you would need to compute a new \code{models} object using \code{\link[tradeSeq]{fitGAM}} without \code{conditions}. This is due to a limitation in how \code{\link[tradeSeq]{predictSmooth}} returns average fitted GAM smoothers (if the \code{models} object was computed with \code{conditions}, the function will always mean the fitted GAM smoothers for each lineage and each condition independently).
 #' @param clusters Character or Factor. Either the name of a metadata present in the \code{sds} object (for example, 'annotations', 'seurat_clusters', etc) to plot the cell densities from, or the identities, as character or factor, of length equal to the number of cells in the \code{sds} object.
 #' @param nPoints Numeric. (from \code{\link[tradeSeq]{predictSmooth}} documentation) The number of points used to create the grid along the smoother for each lineage.
 #' @param branch.points Numeric, Character or List. Branching points may be shown on the cell density plot and the heatmap, to partition the lineages and help visualize differences. Either one or more pseudotime values to plot the branching points at, and/or one or several values containing 'knot' followed by a number (for example, 'knot2', 'knot4' etc), which correspond to the knots (\code{k}) input in \code{\link[tradeSeq]{fitGAM}} and which divide each lineage into segments; the function will extract the pseudotime values from each knot number and plot the branching points. Mixing any of the two options is possible (for example, c(4.3, 7, 'knot4')). You may also provide a \code{list} containing any of the two options, and named after one or several identities of a single metadata among 'lineages' or 'conditions' (for example, if \code{conditions} = c('Control', 'Treated'), list('Control' = c(2, 'knot5')) which will only plot branching points on Control cell density plots and heatmaps). For \code{lineages}, the \code{list} names need to be provided as 'Lineage' (with capital L) followed by the index (for example, list('Lineage1' = c(4.3, 'knot4'), 'Lineage2' = c('knot2', 7, 9)), which will only plot branching points on lineages 1 and 2 cell density plots and heatmaps). Finally, you may also provide identities corresponding to several metadata at the same time by pasting them together with '_' (for example, list('Lineage1_Treated' = c(1, 'knot1', 12)), which will only plot branching points on lineage 1 and Treated cell density plots and heatmaps).
@@ -33,10 +33,10 @@
 #' @param heatmap.height Numeric. The height of each heatmap.
 #' @param density.height Numeric. The height of the cell density plot.
 #' @param raster Logical. (from \code{\link[ComplexHeatmap]{Heatmap}} documentation) If \code{TRUE}, the function will render the heatmap body as a raster image. It helps to reduce file size when the matrix is huge.
-#' @param return.grob Logical. If \code{TRUE}, the function will return a \code{grob}. This allows to capture the cell density plot (which is a \pkg{ggplot2} object) and the heatmap (a \code{\link[ComplexHeatmap]{Heatmap}} object) as a single object which can be further customized using \pkg{grid} functions or included with other plots in complex layouts using \code{\link[cowplot]{plot_grid}}. If \code{FALSE}, the function will return a \code{\link[ComplexHeatmap]{Heatmap}} object, which can then be used to extract various parameters, such as the row clustering values using \code{\link[ComplexHeatmap]{row_order}}. Please note that this only affects the returned object when it is assigned to a variable, such as \code{> htmp <- heatmapSmoothers(...)}, and not when the function is called without assignment, such as \code{> heatmapSmoothers(...)}.
+#' @param return.grob Logical. If \code{TRUE}, the function will return a \code{grob} (\code{gTree} object, printable using \code{\link[grid]{grid.draw}}). This allows to capture the cell density plot (which is a \pkg{ggplot2} object) and the heatmap (a \code{\link[ComplexHeatmap]{HeatmapList}} object) as a single object which can be further customized using \pkg{grid} functions or included with other plots in complex layouts using \code{\link[cowplot]{plot_grid}}. If \code{FALSE}, the function will return a \code{\link[ComplexHeatmap]{HeatmapList}} object, which can then be used to extract various parameters, such as the row clustering values using \code{\link[ComplexHeatmap]{row_order}}. Please note that this only affects the returned object when it is assigned to a variable, such as \code{> htmp <- heatmapSmoothers(...)}, and not when the function is called without assignment, such as \code{> heatmapSmoothers(...)}.
 #' @param ... Additional arguments to be passed to \code{\link[ComplexHeatmap]{Heatmap}}, such as \code{show_parent_dend_line}, \code{clustering_method_rows}, etc, accepts any parameter that wasn't already internally passed to \code{\link[ComplexHeatmap]{Heatmap}} (for example, \code{outer.border} sets the \code{border} parameter of \code{\link[ComplexHeatmap]{Heatmap}}, so you will get an error if you try to pass the \code{border} parameter in \code{\link[RightOmicsTools]{heatmapSmoothers}}).
 #'
-#' @return A \code{grob}, or a \code{\link[ComplexHeatmap]{Heatmap}} object.
+#' @return A \code{grob} (\code{gTree} object, printable using \code{\link[grid]{grid.draw}}), or a \code{\link[ComplexHeatmap]{HeatmapList}} object.
 #'
 #' @import SingleCellExperiment
 #' @import slingshot
@@ -557,40 +557,13 @@ heatmapSmoothers = function(sds,
     }
   }
 
-  htt = draw(ht,
-             heatmap_legend_side = "bottom",
-             align_heatmap_legend = "heatmap_center",
-             align_annotation_legend = "heatmap_center",
-             annotation_legend_list = density.legend,
-             legend_grouping = "original")
-
-  for (i in 1:length(lineages)) {
-    if (!is.null(ht.split[[i]])) {
-      for (j in 1:length(ht.split[[i]])) {
-        for (k in 1:genes.kmeans) {
-          decorate_heatmap_body(paste0("ht",i), {
-            grid.lines(c(ht.split[[i]][j], ht.split[[i]][j]), c(0, 0.99), gp = gpar(lty = 2, lwd = 2, col = "lightblue"))
-          }, slice = k)
-        }
-      }
-    }
-  }
-
-  if (isTRUE(show.density)) {
-    pp = list()
-    for (i in 1:length(p)) {
-      pp[[i]] = grid.grabExpr(suppressWarnings(print(p[[i]])))
-      decorate_annotation(paste0("clust",i), {grid.draw(pp[[i]])})
-    }
-  }
-
   if (isTRUE(return.grob)) {
-    invisible(grid.grabExpr({draw(ht,
-                                  heatmap_legend_side = "bottom",
-                                  align_heatmap_legend = "heatmap_center",
-                                  align_annotation_legend = "heatmap_center",
-                                  annotation_legend_list = density.legend,
-                                  legend_grouping = "original")
+    htt = grid.grabExpr({draw(ht,
+                              heatmap_legend_side = "bottom",
+                              align_heatmap_legend = "heatmap_center",
+                              align_annotation_legend = "heatmap_center",
+                              annotation_legend_list = density.legend,
+                              legend_grouping = "original")
 
       for (i in 1:length(lineages)) {
         if (!is.null(ht.split[[i]])) {
@@ -605,12 +578,44 @@ heatmapSmoothers = function(sds,
       }
 
       if (isTRUE(show.density)) {
+        pp = list()
         for (i in 1:length(p)) {
+          pp[[i]] = grid.grabExpr(suppressWarnings(print(p[[i]])))
           decorate_annotation(paste0("clust",i), {grid.draw(pp[[i]])})
         }
-      }}))
+      }
+    })
+
+    grid.draw(htt)
   }
   else {
-    return(htt)
+    htt = draw(ht,
+               heatmap_legend_side = "bottom",
+               align_heatmap_legend = "heatmap_center",
+               align_annotation_legend = "heatmap_center",
+               annotation_legend_list = density.legend,
+               legend_grouping = "original")
+
+    for (i in 1:length(lineages)) {
+      if (!is.null(ht.split[[i]])) {
+        for (j in 1:length(ht.split[[i]])) {
+          for (k in 1:genes.kmeans) {
+            decorate_heatmap_body(paste0("ht",i), {
+              grid.lines(c(ht.split[[i]][j], ht.split[[i]][j]), c(0, 0.99), gp = gpar(lty = 2, lwd = 2, col = "lightblue"))
+            }, slice = k)
+          }
+        }
+      }
+    }
+
+    if (isTRUE(show.density)) {
+      pp = list()
+      for (i in 1:length(p)) {
+        pp[[i]] = grid.grabExpr(suppressWarnings(print(p[[i]])))
+        decorate_annotation(paste0("clust",i), {grid.draw(pp[[i]])})
+      }
+    }
   }
+
+  return(invisible(htt))
 }
