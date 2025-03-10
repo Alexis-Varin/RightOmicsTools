@@ -150,16 +150,19 @@ curveSmoothers = function(models,
     colors = hue_pal()(n = length(get(ifelse(any(conditions == "therearenoconditionsinthisobject"),
                                              ifelse(length(setdiff(c("lineages", "genes"), facets)) == 0,
                                                     "lineages", setdiff(c("lineages", "genes"), facets)),
-                                             setdiff(c("lineages", "conditions", "genes"), facets))[1])))
-  }
-  if (is.null(names(colors))) {
-    names(colors) = get(ifelse(any(conditions == "therearenoconditionsinthisobject"),
-                               ifelse(length(setdiff(c("lineages", "genes"), facets)) == 0,
-                                      "lineages", setdiff(c("lineages", "genes"), facets)),
-                               setdiff(c("lineages", "conditions", "genes"), facets))[1])
+                                             setdiff(c("lineages", "conditions", "genes"), facets)[1]))))
   }
   if (length(colors) < length(loop.var)) {
-    col.var = get(setdiff(c("genes", "conditions", "lineages"), facets)[1])
+    if (is.null(names(colors))) {
+      names(colors) = get(ifelse(any(conditions == "therearenoconditionsinthisobject"),
+                                 ifelse(length(setdiff(c("lineages", "genes"), facets)) == 0,
+                                        "lineages", setdiff(c("lineages", "genes"), facets)),
+                                 setdiff(c("lineages", "conditions", "genes"), facets)[1]))
+      col.var = get(setdiff(c("genes", "conditions", "lineages"), facets)[1])
+    }
+    else {
+      col.var = setdiff(unique(unlist(strsplit(loop.var, "_"))), names(colors))
+    }
     if (length(colors)*length(col.var) == length(loop.var)) {
       colors = unlist(lapply(seq_along(colors), function(col) {
         col = setNames(rev(colorRamp2(c(0, 1), c("white", colors[col]))
@@ -170,9 +173,23 @@ curveSmoothers = function(models,
       stop("Not enough colors supplied, please provide either", length(loop.var), "colors or", length(loop.var)/length(col.var), "colors")
     }
   }
+  else {
+    if (is.null(names(colors))) {
+      names(colors) = loop.var
+    }
+    else {
+      names(colors) = unlist(lapply(names(colors), function(nm) {
+        if (length(grep(paste0("^",nm,"$","|","^",nm,"_","|","_",nm,"$"), loop.var)) == 1) {
+          return(grep(paste0("^",nm,"$","|","^",nm,"_","|","_",nm,"$"), loop.var, value = TRUE))
+        }
+        else {
+          stop("The color names provided either do not match any of the identities or match multiple ones")
+        }
+      }))
+    }
+  }
 
-  p = ggplot(NULL, aes(x = time, y = yhat,
-                       col = factor(.data[["loop.var"]]))) +
+  p = ggplot(NULL, aes(x = time, y = yhat, col = factor(.data[["loop.var"]]))) +
     geom_scattermore(data = mat, pointsize = points.size + 0.1, alpha = points.alpha, show.legend = FALSE) +
     theme_bw() +
     theme(panel.border = element_blank(),

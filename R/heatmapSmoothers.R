@@ -26,7 +26,7 @@
 #' @param show.density.pseudotime.values Logical. If \code{TRUE}, the pseudotime values will be shown on the cell density plot.
 #' @param data.colors Character. Either two color names, corresponding to the lowest and highest values in the average fitted GAM smoothers and internally passed to \code{\link[colorRamp2]{colorRamp2}}, or the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available).
 #' @param pseudotime.colors Character. Either the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available), or two or more color names, corresponding to the lowest and highest pseudotime values, and additional color names beyond two will either be spaced at regular intervals if unnamed (for example, c('blue', 'green', 'yellow', 'red') will be spaced at 0%, 33%, 66% and 100%) or if named with a pseudotime value (for example, c('orange', "12" = 'white', 'royalblue')) or if named with 'knot' followed by a number (for example, 'knot2', 'knot4' etc), which correspond to the knots (\code{k}) input in \code{\link[tradeSeq]{fitGAM}} and which divide each lineage into segments; the function will extract the pseudotime values from each knot number (for example, c('firebrick', 'knot3' = 'lightgrey', 'gold')). Note that the first and last color names do not need to be named as they always correspond to the lowest and highest pseudotime values.
-#' @param idents.colors Character. The color names for each identity in \code{clusters}. If \code{NULL}, uses \pkg{Seurat}'s default colors. Ignored if \code{show.density} = \code{FALSE}.
+#' @param clusters.colors Character. The color names for each identity in \code{clusters}. If \code{NULL}, uses \pkg{Seurat}'s default colors. Ignored if \code{show.density} = \code{FALSE}.
 #' @param show.density.legend Logical. If \code{TRUE}, the cell density plot legend will be shown.
 #' @param density.legend.name Character. The name of the cell density plot legend.
 #' @param heatmap.width Numeric. The width of each heatmap.
@@ -74,7 +74,7 @@ heatmapSmoothers = function(sds,
                             show.density.pseudotime.values = TRUE,
                             data.colors = "Inferno",
                             pseudotime.colors = "Viridis",
-                            idents.colors = NULL,
+                            clusters.colors = NULL,
                             show.density.legend = TRUE,
                             density.legend.name = "Clusters",
                             heatmap.width = 3,
@@ -110,8 +110,8 @@ heatmapSmoothers = function(sds,
   if (!is.data.frame(predictSmooth.df)) {
     predictSmooth.df = predictSmooth(models, gene = genes, nPoints = nPoints, tidy = TRUE)
   }
-  if (is.numeric(lineages.to.remove)) {
-    predictSmooth.df = predictSmooth.df[predictSmooth.df$lineage != lineages.to.remove, , drop = FALSE]
+  if (length(setdiff(lineages.to.remove, lineages)) > 0) {
+    predictSmooth.df = predictSmooth.df[predictSmooth.df$lineage != setdiff(lineages.to.remove, lineages), , drop = FALSE]
   }
 
   if (isFALSE("condition" %in% colnames(predictSmooth.df))) {
@@ -272,12 +272,12 @@ heatmapSmoothers = function(sds,
     }
   }
 
-  if (is.null(idents.colors)) {
-    idents.colors = hue_pal()(n = length(levels(as.factor(colData(sds)[ , clusters]))))
-    names(idents.colors) = levels(as.factor(colData(sds)[ , clusters]))
+  if (is.null(clusters.colors)) {
+    clusters.colors = hue_pal()(n = length(levels(as.factor(colData(sds)[ , clusters]))))
+    names(clusters.colors) = levels(as.factor(colData(sds)[ , clusters]))
   }
-  else if (is.null(names(idents.colors))) {
-    names(idents.colors) = levels(as.factor(colData(sds)[ , clusters]))
+  else if (is.null(names(clusters.colors))) {
+    names(clusters.colors) = levels(as.factor(colData(sds)[ , clusters]))
   }
 
   if (isTRUE(show.density)) {
@@ -307,8 +307,8 @@ heatmapSmoothers = function(sds,
               axis.title = element_blank(),
               plot.margin = margin(0, 0, 0, 0)) +
         guides(col = "none", fill ="none") +
-        scale_fill_manual(values = idents.colors[names(idents.colors) %in% unique(tmp[[i]]$clusters)]) +
-        scale_color_manual(values = idents.colors[names(idents.colors) %in% unique(tmp[[i]]$clusters)]) +
+        scale_fill_manual(values = clusters.colors[names(clusters.colors) %in% unique(tmp[[i]]$clusters)]) +
+        scale_color_manual(values = clusters.colors[names(clusters.colors) %in% unique(tmp[[i]]$clusters)]) +
         scale_x_continuous(expand = c(0, 0), breaks = seq(ceiling(min(tmp[[i]]$lineage, na.rm = TRUE)), max(tmp[[i]]$lineage, na.rm = TRUE), by = ceiling(sqrt(max(tmp[[i]]$lineage, na.rm = TRUE)-min(tmp[[i]]$lineage, na.rm = TRUE)))))
     }
 
@@ -436,8 +436,8 @@ heatmapSmoothers = function(sds,
 
   density.legend = NULL
   if (isTRUE(show.density.legend) & isTRUE(show.density)) {
-    density.legend = Legend(at = names(idents.colors)[names(idents.colors) %in% unique(do.call(rbind, tmp)$clusters)],
-                            legend_gp = gpar(fill = idents.colors[names(idents.colors)[names(idents.colors) %in% unique(do.call(rbind, tmp)$clusters)]]),
+    density.legend = Legend(at = names(clusters.colors)[names(clusters.colors) %in% unique(do.call(rbind, tmp)$clusters)],
+                            legend_gp = gpar(fill = clusters.colors[names(clusters.colors)[names(clusters.colors) %in% unique(do.call(rbind, tmp)$clusters)]]),
                             title = density.legend.name,
                             gap = unit(0.5, "cm"),
                             border = TRUE)
@@ -569,9 +569,9 @@ heatmapSmoothers = function(sds,
         if (!is.null(ht.split[[i]])) {
           for (j in 1:length(ht.split[[i]])) {
             for (k in 1:genes.kmeans) {
-              decorate_heatmap_body(paste0("ht",i), {
+              tryCatch(decorate_heatmap_body(paste0("ht",i), {
                 grid.lines(c(ht.split[[i]][j], ht.split[[i]][j]), c(0, 0.99), gp = gpar(lty = 2, lwd = 2, col = "lightblue"))
-              }, slice = k)
+              }, slice = k), error = function(e) {genes.kmeans <<- k-1})
             }
           }
         }
@@ -600,9 +600,9 @@ heatmapSmoothers = function(sds,
       if (!is.null(ht.split[[i]])) {
         for (j in 1:length(ht.split[[i]])) {
           for (k in 1:genes.kmeans) {
-            decorate_heatmap_body(paste0("ht",i), {
+            tryCatch(decorate_heatmap_body(paste0("ht",i), {
               grid.lines(c(ht.split[[i]][j], ht.split[[i]][j]), c(0, 0.99), gp = gpar(lty = 2, lwd = 2, col = "lightblue"))
-            }, slice = k)
+            }, slice = k), error = function(e) {})
           }
         }
       }

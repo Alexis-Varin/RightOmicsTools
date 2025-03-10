@@ -29,7 +29,7 @@ heatmapSmoothers(
   show.density.pseudotime.values = TRUE,
   data.colors = "Inferno",
   pseudotime.colors = "Viridis",
-  idents.colors = NULL,
+  clusters.colors = NULL,
   show.density.legend = TRUE,
   density.legend.name = "Clusters",
   heatmap.width = 3,
@@ -89,7 +89,7 @@ heatmapSmoothers(
 
 \item{pseudotime.colors}{Character. Either the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available), or two or more color names, corresponding to the lowest and highest pseudotime values, and additional color names beyond two will either be spaced at regular intervals if unnamed (for example, c('blue', 'green', 'yellow', 'red') will be spaced at 0\%, 33\%, 66\% and 100\%) or if named with a pseudotime value (for example, c('orange', "12" = 'white', 'royalblue')) or if named with 'knot' followed by a number (for example, 'knot2', 'knot4' etc), which correspond to the knots (\code{k}) input in \code{\link[tradeSeq]{fitGAM}} and which divide each lineage into segments; the function will extract the pseudotime values from each knot number (for example, c('firebrick', 'knot3' = 'lightgrey', 'gold')). Note that the first and last color names do not need to be named as they always correspond to the lowest and highest pseudotime values.}
 
-\item{idents.colors}{Character. The color names for each identity in \code{clusters}. If \code{NULL}, uses \pkg{Seurat}'s default colors. Ignored if \code{show.density} = \code{FALSE}.}
+\item{clusters.colors}{Character. The color names for each identity in \code{clusters}. If \code{NULL}, uses \pkg{Seurat}'s default colors. Ignored if \code{show.density} = \code{FALSE}.}
 
 \item{show.density.legend}{Logical. If \code{TRUE}, the cell density plot legend will be shown.}
 
