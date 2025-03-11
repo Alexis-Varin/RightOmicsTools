@@ -586,6 +586,7 @@ heatmapSmoothers = function(sds,
       }
     })
 
+    plot.new()
     grid.draw(htt)
   }
   else {
