@@ -15,8 +15,11 @@ tradeSeqTests(
   n.points = 2 * nknots(models),
   knots = NULL,
   pseudotime.values = NULL,
+  parallelized = FALSE,
+  BPPARAM = NULL,
   tidy = TRUE,
-  raw = FALSE
+  raw = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,9 +43,15 @@ tradeSeqTests(
 
 \item{pseudotime.values}{Numeric or List. (from \code{\link[tradeSeq]{startVsEndTest}} documentation) A vector of length 2, specifying two pseudotime values to be compared against each other, for every lineage of the trajectory. @details Note that this test assumes that all lineages start at a pseudotime value of zero, which is the starting point against which the end point is compared. You may also provide a \code{list} of multiple elements (for example, list(c(8,12), c(6,14))) to repeat the test for multiple sets of pseudotime values. Ignored in tests that do not have \code{pseudotime.values}.}
 
+\item{parallelized}{Logical. If \code{TRUE}, the \code{tests} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your operating system (Windows users might not see a gain or might even experience a slowdown).}
+
+\item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL} and \code{parallelized} = \code{TRUE}, the function will use a \code{\link[BiocParallel]{SerialParam}} object configured to use a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
+
 \item{tidy}{Logical. If \code{TRUE}, a \code{list} is returned, with \code{data.frame} objects corresponding to each test divided into each global, pairwise and/or lineage comparison results. An adjusted p-value (False Discovery Rate) is also calculated and each \code{data.frame} object is ordered based on decreasing Waldstat.}
 
 \item{raw}{Logical. If \code{TRUE}, a \code{list} is returned, with \code{data.frame} objects corresponding to each test results.}
+
+\item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 }
 \value{
 A \pkg{list}, with \code{data.frame} objects corresponding to each test results and/or \code{data.frame} objects corresponding to each test and each global, pairwise and/or lineage comparison results.

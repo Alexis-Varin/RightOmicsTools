@@ -46,6 +46,7 @@
 #' @import colorRamp2
 #' @import ggplot2
 #' @import scales
+#' @importFrom graphics plot.new
 #' @importFrom stats na.omit
 #' @importFrom S4Vectors metadata
 #' @export

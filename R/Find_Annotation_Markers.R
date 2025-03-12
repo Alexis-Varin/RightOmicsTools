@@ -85,39 +85,40 @@ Find_Annotation_Markers = function(seurat_object,
 
   if (isTRUE(parallelized)) {
     if (is.null(BPPARAM)) {
-      warning("No BPPARAM parameter provided, using BiocParallel::SerialParam(), which is not parallelized")
+      warning("No BPPARAM parameter provided, using BiocParallel::SerialParam(), which is not parallelized", immediate. = TRUE)
       BPPARAM = SerialParam()
+      parallelized = FALSE
     }
     if (is.null(ident.1) & is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",x," against all other clusters","\n",sep="")
+          cat("Finding markers for cluster ",ident," against all other clusters",ifelse(isFALSE(parallelized),"\n",""),sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = x, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident, min.pct = min.pct, ...)
       }, BPPARAM = BPPARAM))
     }
 
     if (is.null(ident.1) & !is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",x," against cluster ",ident.2,"\n",sep="")
+          cat("Finding markers for cluster ",ident," against cluster ",ident.2,ifelse(isFALSE(parallelized),"\n",""),sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = x, ident.2 = ident.2, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident, ident.2 = ident.2, min.pct = min.pct, ...)
       }, BPPARAM = BPPARAM))
     }
 
     if (is.null(ident.2) & !is.null(ident.1)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = suppressWarnings(bplapply(idents, function(x) {
+      all.markers2 = suppressWarnings(bplapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",ident.1," against cluster ",x,"\n",sep="")
+          cat("Finding markers for cluster ",ident.1," against cluster ",ident,ifelse(isFALSE(parallelized),"\n",""),sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = x, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = ident, min.pct = min.pct, ...)
       }, BPPARAM = BPPARAM))
     }
 
@@ -125,7 +126,7 @@ Find_Annotation_Markers = function(seurat_object,
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
       if (isTRUE(verbose)) {
-        cat("Finding markers between cluster ",ident.1," and cluster ",ident.2,"\n",sep="")
+        cat("Finding markers between cluster ",ident.1," and cluster ",ident.2,ifelse(isFALSE(parallelized),"\n",""),sep="")
       }
       all.markers2[[1]] = FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = ident.2, min.pct = min.pct, ...)
     }
@@ -135,33 +136,33 @@ Find_Annotation_Markers = function(seurat_object,
     if (is.null(ident.1) & is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = lapply(idents, function(x) {
+      all.markers2 = lapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",x," against all other clusters","\n",sep="")
+          cat("Finding markers for cluster ",ident," against all other clusters","\n",sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = x, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident, min.pct = min.pct, ...)
       })
     }
 
     if (is.null(ident.1) & !is.null(ident.2)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = lapply(idents, function(x) {
+      all.markers2 = lapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",x," against cluster ",ident.2,"\n",sep="")
+          cat("Finding markers for cluster ",ident," against cluster ",ident.2,"\n",sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = x, ident.2 = ident.2, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident, ident.2 = ident.2, min.pct = min.pct, ...)
       })
     }
 
     if (is.null(ident.2) & !is.null(ident.1)) {
       all.markers2 = list()
       idents = levels(Idents(seurat_object))
-      all.markers2 = lapply(idents, function(x) {
+      all.markers2 = lapply(idents, function(ident) {
         if (isTRUE(verbose)) {
-          cat("Finding markers for cluster ",ident.1," against cluster ",x,"\n",sep="")
+          cat("Finding markers for cluster ",ident.1," against cluster ",ident,"\n",sep="")
         }
-        FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = x, min.pct = min.pct, ...)
+        FindMarkers(object = seurat_object, ident.1 = ident.1, ident.2 = ident, min.pct = min.pct, ...)
       })
     }
 
