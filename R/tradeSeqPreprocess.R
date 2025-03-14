@@ -66,7 +66,7 @@ tradeSeqPreprocess = function(sds,
             scale_fill_manual(values = if (is.data.frame(condition)) if (isTRUE(grepl("Global", sum.mat$condition))) c("grey60",hue_pal()(length(unique(sum.mat$condition))-1)) else hue_pal()(length(unique(sum.mat$condition))) else "grey60") +
             labs(x = paste0("Number of cells with 1 count or more per gene"), y = "Number of genes removed", fill = "Identity") +
             geom_text(data = aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum), aes(y = nb.genes, label = nb.genes), vjust = -0.5) +
-            annotate("text", x = max(as.numeric(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$Var1)), y = max(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$nb.genes), label = paste0("n = ", length(genes.to.subset), " genes removed"), vjust = -0.5, hjust = 1) +
+            annotate("text", x = max(as.numeric(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$nb.cells)), y = max(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$nb.genes), label = paste0("n = ", length(genes.to.subset), " genes removed"), vjust = -0.5, hjust = 1) +
             scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
             theme_classic() +
             theme(legend.position = ifelse(is.data.frame(condition), "right", "none")))
@@ -81,8 +81,8 @@ tradeSeqPreprocess = function(sds,
     gc(verbose = FALSE)
   }
   if (!is.data.frame(condition)) {
-    stats.on.mat = stats.on.mat[, -2]
-    sum.mat = sum.mat[, -2]
+    stats.on.mat = stats.on.mat[, -2, drop = FALSE]
+    sum.mat = sum.mat[, -2, drop = FALSE]
   }
 
   if (isTRUE(output.data)) {
