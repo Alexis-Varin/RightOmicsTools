@@ -35,6 +35,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
 <li><a class="dropdown-item" href="../articles/Visualization.html">Advanced Data Visualization</a></li>
     <li><a class="dropdown-item" href="../articles/GSEA.html">Creating gene signatures from GSEA pathways</a></li>
+    <li><a class="dropdown-item" href="../articles/tradeSeq.html">Analysis of DEG along pseudotime</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -107,8 +108,9 @@ the following command:</p>
 contains single-cell RNA-seq data from peripheral blood mononuclear
 cells (PBMCs), and made available by <a href="https://www.10xgenomics.com/datasets/3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0" class="external-link">10X
 Genomics</a>.</p>
-<p>We will also build on <code>Seurat</code>’s <code>pbmc3k</code>
-tutorial to preprocess it, available for reference <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial" class="external-link">here</a>.</p>
+<p>We will also build on the <code>Seurat</code> package’s
+<code>pbmc3k</code> tutorial to preprocess it, available for reference
+<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial" class="external-link">here</a>.</p>
 <p>Let’s start by loading all the packages we will be using in this
 vignette:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -209,7 +211,7 @@ mitochondrial genes as well as cells with less than 400 or more than
 <p>Now that we have filtered the cells, we will move on to the next
 step, which is normalizing, scaling the data and identifying highly
 variable genes. For convenience, we use the same parameters as in the
-<code>Seurat</code> tutorial:</p>
+<code>Seurat</code> package tutorial:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Normalizing the data with default parameters</span></span>
 <span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
@@ -225,7 +227,7 @@ variable genes. For convenience, we use the same parameters as in the
 </h3>
 <p>Next, we will perform dimensionality reduction and unsupervised
 clustering. We again use the same parameters as in the
-<code>Seurat</code> tutorial:</p>
+<code>Seurat</code> package tutorial:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Perform PCA</span></span>
 <span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span>
@@ -242,11 +244,11 @@ steps:</p>
 <code class="sourceCode R"><span><span class="co"># Plot UMAP</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightOmicsTools_files/figure-html/umap-1.png" width="768" style="display: block; margin: auto;"></p>
-<p>Interestingly, compared to the <code>Seurat</code> tutorial, we are
-missing the platelet cluster, which is likely due to the fact that we
-have a more drastic cutoff for the number of genes per cell, at 400
-versus 200. This is a good example of how the preprocessing steps can
-influence the clustering results.</p>
+<p>Interestingly, compared to the <code>Seurat</code> package tutorial,
+we are missing the platelet cluster, which is likely due to the fact
+that we have a more drastic cutoff for the number of genes per cell, at
+400 versus 200. This is a good example of how the preprocessing steps
+can influence the clustering results.</p>
 </div>
 </div>
 <div class="section level2">
@@ -295,17 +297,17 @@ tailor the function to your specific needs:</p>
 <span><span class="co">#&gt; [31] "AKR1C3"   "GNLY"     "GZMB"     "SH2D1B"   "SPON2"    "SERPINF1"</span></span>
 <span><span class="co">#&gt; [37] "FCER1A"   "CLIC2"    "ENHO"     "CLEC10A"</span></span></code></pre>
 <p>These markers may then be directly used for plotting. Since the
-<code>Seurat</code> tutorial uses <a href="https://satijalab.org/seurat/reference/doheatmap" class="external-link">DoHeatmap</a>,
+<code>Seurat</code> package tutorial uses <a href="https://satijalab.org/seurat/reference/doheatmap" class="external-link">DoHeatmap</a>,
 we will compare it to its equivalent in <code>RightOmicsTools</code>, <a href="https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.html">Cell_Heatmap</a>,
-which is reworked using <code>ComplexHeatmap</code> instead of
-<code>ggplot2</code>:</p>
+which is reworked using the <code>ComplexHeatmap</code> package instead
+of the <code>ggplot2</code> package:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Cell_Heatmap.html">Cell_Heatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
 <span>             cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>             show.idents.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightOmicsTools_files/figure-html/heatmap-1.png" width="768" style="display: block; margin: auto;"></p>
-<p>Let’s compare it to <code>Seurat</code>’s default heatmap
+<p>Let’s compare it to <code>Seurat</code> package’s default heatmap
 function:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
@@ -359,11 +361,11 @@ many other parameters:</p>
 </h3>
 <p>We will conclude by showing the last two visualization functions; <a href="https://alexis-varin.github.io/RightOmicsTools/reference/DotPlot_Heatmap.html">DotPlot_Heatmap</a>,
 which is a reworked version of <a href="https://satijalab.org/seurat/reference/dotplot" class="external-link">DotPlot</a>, also
-built from <code>ComplexHeatmap</code> instead of <code>ggplot2</code>,
-and <a href="https://alexis-varin.github.io/RightOmicsTools/reference/Grid_VlnPlot.html">Grid_VlnPlot</a>,
+built from the <code>ComplexHeatmap</code> package instead of the
+<code>ggplot2</code> package, and <a href="https://alexis-varin.github.io/RightOmicsTools/reference/Grid_VlnPlot.html">Grid_VlnPlot</a>,
 which is a stacked version of <a href="https://satijalab.org/seurat/reference/vlnplot" class="external-link">VlnPlot</a> in a
 square grid, both also offering many more options than their
-<code>Seurat</code> counterparts:</p>
+<code>Seurat</code> package’s counterparts:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We will disable some parameters to be as close as possible from Seurat's DotPlot</span></span>
 <span><span class="co"># Due to the number of features, we will also lower dots size and flip the axis</span></span>
@@ -374,7 +376,8 @@ square grid, both also offering many more options than their
 <span>                cluster.idents <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                rotate.axis <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightOmicsTools_files/figure-html/dotplot-1.png" width="768" style="display: block; margin: auto;"></p>
-<p>Comparing it to <code>Seurat</code>’s default dotplot function:</p>
+<p>Comparing it to <code>Seurat</code> package’s default dotplot
+function:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Seurat's DotPlot function doesn't work well with named features, we will remove names</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
@@ -410,6 +413,17 @@ Analysis (GSEA) database to create and visualize signatures. Check the
 <a href="https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html">gene
 signatures from GSEA vignette</a> to learn more about the various usages
 of this function.</p>
+</div>
+<div class="section level3">
+<h3 id="differentially-expressed-genes-in-pseudotime-analysis">Differentially expressed genes in pseudotime analysis<a class="anchor" aria-label="anchor" href="#differentially-expressed-genes-in-pseudotime-analysis"></a>
+</h3>
+<p>Finally, <code>RightOmicsTools</code> provides helper and
+visualization functions to greatly speed up and facilitate differential
+gene expression in pseudotime analysis with the <code>tradeSeq</code>
+package, with a focus on a highly customizable heatmap visualization
+function. Head over to the <a href="https://alexis-varin.github.io/RightOmicsTools/articles/tradeSeq.html">DEG
+along pseudotime analysis vignette</a> for an in-depth look at these
+functions.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

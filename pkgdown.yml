@@ -4,8 +4,9 @@ pkgdown_sha: ~
 articles:
   GSEA: GSEA.html
   RightOmicsTools: RightOmicsTools.html
+  tradeSeq: tradeSeq.html
   Visualization: Visualization.html
-last_built: 2025-03-14T12:52Z
+last_built: 2025-03-24T12:52Z
 urls:
   reference: https://alexis-varin.github.io/RightOmicsTools/reference
   article: https://alexis-varin.github.io/RightOmicsTools/articles
