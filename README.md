@@ -34,7 +34,7 @@ from GSEA
 pathways](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html),
 and finally a last one showing helper functions designed to [facilitate
 differential gene expression in pseudotime analysis with the tradeSeq
-package](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html),
+package](https://alexis-varin.github.io/RightOmicsTools/articles/tradeSeq.html),
 with a focus on a heatmap visualization function of gene expression
 along pseudotime, an often requested feature.
 
