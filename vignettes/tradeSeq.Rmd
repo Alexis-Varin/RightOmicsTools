@@ -1,8 +1,8 @@
 ---
-title: "Trajectory analysis"
+title: "DEG along pseudotime"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Trajectory analysis}
+  %\VignetteIndexEntry{DEG along pseudotime}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
