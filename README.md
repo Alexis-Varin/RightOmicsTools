@@ -25,13 +25,18 @@ some examples of the functions available.
 
 ## Vignettes
 
-The package also contains two other vignettes, currently under
+This package also contains three other vignettes, currently under
 construction, one deep diving into [advanced customization of
 visualization
-functions](https://alexis-varin.github.io/RightOmicsTools/articles/Visualization.html)
-and another one demonstrating how to [create and visualize gene
-signatures from GSEA
-pathways](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html).
+functions](https://alexis-varin.github.io/RightOmicsTools/articles/Visualization.html),
+another one demonstrating how to [create and visualize gene signatures
+from GSEA
+pathways](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html),
+and finally a last one showing helper functions designed to [facilitate
+differential gene expression in pseudotime analysis with the tradeSeq
+package](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html),
+with a focus on a heatmap visualization function of gene expression
+along pseudotime, an often requested feature.
 
 ## Reference
 

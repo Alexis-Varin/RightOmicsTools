@@ -45,6 +45,8 @@ navbar:
           href: articles/Visualization.html
         - text: "Creating gene signatures from GSEA pathways"
           href: articles/GSEA.html
+        - text: "Analysis of DEG along pseudotime"
+          href: articles/tradeSeq.html
     issues:
       text: "Issues"
       href: https://github.com/Alexis-Varin/RightOmicsTools/issues

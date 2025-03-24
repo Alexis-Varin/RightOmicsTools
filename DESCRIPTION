@@ -33,6 +33,7 @@ Imports:
     stats,
     ComplexHeatmap,
     colorRamp2
+biocViews: Software
 URL: https://alexis-varin.github.io/RightOmicsTools/
 BugReports: https://github.com/Alexis-Varin/RightOmicsTools/issues
 Depends: 

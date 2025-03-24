@@ -1,8 +1,8 @@
 ---
-title: "Advanced Seurat's Visualization"
+title: "Trajectory analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Advanced Seurat's Visualization}
+  %\VignetteIndexEntry{Trajectory analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
