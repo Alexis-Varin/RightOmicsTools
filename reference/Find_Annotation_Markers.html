@@ -45,7 +45,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get the top markers for fast annotation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Alexis-Varin/RightOmicsTools/blob/v.2.2.0/R/Find_Annotation_Markers.R" class="external-link"><code>R/Find_Annotation_Markers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Alexis-Varin/RightOmicsTools/blob/main/R/Find_Annotation_Markers.R" class="external-link"><code>R/Find_Annotation_Markers.R</code></a></small>
       <div class="d-none name"><code>Find_Annotation_Markers.Rd</code></div>
     </div>
 
@@ -171,22 +171,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster DC against all other clusters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Finding markers for cluster Platelets against all other clusters</span>
 <span class="r-in"><span><span class="va">pbmc3k.markers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T   CD14+ Mono </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       "CCR7"       "LEF1"        "MAL"    "PIK3IP1"       "TCF7"      "FOLR3" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   CD14+ Mono   CD14+ Mono   CD14+ Mono   CD14+ Mono Memory CD4 T Memory CD4 T </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    "S100A12"     "S100A8"     "S100A9"       "CD14"     "CD40LG"       "AQP3" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Memory CD4 T Memory CD4 T Memory CD4 T            B            B            B </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "SUSD3"        "CD2"      "TRAT1"     "VPREB3"      "CD79A"      "FCRLA" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            B            B        CD8 T        CD8 T        CD8 T        CD8 T </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "TCL1A"      "FCER2"       "GZMK"       "GZMH"       "CD8A"       "CCL5" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        CD8 T FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono FCGR3A+ Mono </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      "KLRG1"        "CKB"     "CDKN1C"     "MS4A4A"       "HES4"      "BATF3" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           NK           NK           NK           NK           NK           DC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "AKR1C3"       "GZMB"     "SH2D1B"      "SPON2"     "FGFBP2"   "SERPINF1" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           DC           DC           DC           DC    Platelets    Platelets </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "FCER1A"      "CLIC2"    "CLEC10A"       "ENHO"     "LY6G6F"      "CLDN5" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Platelets    Platelets    Platelets </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        "GP9"     "ITGA2B"      "SEPT5" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Naive CD4 T     Naive CD4 T     Naive CD4 T     Naive CD4 T     Naive CD4 T </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          "CCR7"          "LEF1"           "MAL"       "PIK3IP1"          "TCF7" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      CD14+ Mono      CD14+ Mono      CD14+ Mono      CD14+ Mono      CD14+ Mono </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "FOLR3"       "S100A12"        "S100A8"        "S100A9"          "CD14" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Memory CD4 T    Memory CD4 T    Memory CD4 T    Memory CD4 T    Memory CD4 T </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        "CD40LG"          "AQP3"         "SUSD3"           "CD2"         "TRAT1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               B               B               B               B               B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        "VPREB3"         "CD79A"         "FCRLA"         "TCL1A"         "FCER2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           CD8 T           CD8 T           CD8 T           CD8 T           CD8 T </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          "GZMK"          "GZMH"          "CD8A"          "CCL5"         "KLRG1" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    FCGR3A+ Mono    FCGR3A+ Mono    FCGR3A+ Mono    FCGR3A+ Mono    FCGR3A+ Mono </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           "CKB"        "CDKN1C"        "MS4A4A"          "HES4"         "BATF3" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              NK              NK              NK              NK              NK </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        "AKR1C3"          "GZMB"        "SH2D1B"         "SPON2"        "FGFBP2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              DC              DC              DC              DC              DC </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      "SERPINF1"        "FCER1A"         "CLIC2"       "CLEC10A"          "ENHO" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Platelets       Platelets       Platelets       Platelets       Platelets </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        "LY6G6F" "RP11-879F14.2"         "CLDN5"           "GP9"        "ITGA2B" </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: parallelized FindAllMarkers</span></span></span>
 <span class="r-in"><span><span class="va">BPPARAM</span> <span class="op">&lt;-</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">registered</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>

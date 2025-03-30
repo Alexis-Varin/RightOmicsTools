@@ -45,7 +45,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Heatmap of average fitted GAM smoothers along pseudotime</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Alexis-Varin/RightOmicsTools/blob/v.2.2.0/R/heatmapSmoothers.R" class="external-link"><code>R/heatmapSmoothers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Alexis-Varin/RightOmicsTools/blob/main/R/heatmapSmoothers.R" class="external-link"><code>R/heatmapSmoothers.R</code></a></small>
       <div class="d-none name"><code>heatmapSmoothers.Rd</code></div>
     </div>
 
@@ -81,6 +81,8 @@
 <span>  data.colors <span class="op">=</span> <span class="st">"Inferno"</span>,</span>
 <span>  pseudotime.colors <span class="op">=</span> <span class="st">"Viridis"</span>,</span>
 <span>  clusters.colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  genes.names.size <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  genes.names.style <span class="op">=</span> <span class="st">"italic"</span>,</span>
 <span>  show.density.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  density.legend.name <span class="op">=</span> <span class="st">"Clusters"</span>,</span>
 <span>  heatmap.width <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -194,6 +196,14 @@
 
 <dt id="arg-clusters-colors">clusters.colors<a class="anchor" aria-label="anchor" href="#arg-clusters-colors"></a></dt>
 <dd><p>Character. The color names for each identity in <code>clusters</code>. If <code>NULL</code>, uses <span class="pkg">Seurat</span>'s default colors. Ignored if <code>show.density</code> = <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-genes-names-size">genes.names.size<a class="anchor" aria-label="anchor" href="#arg-genes-names-size"></a></dt>
+<dd><p>Numeric. The font size of the gene names. Set to 0 to remove them.</p></dd>
+
+
+<dt id="arg-genes-names-style">genes.names.style<a class="anchor" aria-label="anchor" href="#arg-genes-names-style"></a></dt>
+<dd><p>Character. The font face of the gene names. The <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/" class="external-link">Gene nomenclature</a> used by almost all scientific journals require that gene names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.</p></dd>
 
 
 <dt id="arg-show-density-legend">show.density.legend<a class="anchor" aria-label="anchor" href="#arg-show-density-legend"></a></dt>
