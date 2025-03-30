@@ -9,6 +9,10 @@ tradeSeqPreprocess(
   min.cells = 10,
   nb.genes = NULL,
   condition = NULL,
+  filter.mito = FALSE,
+  filter.ribo = FALSE,
+  filter.ncRNA = FALSE,
+  species = "human",
   plot.genes = TRUE,
   output.data = FALSE
 )
@@ -21,6 +25,14 @@ tradeSeqPreprocess(
 \item{nb.genes}{Numeric. The maximum number of genes to keep according to deviance, as computed by \code{scry{devianceFeatureSelection}} internally. If \code{NULL}, all genes are kept.}
 
 \item{condition}{Character or Factor. Either the name of a metadata present in \code{sds} (for example, 'treatment', 'disease', etc) to subset the object and separately remove lowly expressed genes, or the identities, as character or factor, of length equal to the number of cells in \code{sds}.}
+
+\item{filter.mito}{Logical. If \code{TRUE}, mitochondrial features will be filtered out.}
+
+\item{filter.ribo}{Logical. If \code{TRUE}, ribosomal features will be filtered out.}
+
+\item{filter.ncRNA}{Logical. If \code{TRUE}, non-coding RNA features will be filtered out.}
+
+\item{species}{Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.}
 
 \item{plot.genes}{Logical. If \code{TRUE}, a bar plot showing the number of genes removed according to the number of cells with at least 1 count or more is displayed.}
 

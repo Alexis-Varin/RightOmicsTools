@@ -27,6 +27,8 @@
 #' @param data.colors Character. Either two color names, corresponding to the lowest and highest values in the average fitted GAM smoothers and internally passed to \code{\link[colorRamp2]{colorRamp2}}, or the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available).
 #' @param pseudotime.colors Character. Either the name of a palette and internally passed to \code{hcl_palette} in \code{\link[colorRamp2]{colorRamp2}} (such as 'Inferno', 'Berlin', 'Viridis' etc, check \code{\link[grDevices]{hcl.pals}} for all palettes available), or two or more color names, corresponding to the lowest and highest pseudotime values, and additional color names beyond two will either be spaced at regular intervals if unnamed (for example, c('blue', 'green', 'yellow', 'red') will be spaced at 0%, 33%, 66% and 100%) or if named with a pseudotime value (for example, c('orange', "12" = 'white', 'royalblue')) or if named with 'knot' followed by a number (for example, 'knot2', 'knot4' etc), which correspond to the knots (\code{k}) input in \code{\link[tradeSeq]{fitGAM}} and which divide each lineage into segments; the function will extract the pseudotime values from each knot number (for example, c('firebrick', 'knot3' = 'lightgrey', 'gold')). Note that the first and last color names do not need to be named as they always correspond to the lowest and highest pseudotime values.
 #' @param clusters.colors Character. The color names for each identity in \code{clusters}. If \code{NULL}, uses \pkg{Seurat}'s default colors. Ignored if \code{show.density} = \code{FALSE}.
+#' @param genes.names.size Numeric. The font size of the gene names. Set to 0 to remove them.
+#' @param genes.names.style Character. The font face of the gene names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that gene names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.
 #' @param show.density.legend Logical. If \code{TRUE}, the cell density plot legend will be shown.
 #' @param density.legend.name Character. The name of the cell density plot legend.
 #' @param heatmap.width Numeric. The width of each heatmap.
@@ -76,6 +78,8 @@ heatmapSmoothers = function(sds,
                             data.colors = "Inferno",
                             pseudotime.colors = "Viridis",
                             clusters.colors = NULL,
+                            genes.names.size = 6,
+                            genes.names.style = "italic",
                             show.density.legend = TRUE,
                             density.legend.name = "Clusters",
                             heatmap.width = 3,
@@ -92,7 +96,7 @@ heatmapSmoothers = function(sds,
   }
 
   if (is.null(clusters) & isTRUE(show.density)) {
-    stop("Please provide the metadata name or identities to plot the cell densities from")
+    stop("Please provide the clusters, as metadata name or identities, to plot the cell densities from")
   }
 
   knots = ceiling(unname(metadata(models)$tradeSeq$knots)*100)/100
@@ -244,7 +248,6 @@ heatmapSmoothers = function(sds,
           }
           return(col)
         }))
-        print(pseudotime.colors)
         pseudo.col[[i]] = colorRamp2(breaks = as.numeric(names(pseudotime.colors)),
                                      colors = pseudotime.colors)(seq(min.lin, max.lin, length.out = nPoints))
       }
@@ -460,12 +463,13 @@ heatmapSmoothers = function(sds,
                         show_heatmap_legend = ifelse(i == 1, TRUE, FALSE),
                         cluster_columns = F,
                         show_column_names = F,
+                        show_row_names = ifelse(genes.names.size > 0, TRUE, FALSE),
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
-                        row_names_gp = gpar(fontsize = 4, fontface = "italic"),
+                        row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
                         column_title = ifelse(isFALSE(nocond),paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
                                               paste0("Lineage ", gsub("_.*","",lineages[i]))),
                         column_title_gp = gpar(fontsize = 20),
@@ -489,12 +493,13 @@ heatmapSmoothers = function(sds,
                         cluster_rows = cluster.genes,
                         cluster_columns = F,
                         show_column_names = F,
+                        show_row_names = ifelse(genes.names.size > 0, TRUE, FALSE),
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
-                        row_names_gp = gpar(fontsize = 4, fontface = "italic"),
+                        row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
                         column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
@@ -516,12 +521,13 @@ heatmapSmoothers = function(sds,
                         cluster_rows = cluster.genes,
                         cluster_columns = F,
                         show_column_names = F,
+                        show_row_names = ifelse(genes.names.size > 0, TRUE, FALSE),
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
-                        row_names_gp = gpar(fontsize = 4, fontface = "italic"),
+                        row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
                         column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
@@ -539,12 +545,13 @@ heatmapSmoothers = function(sds,
                         cluster_rows = cluster.genes,
                         cluster_columns = F,
                         show_column_names = F,
+                        show_row_names = ifelse(genes.names.size > 0, TRUE, FALSE),
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
-                        row_names_gp = gpar(fontsize = 4, fontface = "italic"),
+                        row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
                         column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,

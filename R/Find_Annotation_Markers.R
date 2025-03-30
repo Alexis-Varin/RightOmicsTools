@@ -193,7 +193,7 @@ Find_Annotation_Markers = function(seurat_object,
     if (isTRUE(filter.ncRNA)) {
       all.markers2[[i]] = all.markers2[[i]][!all.markers2[[i]]$feature %in% to.remove, , drop = FALSE]
       if (species == "human") {
-        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|^LNC|^RP[0-9]|-AS[0-9]$", x = all.markers2[[i]]$feature), , drop = FALSE]
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|-AS1$", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
     }
 

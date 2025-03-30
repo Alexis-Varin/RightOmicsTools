@@ -6,6 +6,10 @@
 #' @param min.cells Numeric. The minimum number of cells with 1 count or more to keep a gene.
 #' @param nb.genes Numeric. The maximum number of genes to keep according to deviance, as computed by \code{scry{devianceFeatureSelection}} internally. If \code{NULL}, all genes are kept.
 #' @param condition Character or Factor. Either the name of a metadata present in \code{sds} (for example, 'treatment', 'disease', etc) to subset the object and separately remove lowly expressed genes, or the identities, as character or factor, of length equal to the number of cells in \code{sds}.
+#' @param filter.mito Logical. If \code{TRUE}, mitochondrial features will be filtered out.
+#' @param filter.ribo Logical. If \code{TRUE}, ribosomal features will be filtered out.
+#' @param filter.ncRNA Logical. If \code{TRUE}, non-coding RNA features will be filtered out.
+#' @param species Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.
 #' @param plot.genes Logical. If \code{TRUE}, a bar plot showing the number of genes removed according to the number of cells with at least 1 count or more is displayed.
 #' @param output.data Logical. If \code{TRUE}, the function will return a \code{list} containing the filtered \pkg{SingleCellExperiment} object, a \code{data.frame} object with the number of cells with at least 1 count or more for each removed gene, and a \code{data.frame} object with the data used to build the bar plot.
 #'
@@ -24,10 +28,25 @@ tradeSeqPreprocess = function(sds,
                               min.cells = 10,
                               nb.genes = NULL,
                               condition = NULL,
+                              filter.mito = FALSE,
+                              filter.ribo = FALSE,
+                              filter.ncRNA = FALSE,
+                              species = "human",
                               plot.genes = TRUE,
                               output.data = FALSE) {
 
   nb.cells = NULL
+
+  if (species != "human" & species != "mouse") {
+    stop("Currently the function only accepts either 'human' or 'mouse' as species")
+  }
+
+  if (species == "human") {
+    to.remove = RightOmicsTools::ncRNA_human
+  }
+  if (species == "mouse") {
+    to.remove = RightOmicsTools::pseudogenes_mouse
+  }
 
   if (is.character(condition) || is.factor(condition)) {
     if (length(condition) == 1) {
@@ -55,16 +74,51 @@ tradeSeqPreprocess = function(sds,
   }
   genes.to.subset = unique(unlist(lapply(mat.to.subset, rownames)))
   sds2 = sds[setdiff(rownames(assays(sds)$counts), genes.to.subset), ]
-  message("Removed ", length(genes.to.subset), " genes, ", nrow(assays(sds2)$counts), " remaining (", round(nrow(assays(sds2)$counts)/nrow(assays(sds)$counts)*100, 2), "%)")
+  message("Removed ", length(genes.to.subset), " genes expressed in less than ", min.cells," cells, ", nrow(assays(sds2)$counts), " remaining (", round(nrow(assays(sds2)$counts)/nrow(assays(sds)$counts)*100, 2), "%)")
 
   stats.on.mat = as.data.frame(table(sum.mat$nb.cells, sum.mat$condition))
   colnames(stats.on.mat) = c("nb.cells", "condition", "nb.genes")
+
+  if (isTRUE(filter.ncRNA)) {
+    if (species == "human") {
+      to.remove = intersect(rownames(assays(sds2)$counts), c(to.remove, grep("^A[C,L,P][0-9]|^LINC[0-9]|^LNC|-AS1$", rownames(assays(sds2)$counts), value = TRUE)))
+    }
+    sds2 = sds2[setdiff(rownames(assays(sds2)$counts), to.remove), , drop = FALSE]
+    message("Removed ", length(to.remove), " non-coding genes, ", nrow(assays(sds2)$counts), " remaining (", round(nrow(assays(sds2)$counts)/nrow(assays(sds)$counts)*100, 2), "%)")
+    stats.on.mat = rbind(stats.on.mat, data.frame(nb.cells = "non-coding", condition = "Global", nb.genes = length(to.remove)))
+    genes.to.subset = c(genes.to.subset, to.remove)
+  }
+  if (isTRUE(filter.mito)) {
+    if (species == "human") {
+      mito.to.subset = grep("^MT-", rownames(assays(sds2)$counts), value = TRUE)
+    }
+    if (species == "mouse") {
+      mito.to.subset = grep("^mt-", rownames(assays(sds2)$counts), value = TRUE)
+    }
+    sds2 = sds2[setdiff(rownames(assays(sds2)$counts), mito.to.subset), , drop = FALSE]
+    message("Removed ", length(mito.to.subset), " mitochondrial genes, ", nrow(assays(sds2)$counts), " remaining (", round(nrow(assays(sds2)$counts)/nrow(assays(sds)$counts)*100, 2), "%)")
+    stats.on.mat = rbind(stats.on.mat, data.frame(nb.cells = "mito", condition = "Global", nb.genes = length(mito.to.subset)))
+    genes.to.subset = c(genes.to.subset, mito.to.subset)
+  }
+
+  if (isTRUE(filter.ribo)) {
+    if (species == "human") {
+      ribo.to.subset = grep("^RP[SL]", rownames(assays(sds2)$counts), value = TRUE)
+    }
+    if (species == "mouse") {
+      ribo.to.subset = grep("^Rp[sl]", rownames(assays(sds2)$counts), value = TRUE)
+    }
+    sds2 = sds2[setdiff(rownames(assays(sds2)$counts), ribo.to.subset), , drop = FALSE]
+    message("Removed ", length(ribo.to.subset), " ribosomal genes, ", nrow(assays(sds2)$counts), " remaining (", round(nrow(assays(sds2)$counts)/nrow(assays(sds)$counts)*100, 2), "%)")
+    stats.on.mat = rbind(stats.on.mat, data.frame(nb.cells = "ribo", condition = "Global", nb.genes = length(ribo.to.subset)))
+    genes.to.subset = c(genes.to.subset, ribo.to.subset)
+  }
 
   if (isTRUE(plot.genes)) {
     print(ggplot(data = stats.on.mat, aes(x = nb.cells, y = nb.genes, fill = condition)) +
             geom_bar(stat = "identity", col = "transparent", position = position_stack(reverse = T)) +
             scale_fill_manual(values = if (is.data.frame(condition)) if (isTRUE(grepl("Global", sum.mat$condition))) c("grey60",hue_pal()(length(unique(sum.mat$condition))-1)) else hue_pal()(length(unique(sum.mat$condition))) else "grey60") +
-            labs(x = paste0("Number of cells with 1 count or more per gene"), y = "Number of genes removed", fill = "Identity") +
+            labs(x = paste0("Number of cells with 1 count or more per gene, or condition"), y = "Number of genes removed", fill = "Identity") +
             geom_text(data = aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum), aes(y = nb.genes, label = nb.genes), vjust = -0.5) +
             annotate("text", x = max(as.numeric(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$nb.cells)), y = max(aggregate(nb.genes ~ nb.cells, data = stats.on.mat, sum)$nb.genes), label = paste0("n = ", length(genes.to.subset), " genes removed"), vjust = -0.5, hjust = 1) +
             scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
