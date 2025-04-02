@@ -219,7 +219,7 @@ curveSmoothers = function(models,
           strip.text.y = element_text(angle = 0)) +
     labs(x = "Pseudotime", y = "Log expression + 1", col = "") +
     scale_x_continuous(expand = expansion(mult = c(0, 0.05)), breaks = pretty_breaks()) +
-    scale_y_continuous(expand = c(0,0), breaks = pretty_breaks()) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05)), breaks = pretty_breaks()) +
     scale_color_manual(values = colors, labels = legend.names)
 
   for (var in loop.var) {
