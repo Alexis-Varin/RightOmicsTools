@@ -22,7 +22,7 @@ tradeSeqPreprocess(
 
 \item{min.cells}{Numeric. The minimum number of cells with 1 count or more to keep a gene.}
 
-\item{nb.genes}{Numeric. The maximum number of genes to keep according to deviance, as computed by \code{scry{devianceFeatureSelection}} internally. If \code{NULL}, all genes are kept.}
+\item{nb.genes}{Numeric. The maximum number of genes to keep according to deviance, as computed by \code{\link[scry]{devianceFeatureSelection}} internally. If \code{NULL}, all genes are kept.}
 
 \item{condition}{Character or Factor. Either the name of a metadata present in \code{sds} (for example, 'treatment', 'disease', etc) to subset the object and separately remove lowly expressed genes, or the identities, as character or factor, of length equal to the number of cells in \code{sds}.}
 

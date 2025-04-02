@@ -16,7 +16,7 @@ Mixture_File_Builder(
 )
 }
 \arguments{
-\item{objects}{A \code{data.frame}, {data.table} or {matrix} object or a mixed \code{list} of \code{data.frame}, \code{data.table} and/or \code{matrix} objects corresponding to bulk RNA-seq and/or microarray experiments, with genes as rows and gene names as row names or first column. A single object may contain multiple samples and/or experiments as columns as long as it contains a single gene names column as row names or first column (i.e. | gene | sample1 | sample2 | sample3 | etc). You may mix objects with different gene names order and number (for example, an object containing 13567 genes and another with 18458 genes).}
+\item{objects}{A \code{data.frame}, \code{data.table} or \code{matrix} object or a mixed \code{list} of \code{data.frame}, \code{data.table} and/or \code{matrix} objects corresponding to bulk RNA-seq and/or microarray experiments, with genes as rows and gene names as row names or first column. A single object may contain multiple samples and/or experiments as columns as long as it contains a single gene names column as row names or first column (i.e. | gene | sample1 | sample2 | sample3 | etc). You may mix objects with different gene names order and number (for example, an object containing 13567 genes and another with 18458 genes).}
 
 \item{files.path}{Character. The path to read txt, csv and/or tsv files corresponding to bulk RNA-seq or microarray experiments, with genes as rows and gene names as first column. A single file may contain multiple samples and/or experiments as columns as long as it contains a single gene names column as first column. You may mix files with different genes names order and number (for example, a file containing 21848 genes and another with 19457 genes).}
 

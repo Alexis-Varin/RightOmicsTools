@@ -1,6 +1,6 @@
 #' @title Scatterplot of log-transformed counts, and average fitted GAM smoother curves along pseudotime
 #'
-#' @description This function generates a scatterplot of the log-transformed counts, and displays on top the average fitted GAM smoother curves, computed using \code{\link[tradeSeq]{fitGAM}}, along pseudotime, and is a reworked version of \code{link[tradeSeq]{plotSmoothers}}, it allows for the plotting of multiple genes simultaneously, as well as selected lineages and conditions. Additionally, the scatterplot is rasterized to reduce the size of the output file and branching points may be displayed on each curve.
+#' @description This function generates a scatterplot of the log-transformed counts, and displays on top the average fitted GAM smoother curves, computed using \code{\link[tradeSeq]{fitGAM}}, along pseudotime, and is a reworked version of \code{\link[tradeSeq]{plotSmoothers}}, it allows for the plotting of multiple genes simultaneously, as well as selected lineages and conditions. Additionally, the scatterplot is rasterized to reduce the size of the output file and branching points may be displayed on each curve.
 #'
 #' @param models A \pkg{SingleCellExperiment} object containing the fitted GAM smoothers, computed using \code{\link[tradeSeq]{fitGAM}}, with or without \code{conditions} provided.
 #' @param predictSmooth.df A \code{data.frame} object containing the average fitted GAM smoothers, computed using \code{\link[tradeSeq]{predictSmooth}} with \code{nPoints}, \code{lineages} and \code{tidy} = \code{TRUE}. If \code{NULL}, average fitted GAM smoothers will be internally computed.
@@ -17,6 +17,11 @@
 #' @param facets.scales Character. (from \code{\link[ggplot2]{facet_grid}} documentation) Are scales shared across all facets (the default, "\code{fixed}"), or do they vary across rows ("\code{free_x}"), columns ("\code{free_y}"), or both rows and columns ("\code{free}")?
 #' @param facets.axes Character. (from \code{\link[ggplot2]{facet_grid}} documentation) Determines which axes will be drawn. When "\code{margins}" (default), axes will be drawn at the exterior margins. "\code{all_x}" and "\code{all_y}" will draw the respective axes at the interior panels too, whereas "\code{all}" will draw all axes at all panels.
 #' @param colors Character. The color names for each identity of the metadata excluded from \code{facets} among 'genes', 'lineages' and/or 'conditions' (for example, if \code{facets} = c('genes', 'conditions'), the \code{colors} will be for each of the \code{lineages} provided, or if \code{facets} = 'lineages', the \code{colors} will be for each of the \code{genes} times \code{conditions} provided). If \code{NULL}, uses \pkg{Seurat}'s default colors.
+#' @param axis.text.size Numeric. The font size of the pseudotime and log-transformed counts.
+#' @param axis.title.size Numeric. The font size of the axis title.
+#' @param facets.title.size Numeric. The font size of the facet titles.
+#' @param legend.names Character. You may provide custom names for the colors displayed in the legend, instead of the default names (for example, if \code{facets} = c('genes', 'conditions'), the color names will be 'Lineage' followed by the index of the \code{lineages} provided, you may replace these with any other names).
+#' @param legend.text.size Numeric. The font size of the legend text.
 #' @param nrow Numeric. The number of rows to use for the facets. Ignored if two metadata are provided to \code{facets}.
 #'
 #' @return A \pkg{ggplot2} object.
@@ -36,20 +41,26 @@
 #' @export
 
 curveSmoothers = function(models,
-                           predictSmooth.df = NULL,
-                           genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
-                           lineages,
-                           conditions = NULL,
-                           facets = c("genes", "conditions"),
-                           nPoints = 100,
-                           branch.points = NULL,
-                           points.size = 3,
-                           points.alpha = 0.8,
-                           curves.width = 1,
-                           curves.alpha = 1,
-                           facets.scales = "free",
-                           facets.axes = "all",colors = NULL,
-                           nrow = floor(sqrt(length(genes)))) {
+                          predictSmooth.df = NULL,
+                          genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
+                          lineages,
+                          conditions = NULL,
+                          facets = c("genes", "conditions"),
+                          nPoints = 100,
+                          branch.points = NULL,
+                          points.size = 3,
+                          points.alpha = 0.8,
+                          curves.width = 1,
+                          curves.alpha = 1,
+                          facets.scales = "free",
+                          facets.axes = "all",
+                          colors = NULL,
+                          axis.text.size = 9,
+                          axis.title.size = 11,
+                          facets.title.size = 9,
+                          legend.names = NULL,
+                          legend.text.size = 9,
+                          nrow = floor(sqrt(length(genes)))) {
 
   if (any(is.na(genes))) {
     stop("Please provide the genes names to plot the smoothed expression from")
@@ -189,6 +200,10 @@ curveSmoothers = function(models,
     }
   }
 
+  if (!is.character(legend.names)) {
+    legend.names = names(colors)
+  }
+
   p = ggplot(NULL, aes(x = time, y = yhat, col = factor(.data[["loop.var"]]))) +
     geom_scattermore(data = mat, pointsize = points.size + 0.1, alpha = points.alpha, show.legend = FALSE) +
     theme_bw() +
@@ -196,21 +211,25 @@ curveSmoothers = function(models,
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           axis.line = element_line(colour = "black"),
+          axis.text = element_text(size = axis.text.size),
+          axis.title = element_text(size = axis.title.size),
           strip.background = element_blank(),
+          legend.text = element_text(size = legend.text.size),
+          strip.text = element_text(size = facets.title.size),
           strip.text.y = element_text(angle = 0)) +
     labs(x = "Pseudotime", y = "Log expression + 1", col = "") +
     scale_x_continuous(expand = expansion(mult = c(0, 0.05)), breaks = pretty_breaks()) +
     scale_y_continuous(expand = c(0,0), breaks = pretty_breaks()) +
-    scale_color_manual(values = colors)
+    scale_color_manual(values = colors, labels = legend.names)
 
-  for (i in loop.var) {
+  for (var in loop.var) {
     p = p +
-      geom_borderline(data = predictSmooth.df[predictSmooth.df$loop.var %in% i, ],
+      geom_borderline(data = predictSmooth.df[predictSmooth.df$loop.var %in% var, ],
                       linewidth = curves.width + 0.1, borderwidth = 0.3, alpha = curves.alpha)
 
     if (is.data.frame(branch.points)) {
       p = p +
-        geom_point(data = branch.points[branch.points$loop.var %in% i, ],
+        geom_point(data = branch.points[branch.points$loop.var %in% var, ],
                    size = curves.width*2 + 0.1, show.legend = FALSE)
     }
   }

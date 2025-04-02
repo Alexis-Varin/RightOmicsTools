@@ -20,6 +20,11 @@ curveSmoothers(
   facets.scales = "free",
   facets.axes = "all",
   colors = NULL,
+  axis.text.size = 9,
+  axis.title.size = 11,
+  facets.title.size = 9,
+  legend.names = NULL,
+  legend.text.size = 9,
   nrow = floor(sqrt(length(genes)))
 )
 }
@@ -54,11 +59,21 @@ curveSmoothers(
 
 \item{colors}{Character. The color names for each identity of the metadata excluded from \code{facets} among 'genes', 'lineages' and/or 'conditions' (for example, if \code{facets} = c('genes', 'conditions'), the \code{colors} will be for each of the \code{lineages} provided, or if \code{facets} = 'lineages', the \code{colors} will be for each of the \code{genes} times \code{conditions} provided). If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
+\item{axis.text.size}{Numeric. The font size of the pseudotime and log-transformed counts.}
+
+\item{axis.title.size}{Numeric. The font size of the axis title.}
+
+\item{facets.title.size}{Numeric. The font size of the facet titles.}
+
+\item{legend.names}{Character. You may provide custom names for the colors displayed in the legend, instead of the default names (for example, if \code{facets} = c('genes', 'conditions'), the color names will be 'Lineage' followed by the index of the \code{lineages} provided, you may replace these with any other names).}
+
+\item{legend.text.size}{Numeric. The font size of the legend text.}
+
 \item{nrow}{Numeric. The number of rows to use for the facets. Ignored if two metadata are provided to \code{facets}.}
 }
 \value{
 A \pkg{ggplot2} object.
 }
 \description{
-This function generates a scatterplot of the log-transformed counts, and displays on top the average fitted GAM smoother curves, computed using \code{\link[tradeSeq]{fitGAM}}, along pseudotime, and is a reworked version of \code{link[tradeSeq]{plotSmoothers}}, it allows for the plotting of multiple genes simultaneously, as well as selected lineages and conditions. Additionally, the scatterplot is rasterized to reduce the size of the output file and branching points may be displayed on each curve.
+This function generates a scatterplot of the log-transformed counts, and displays on top the average fitted GAM smoother curves, computed using \code{\link[tradeSeq]{fitGAM}}, along pseudotime, and is a reworked version of \code{\link[tradeSeq]{plotSmoothers}}, it allows for the plotting of multiple genes simultaneously, as well as selected lineages and conditions. Additionally, the scatterplot is rasterized to reduce the size of the output file and branching points may be displayed on each curve.
 }

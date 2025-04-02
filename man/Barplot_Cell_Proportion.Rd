@@ -83,14 +83,14 @@ Barplot_Cell_Proportion(
 
 \item{nrow}{Numeric. The number of rows in the \code{patchwork} object. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.}
 
-\item{unique.group.plot}{Logical. If \code{TRUE}, the stacked bar plots will be gathered in a single \code{ggplot} object. Ignored if \code{group.by} = \code{NULL}.}
+\item{unique.group.plot}{Logical. If \code{TRUE}, the stacked bar plots will be gathered in a single \pkg{ggplot2} object. Ignored if \code{group.by} = \code{NULL}.}
 
-\item{unique.split.plot}{Logical. If \code{TRUE}, the \code{ggplot} objects will be gathered in a single \code{patchwork}. Ignored if \code{split.by} = \code{NULL}.}
+\item{unique.split.plot}{Logical. If \code{TRUE}, the \pkg{ggplot2} objects will be gathered in a single \code{patchwork}. Ignored if \code{split.by} = \code{NULL}.}
 
 \item{output.data}{Logical. If \code{TRUE}, the function will return a \code{data.frame} object or a \code{list} of \code{data.frame} objects of the cell proportions, instead of displaying anything.}
 }
 \value{
-A \code{ggplot} object, a \code{list} of \code{ggplot} objects, a \code{patchwork} object containing \code{ggplot} objects or a \code{list} of \code{patchwork} objects containing \code{ggplot} objects.
+A \pkg{ggplot2} object, a \code{list} of \pkg{ggplot2} objects, a \code{patchwork} object containing \pkg{ggplot2} objects or a \code{list} of \code{patchwork} objects containing \pkg{ggplot2} objects.
 }
 \description{
 This function generates a bar plot of the cell proportions from a \pkg{Seurat} object.

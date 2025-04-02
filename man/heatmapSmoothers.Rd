@@ -21,6 +21,7 @@ heatmapSmoothers(
   kmeans.repeats = 100,
   cluster.genes = TRUE,
   genes.kmeans = 1,
+  genes.kmeans.numbers.size = 11,
   outer.border = TRUE,
   pseudotime.type = "relative",
   density.type = "relative",
@@ -34,6 +35,7 @@ heatmapSmoothers(
   genes.names.style = "italic",
   show.density.legend = TRUE,
   density.legend.name = "Clusters",
+  heatmap.names = NULL,
   heatmap.width = 3,
   heatmap.height = length(genes),
   density.height = 1,
@@ -75,6 +77,8 @@ heatmapSmoothers(
 
 \item{genes.kmeans}{Numeric. The number of slices to use for gene K-means clustering.}
 
+\item{genes.kmeans.numbers.size}{Numeric. The font size of the gene K-means slice numbers. Set to 0 to remove them.}
+
 \item{outer.border}{Logical. If \code{TRUE}, the function will display an outer border around each heatmap.}
 
 \item{pseudotime.type}{Character. Determines the \code{pseudotime.colors} range scale of each lineage: either 'independent', where each lineage's \code{pseudotime.colors} range is independent of the others (i.e., minimum and maximum values are identical for each lineage, regardless of trajectory length differences), or 'relative', where each lineage's \code{pseudotime.colors} range is scaled relative to the highest pseudotime value (i.e., the longest trajectory, reflecting differences in trajectory lengths).}
@@ -100,6 +104,8 @@ heatmapSmoothers(
 \item{show.density.legend}{Logical. If \code{TRUE}, the cell density plot legend will be shown.}
 
 \item{density.legend.name}{Character. The name of the cell density plot legend.}
+
+\item{heatmap.names}{Character. You may provide custom names for each heatmap, instead of 'Lineage' followed by the index of the \code{lineages} and \code{conditions} provided.}
 
 \item{heatmap.width}{Numeric. The width of each heatmap.}
 

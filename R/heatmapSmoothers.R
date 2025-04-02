@@ -18,6 +18,7 @@
 #' @param kmeans.repeats Numeric. The number of runs to get a consensus K-means clustering. Ignored if \code{genes.kmeans} = 1.
 #' @param cluster.genes Logical or Function. If \code{TRUE}, the function will cluster the \code{genes}. You may also pass an \code{hclust} or \code{dendrogram} object which contains clustering.
 #' @param genes.kmeans Numeric. The number of slices to use for gene K-means clustering.
+#' @param genes.kmeans.numbers.size Numeric. The font size of the gene K-means slice numbers. Set to 0 to remove them.
 #' @param outer.border Logical. If \code{TRUE}, the function will display an outer border around each heatmap.
 #' @param pseudotime.type Character. Determines the \code{pseudotime.colors} range scale of each lineage: either 'independent', where each lineage's \code{pseudotime.colors} range is independent of the others (i.e., minimum and maximum values are identical for each lineage, regardless of trajectory length differences), or 'relative', where each lineage's \code{pseudotime.colors} range is scaled relative to the highest pseudotime value (i.e., the longest trajectory, reflecting differences in trajectory lengths).
 #' @param density.type Character. Determines the cell density scale (height) of each lineage: either 'independent,' where each lineage's cell density is independent of the others (i.e., the maximum density height is identical for each lineage, regardless of differences in cell counts contributing to a trajectory), or 'relative,' where each lineage's density scale is relative to the highest cell density (i.e., the highest cell counts, reflecting differences in the number of cells contributing to a trajectory).
@@ -31,6 +32,7 @@
 #' @param genes.names.style Character. The font face of the gene names. The \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7494048/}{Gene nomenclature} used by almost all scientific journals require that gene names are italicized, therefore the parameter is by default set to 'italic'. Use 'plain' to revert back to regular font face.
 #' @param show.density.legend Logical. If \code{TRUE}, the cell density plot legend will be shown.
 #' @param density.legend.name Character. The name of the cell density plot legend.
+#' @param heatmap.names Character. You may provide custom names for each heatmap, instead of 'Lineage' followed by the index of the \code{lineages} and \code{conditions} provided.
 #' @param heatmap.width Numeric. The width of each heatmap.
 #' @param heatmap.height Numeric. The height of each heatmap.
 #' @param density.height Numeric. The height of the cell density plot.
@@ -69,6 +71,7 @@ heatmapSmoothers = function(sds,
                             kmeans.repeats = 100,
                             cluster.genes = TRUE,
                             genes.kmeans = 1,
+                            genes.kmeans.numbers.size = 11,
                             outer.border = TRUE,
                             pseudotime.type = "relative",
                             density.type = "relative",
@@ -82,6 +85,7 @@ heatmapSmoothers = function(sds,
                             genes.names.style = "italic",
                             show.density.legend = TRUE,
                             density.legend.name = "Clusters",
+                            heatmap.names = NULL,
                             heatmap.width = 3,
                             heatmap.height = length(genes),
                             density.height = 1,
@@ -451,6 +455,10 @@ heatmapSmoothers = function(sds,
   ht = NULL
   ht.anno = list()
   for (i in 1:length(lineages)) {
+    if (!is.character(heatmap.names)) {
+      heatmap.names[i] = ifelse(isFALSE(nocond),paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
+                                paste0("Lineage ", gsub("_.*","",lineages[i])))
+    }
     if (isTRUE(show.pseudotime) & isTRUE(show.density)) {
       ht.anno[[i]] = HeatmapAnnotation(clust = anno_empty(height = unit(density.height, "inches"), border = F),
                                        pseudo = 1:length(pseudo.col[[i]]),
@@ -467,11 +475,11 @@ heatmapSmoothers = function(sds,
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
+                        row_title_gp = gpar(fontsize = genes.kmeans.numbers.size, col = ifelse(genes.kmeans.numbers.size > 0, "black", "white")),
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = ifelse(isFALSE(nocond),paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
-                                              paste0("Lineage ", gsub("_.*","",lineages[i]))),
+                        column_title = heatmap.names[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -497,10 +505,11 @@ heatmapSmoothers = function(sds,
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
+                        row_title_gp = gpar(fontsize = genes.kmeans.numbers.size, col = ifelse(genes.kmeans.numbers.size > 0, "black", "white")),
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
+                        column_title = heatmap.names[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -525,10 +534,11 @@ heatmapSmoothers = function(sds,
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
+                        row_title_gp = gpar(fontsize = genes.kmeans.numbers.size, col = ifelse(genes.kmeans.numbers.size > 0, "black", "white")),
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
+                        column_title = heatmap.names[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -549,10 +559,11 @@ heatmapSmoothers = function(sds,
                         row_km = ifelse(i == 1, genes.kmeans, 1),
                         row_km_repeats = ifelse(i == 1, kmeans.repeats, 1),
                         row_title_rot = 0,
+                        row_title_gp = gpar(fontsize = genes.kmeans.numbers.size, col = ifelse(genes.kmeans.numbers.size > 0, "black", "white")),
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
+                        column_title = heatmap.names[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -598,6 +609,7 @@ heatmapSmoothers = function(sds,
     grid.draw(htt)
   }
   else {
+    plot.new()
     htt = draw(ht,
                heatmap_legend_side = "bottom",
                align_heatmap_legend = "heatmap_center",

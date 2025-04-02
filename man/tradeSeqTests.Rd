@@ -47,14 +47,14 @@ tradeSeqTests(
 
 \item{BPPARAM}{A \code{\link[BiocParallel]{BiocParallelParam}} object to be used for parallelization. If \code{NULL} and \code{parallelized} = \code{TRUE}, the function will use a \code{\link[BiocParallel]{SerialParam}} object configured to use a single worker (core) and is therefore not parallelized, in order to prevent accidental use of large computation resources. Ignored if \code{parallelized} = \code{FALSE}.}
 
-\item{tidy}{Logical. If \code{TRUE}, a \code{list} is returned, with \code{data.frame} objects corresponding to each test divided into each global, pairwise and/or lineage comparison results. An adjusted p-value (False Discovery Rate) is also calculated and each \code{data.frame} object is ordered based on decreasing Waldstat.}
+\item{tidy}{Logical. If \code{TRUE}, a \code{list} is returned, with \code{data.frame} objects corresponding to each test divided into each \code{global}, \code{pairwise} and/or \code{lineages} comparison results. An adjusted p-value (False Discovery Rate) is also calculated and each \code{data.frame} object is ordered based on decreasing Waldstat.}
 
 \item{raw}{Logical. If \code{TRUE}, a \code{list} is returned, with \code{data.frame} objects corresponding to each test results.}
 
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 }
 \value{
-A \pkg{list}, with \code{data.frame} objects corresponding to each test results and/or \code{data.frame} objects corresponding to each test and each global, pairwise and/or lineage comparison results.
+A \code{list}, with \code{data.frame} objects corresponding to each test results and/or \code{data.frame} objects corresponding to each test and each \code{global}, \code{pairwise} and/or \code{lineages} comparison results.
 }
 \description{
 This function is a wrapper around \pkg{tradeSeq} test functions, such as \code{\link[tradeSeq]{associationTest}} or \code{\link[tradeSeq]{conditionTest}}, and allows multiple tests to be performed simultaneously, with all necessary parameters specified internally. It also organizes the output of each test into separate \code{list} elements, making it easy to access results. Finally, it calculates an adjusted p-value and orders based on decreasing Waldstat.

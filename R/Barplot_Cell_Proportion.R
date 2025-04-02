@@ -26,11 +26,11 @@
 #' @param show.legend Logical. If \code{TRUE}, shows the legend.
 #' @param prop.percent Logical. If \code{TRUE}, the cell proportions will be shown as a percentage of total cells for each identity. Ignored if \code{group.by} = \code{NULL}.
 #' @param nrow Numeric. The number of rows in the \code{patchwork} object. Ignored if \code{group.by} = \code{NULL} and \code{split.by} = \code{NULL}.
-#' @param unique.group.plot Logical. If \code{TRUE}, the stacked bar plots will be gathered in a single \code{ggplot} object. Ignored if \code{group.by} = \code{NULL}.
-#' @param unique.split.plot Logical. If \code{TRUE}, the \code{ggplot} objects will be gathered in a single \code{patchwork}. Ignored if \code{split.by} = \code{NULL}.
+#' @param unique.group.plot Logical. If \code{TRUE}, the stacked bar plots will be gathered in a single \pkg{ggplot2} object. Ignored if \code{group.by} = \code{NULL}.
+#' @param unique.split.plot Logical. If \code{TRUE}, the \pkg{ggplot2} objects will be gathered in a single \code{patchwork}. Ignored if \code{split.by} = \code{NULL}.
 #' @param output.data Logical. If \code{TRUE}, the function will return a \code{data.frame} object or a \code{list} of \code{data.frame} objects of the cell proportions, instead of displaying anything.
 #'
-#' @return A \code{ggplot} object, a \code{list} of \code{ggplot} objects, a \code{patchwork} object containing \code{ggplot} objects or a \code{list} of \code{patchwork} objects containing \code{ggplot} objects.
+#' @return A \pkg{ggplot2} object, a \code{list} of \pkg{ggplot2} objects, a \code{patchwork} object containing \pkg{ggplot2} objects or a \code{list} of \code{patchwork} objects containing \pkg{ggplot2} objects.
 #'
 #' @examples
 #' \dontshow{
