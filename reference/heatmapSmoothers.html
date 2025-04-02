@@ -72,6 +72,7 @@
 <span>  kmeans.repeats <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  cluster.genes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  genes.kmeans <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  genes.kmeans.numbers.size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  outer.border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pseudotime.type <span class="op">=</span> <span class="st">"relative"</span>,</span>
 <span>  density.type <span class="op">=</span> <span class="st">"relative"</span>,</span>
@@ -85,6 +86,7 @@
 <span>  genes.names.style <span class="op">=</span> <span class="st">"italic"</span>,</span>
 <span>  show.density.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  density.legend.name <span class="op">=</span> <span class="st">"Clusters"</span>,</span>
+<span>  heatmap.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  heatmap.width <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  heatmap.height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span>,</span>
 <span>  density.height <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -162,6 +164,10 @@
 <dd><p>Numeric. The number of slices to use for gene K-means clustering.</p></dd>
 
 
+<dt id="arg-genes-kmeans-numbers-size">genes.kmeans.numbers.size<a class="anchor" aria-label="anchor" href="#arg-genes-kmeans-numbers-size"></a></dt>
+<dd><p>Numeric. The font size of the gene K-means slice numbers. Set to 0 to remove them.</p></dd>
+
+
 <dt id="arg-outer-border">outer.border<a class="anchor" aria-label="anchor" href="#arg-outer-border"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, the function will display an outer border around each heatmap.</p></dd>
 
@@ -212,6 +218,10 @@
 
 <dt id="arg-density-legend-name">density.legend.name<a class="anchor" aria-label="anchor" href="#arg-density-legend-name"></a></dt>
 <dd><p>Character. The name of the cell density plot legend.</p></dd>
+
+
+<dt id="arg-heatmap-names">heatmap.names<a class="anchor" aria-label="anchor" href="#arg-heatmap-names"></a></dt>
+<dd><p>Character. You may provide custom names for each heatmap, instead of 'Lineage' followed by the index of the <code>lineages</code> and <code>conditions</code> provided.</p></dd>
 
 
 <dt id="arg-heatmap-width">heatmap.width<a class="anchor" aria-label="anchor" href="#arg-heatmap-width"></a></dt>
