@@ -609,7 +609,6 @@ heatmapSmoothers = function(sds,
     grid.draw(htt)
   }
   else {
-    plot.new()
     htt = draw(ht,
                heatmap_legend_side = "bottom",
                align_heatmap_legend = "heatmap_center",

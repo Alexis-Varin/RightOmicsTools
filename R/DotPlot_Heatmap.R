@@ -845,7 +845,6 @@ DotPlot_Heatmap = function(seurat_object,
       ...)
   }
 
-  plot.new()
   return(draw(ht,
               heatmap_legend_side = data.legend.side,
               align_heatmap_legend = "heatmap_center",
