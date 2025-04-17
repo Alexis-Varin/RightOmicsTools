@@ -20,7 +20,7 @@ This tutorial will guide you through the main functions of the `RightOmicsTools`
 
 ## Installation
 
-You first need to make sure you have Rtools installed, as some dependencies required for `RightOmicsTools` are not available on CRAN and require compilation. You may download Rtools from [here](https://cran.r-project.org/bin/windows/Rtools/).
+If you are using Windows, you first need to make sure you have Rtools installed, as some dependencies needed for `RightOmicsTools` require compilation. You may download Rtools from [here](https://cran.r-project.org/bin/windows/Rtools/).
 
 You may install the package from GitHub using the `devtools` package, which, if you don't have it, may be installed using the following command:
 
