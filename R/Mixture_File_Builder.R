@@ -40,20 +40,23 @@ Mixture_File_Builder = function(
     if (isTRUE(verbose))
       cat("Adding objects...","\n")
 
-    if (!inherits(class(objects), "list")) objects = list(objects)
+    if (!inherits(objects, "list")) objects = list(objects)
     objects = lapply(objects, function(x) {
       if (is.matrix(x)) x = as.data.frame(x)
-      x = setDT(x)
+      if (!inherits(x, "data.table") && !all(as.character(rownames(x)) == as.character(seq_len(nrow(x))))) setDT(x, keep.rownames = T) else setDT(x)
       })
     if (is.character(files.path))
-      dt.list = c(dt.list,objects)
+      dt.list = c(dt.list, objects)
     else
       dt.list = objects
   }
 
   if (isTRUE(verbose))
     cat("Building the data.table...","\n")
-  dt.list = lapply(dt.list, function(x) {names(x)[1] = "Gene"; x})
+  dt.list = lapply(dt.list, function(x) {
+    colnames(x)[1] = "Gene"
+    return(x)
+  })
   merged.dt = Reduce(function(x, y) merge(x, y, all = TRUE), dt.list)
   merged.dt[is.na(merged.dt)] = 0
 
