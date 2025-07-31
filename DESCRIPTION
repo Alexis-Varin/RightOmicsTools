@@ -1,6 +1,6 @@
 Package: RightOmicsTools
 Title: Complementary tools to manipulate and visualize single-cell RNA-seq data
-Version: 2.2.0
+Version: 2.2.1
 Authors@R: 
     person(given = "Alexis", family = "Varin", email = "alexis.varin@inserm.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-3474-7263"))

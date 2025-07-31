@@ -93,7 +93,7 @@ heatmapSmoothers = function(sds,
                             return.grob = TRUE,
                             ...) {
 
-  gene = lineage = xx = yy = count = NULL
+  gene = lineage = xx = yy = count = heatmap.named = NULL
 
   if (any(is.na(genes))) {
     stop("Please provide the gene names to plot the smoothed expression from")
@@ -266,6 +266,7 @@ heatmapSmoothers = function(sds,
   rownames(mat) = mat$gene
   mat$gene = NULL
   mat = log1p(mat)
+  mat = mat[match(genes, rownames(mat)), ]
 
   if (isTRUE(rescale)) {
     mat = t(apply(mat, 1, rescale, to = rescale.range))
@@ -456,8 +457,11 @@ heatmapSmoothers = function(sds,
   ht.anno = list()
   for (i in 1:length(lineages)) {
     if (!is.character(heatmap.names)) {
-      heatmap.names[i] = ifelse(isFALSE(nocond),paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
+      heatmap.named[i] = ifelse(isFALSE(nocond),paste0("Lineage ", gsub("_.*","",lineages[i]), "\n", gsub(".*_","",lineages[i])),
                                 paste0("Lineage ", gsub("_.*","",lineages[i])))
+    }
+    else {
+      heatmap.named[i] = heatmap.names[i]
     }
     if (isTRUE(show.pseudotime) & isTRUE(show.density)) {
       ht.anno[[i]] = HeatmapAnnotation(clust = anno_empty(height = unit(density.height, "inches"), border = F),
@@ -479,7 +483,7 @@ heatmapSmoothers = function(sds,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = heatmap.names[i],
+                        column_title = heatmap.named[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -509,7 +513,7 @@ heatmapSmoothers = function(sds,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = heatmap.names[i],
+                        column_title = heatmap.named[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -538,7 +542,7 @@ heatmapSmoothers = function(sds,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = heatmap.names[i],
+                        column_title = heatmap.named[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),
@@ -563,7 +567,7 @@ heatmapSmoothers = function(sds,
                         width = unit(heatmap.width, "inches"),
                         height = unit(heatmap.height/8, "inches"),
                         row_names_gp = gpar(fontsize = genes.names.size, fontface = genes.names.style),
-                        column_title = heatmap.names[i],
+                        column_title = heatmap.named[i],
                         column_title_gp = gpar(fontsize = 20),
                         col = data.colors,
                         name = paste0("ht",i),

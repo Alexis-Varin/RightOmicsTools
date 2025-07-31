@@ -16,7 +16,7 @@ Cell_Heatmap(
   rescale = FALSE,
   rescale.range = c(0, 3),
   rotate.axis = FALSE,
-  col.min = ifelse(isTRUE(scale), -2, 0),
+  col.min = ifelse(isTRUE(scale), -2, "q0"),
   col.max = ifelse(isTRUE(scale), 2, "q100"),
   data.colors = if (isTRUE(scale)) c("#35A5FF", "white", "red") else "Viridis",
   palette.reverse = FALSE,

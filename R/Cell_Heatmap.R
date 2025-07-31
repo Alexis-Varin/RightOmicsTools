@@ -101,7 +101,7 @@ Cell_Heatmap = function(seurat_object,
                         rescale = FALSE,
                         rescale.range = c(0, 3),
                         rotate.axis = FALSE,
-                        col.min = ifelse(isTRUE(scale), -2, 0),
+                        col.min = ifelse(isTRUE(scale), -2, "q0"),
                         col.max = ifelse(isTRUE(scale), 2, "q100"),
                         data.colors = if (isTRUE(scale)) c("#35A5FF","white","red") else "Viridis",
                         palette.reverse = FALSE,
@@ -282,7 +282,7 @@ Cell_Heatmap = function(seurat_object,
     stop("Less than two identities left, cannot compare features expression")
   }
   idents.removed = setdiff(ident.3, unique(cell.idents))
-  mat = mat[ , colSums(mat) > 0, drop = FALSE]
+  mat = mat[ , colSums(mat) != 0, drop = FALSE]
   if (ncol(mat) == 0) {
     stop("None of the features were expressed in any cells")
   }
