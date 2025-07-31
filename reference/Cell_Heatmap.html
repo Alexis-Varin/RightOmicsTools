@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 <span>  rescale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rescale.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  rotate.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  col.min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  col.min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span>, <span class="op">-</span><span class="fl">2</span>, <span class="st">"q0"</span><span class="op">)</span>,</span>
 <span>  col.max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span>, <span class="fl">2</span>, <span class="st">"q100"</span><span class="op">)</span>,</span>
 <span>  data.colors <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#35A5FF"</span>, <span class="st">"white"</span>, <span class="st">"red"</span><span class="op">)</span> <span class="kw">else</span> <span class="st">"Viridis"</span>,</span>
 <span>  palette.reverse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
