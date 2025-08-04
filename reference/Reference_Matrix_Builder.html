@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
 <span>  downsample.cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  automatic.downsample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  max.matrix.size <span class="op">=</span> <span class="fl">900</span>,</span>
+<span>  max.matrix.size <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  cell.barcodes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  file.name <span class="op">=</span> <span class="st">"Reference_Matrix"</span>,</span>
 <span>  file.format <span class="op">=</span> <span class="st">"txt"</span>,</span>
@@ -97,7 +97,7 @@
 
 
 <dt id="arg-layer">layer<a class="anchor" aria-label="anchor" href="#arg-layer"></a></dt>
-<dd><p>Character. The name of a layer (formerly known as slot) which stores the expression matrix. Must be 'counts' layer for CIBERSORTx. You may also specify another layer such as 'data' (normalized counts) or any other present in the specified <code>assay</code> if you want to extract the expression matrix for projects other than CIBERSORTx. If you have split layers the function will always join them before extracting the expression matrix.</p></dd>
+<dd><p>Character. The name of a layer (formerly known as slot) which stores the expression matrix. Must be 'counts' layer for CIBERSORTx. You may also specify another layer such as 'data' (log-normalized counts) or any other present in the specified <code>assay</code> if you want to extract the expression matrix for projects other than CIBERSORTx. If you have split layers the function will always join them before extracting the expression matrix. The raw counts matrix will be normalized to Counts Per Million (CPM) for CIBERSORTx.</p></dd>
 
 
 <dt id="arg-ident-">ident.1<a class="anchor" aria-label="anchor" href="#arg-ident-"></a></dt>
@@ -137,11 +137,11 @@
 
 
 <dt id="arg-downsample-object-first">downsample.object.first<a class="anchor" aria-label="anchor" href="#arg-downsample-object-first"></a></dt>
-<dd><p>Numeric. The number of cells to downsample from the entire <code>seurat_object</code> (not from each identity) before subsetting with <code>subset.ident.1</code> and/or <code>subset.ident.2</code>. If <code>NULL</code>, all cells are used.</p></dd>
+<dd><p>Numeric. The number of cells to downsample from the entire <code>seurat_object</code> (not from each identity) before subsetting with <code>subset.ident.1</code> and/or <code>subset.ident.2</code>. Please note that the relative proportion of each identity will be kept (for example if an identity is 10% of total cells, it will remain 10% after downsampling). If <code>NULL</code>, all cells are used.</p></dd>
 
 
 <dt id="arg-downsample-object-last">downsample.object.last<a class="anchor" aria-label="anchor" href="#arg-downsample-object-last"></a></dt>
-<dd><p>Numeric. The number of cells to downsample from the entire <code>seurat_object</code> after subsetting with <code>subset.ident.1</code> and/or <code>subset.ident.2</code>. If <code>NULL</code>, all cells are used.</p></dd>
+<dd><p>Numeric. The number of cells to downsample from the entire <code>seurat_object</code> after subsetting with <code>subset.ident.1</code> and/or <code>subset.ident.2</code>. Please note that the relative proportion of each identity will be kept (for example if an identity is 10% of total cells, it will remain 10% after downsampling). If <code>NULL</code>, all cells are used.</p></dd>
 
 
 <dt id="arg-downsample-cluster">downsample.cluster<a class="anchor" aria-label="anchor" href="#arg-downsample-cluster"></a></dt>
@@ -149,7 +149,7 @@
 
 
 <dt id="arg-automatic-downsample">automatic.downsample<a class="anchor" aria-label="anchor" href="#arg-automatic-downsample"></a></dt>
-<dd><p>Logical. If <code>TRUE</code>, automatically downsamples the <code>seurat_object</code> so that the Reference Matrix file written to disk would be just under the <code>max.matrix.size</code> limit (empirically estimated). Performed last. Ignored if <code>check.size</code> = <code>TRUE</code> or <code>write</code> = <code>FALSE</code>. Please <a href="https://github.com/Alexis-Varin/RightOmicsTools/issues" class="external-link">report an issue</a> if you see a significant difference between the file size written to disk and <code>max.matrix.size</code> (for example, <code>max.matrix.size</code> is set to 200 MB but the file is 400 MB or 100 MB).</p></dd>
+<dd><p>Logical. If <code>TRUE</code>, automatically downsamples the <code>seurat_object</code> (respecting the relative proportion of each <code>ident.1</code> identity, it is therefore similar to <code>downsample.object.first</code> and <code>downsample.object.last</code>) so that the Reference Matrix file written to disk would be just under the <code>max.matrix.size</code> limit (empirically estimated). Performed last. Ignored if <code>check.size</code> = <code>TRUE</code> or <code>write</code> = <code>FALSE</code>. Please <a href="https://github.com/Alexis-Varin/RightOmicsTools/issues" class="external-link">report an issue</a> if you see a significant difference between the file size written to disk and <code>max.matrix.size</code> (for example, <code>max.matrix.size</code> is set to 200 MB but the file is 400 MB or 100 MB).</p></dd>
 
 
 <dt id="arg-check-size">check.size<a class="anchor" aria-label="anchor" href="#arg-check-size"></a></dt>
@@ -190,7 +190,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>data.table</code> object containing the raw counts from the <code>seurat_object</code> or any other specified <code>assay</code> and <code>layer</code>, with cell identities or barcodes as column names and feature names as first column. If <code>write</code> = <code>TRUE</code>, the <code>data.table</code> object is also written to disk. If <code>check.size</code> = <code>TRUE</code>, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.</p>
+    <p>A <code>data.table</code> object containing the normalized counts to CPM from the <code>seurat_object</code> or any other specified <code>assay</code> and <code>layer</code>, with cell identities or barcodes as column names and feature names as first column. If <code>write</code> = <code>TRUE</code>, the <code>data.table</code> object is also written to disk. If <code>check.size</code> = <code>TRUE</code>, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.</p>
     </div>
 
     <div class="section level2">
@@ -214,28 +214,35 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Downsampling... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Subsetting... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Subsetting... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Extracting the expression matrix... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Normalizing and extracting the expression matrix... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Building the data.table... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Done. </span>
 <span class="r-in"><span><span class="va">refmat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Gene CD8 T_Donor_1 CD8 T_Donor_1 CD8 T_Donor_3 Naive CD4 T_Donor_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;char&gt;         &lt;num&gt;         &lt;num&gt;         &lt;num&gt;               &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    AL627309.1             0             0             0                   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    AP006222.2             0             0             0                   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: RP11-206L10.2             0             0             0                   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: RP11-206L10.9             0             0             0                   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     LINC00115             0             0             0                   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Gene Memory CD4 T_Donor_3 NK_Donor_3 Memory CD4 T_Donor_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;char&gt;                &lt;num&gt;      &lt;num&gt;                &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    AL627309.1                    0          0                    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    AP006222.2                    0          0                    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: RP11-206L10.2                    0          0                    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: RP11-206L10.9                    0          0                    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     LINC00115                    0          0                    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    CD8 T_Donor_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2:</span></span></span>
 <span class="r-in"><span><span class="fu">Reference_Matrix_Builder</span><span class="op">(</span><span class="va">pbmc3k</span>,</span></span>
 <span class="r-in"><span>                         check.size <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                         max.matrix.size <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Starting... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Extracting the expression matrix... </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Current estimated Reference Matrix size on CIBERSORTx web portal is between 71 and 74 MB :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Normalizing and extracting the expression matrix... </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Current estimated Reference Matrix size on CIBERSORTx web portal is between 84 and 87 MB :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Matrix of 2700 cells by 13714 features</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> You may want to downsample your Seurat object to 1429 cells for a Reference Matrix under 40 MB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> You may want to downsample your Seurat object to 1215 cells for a Reference Matrix under 40 MB</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
