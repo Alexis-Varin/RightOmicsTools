@@ -24,6 +24,7 @@ Reference_Matrix_Builder(
   check.size = FALSE,
   max.matrix.size = 500,
   cell.barcodes = FALSE,
+  output.cell.barcodes = FALSE,
   file.name = "Reference_Matrix",
   file.format = "txt",
   file.sep = "\\t",
@@ -71,6 +72,8 @@ Reference_Matrix_Builder(
 
 \item{cell.barcodes}{Logical. Must be \code{FALSE} for CIBERSORTx. If \code{TRUE}, keeps the cell barcodes and does not rename with cell identities, if you want to extract the expression matrix for projects other than CIBERSORTx.}
 
+\item{output.cell.barcodes}{Logical. If \code{TRUE}, outputs the cell barcodes used to build the Reference Matrix file.}
+
 \item{file.name}{Character. The name of the Reference Matrix file written to disk. Must not contain any space for CIBERSORTx, the function will automatically replace any space with an underscore. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}.}
 
 \item{file.format}{Character. The format of the Reference Matrix file written to disk. Must be 'txt' or 'tsv' for CIBERSORTx, but you may also specify 'csv' for example, if you want to extract the expression matrix for projects other than CIBERSORTx. Accepts any format the \code{\link[data.table]{fwrite}} function would accept. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}.}
@@ -84,7 +87,7 @@ Reference_Matrix_Builder(
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 }
 \value{
-A \code{data.table} object containing the normalized counts to CPM from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
+A \code{data.table} object containing the normalized counts to CPM from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column, or a \code{list} containing the \code{data.table} object as well as the cell barcodes used to build the Reference Matrix file. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
 }
 \description{
 This function builds a Reference Matrix for \href{https://cibersortx.stanford.edu/index.php}{CIBERSORTx} from a \pkg{Seurat} object.

@@ -21,6 +21,7 @@
 #' @param check.size Logical. If \code{TRUE}, prints the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
 #' @param max.matrix.size Numeric. The maximum size of the Reference Matrix file written to disk in MB. Will stop the function if the Reference Matrix file written to disk is estimated to be over this limit, or if \code{automatic.downsample} = \code{TRUE}, will downsample the \code{seurat_object} instead so that the Reference Matrix written to disk is under the size limit. Ignored if \code{write} = \code{FALSE}.
 #' @param cell.barcodes Logical. Must be \code{FALSE} for CIBERSORTx. If \code{TRUE}, keeps the cell barcodes and does not rename with cell identities, if you want to extract the expression matrix for projects other than CIBERSORTx.
+#' @param output.cell.barcodes Logical. If \code{TRUE}, outputs the cell barcodes used to build the Reference Matrix file.
 #' @param file.name Character. The name of the Reference Matrix file written to disk. Must not contain any space for CIBERSORTx, the function will automatically replace any space with an underscore. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}.
 #' @param file.format Character. The format of the Reference Matrix file written to disk. Must be 'txt' or 'tsv' for CIBERSORTx, but you may also specify 'csv' for example, if you want to extract the expression matrix for projects other than CIBERSORTx. Accepts any format the \code{\link[data.table]{fwrite}} function would accept. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}.
 #' @param file.sep Character. The separator to use in the Reference Matrix file written to disk. Must be tabulation for CIBERSORTx, but you may also specify a comma for example, if you want to extract the expression matrix for projects other than CIBERSORTx. Accepts any separator the \code{\link[data.table]{fwrite}} function would accept. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}.
@@ -28,7 +29,7 @@
 #' @param write Logical. If \code{TRUE}, writes to disk the Reference Matrix file. Ignored if \code{check.size} = \code{TRUE}.
 #' @param verbose Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.
 #'
-#' @return A \code{data.table} object containing the normalized counts to CPM from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
+#' @return A \code{data.table} object containing the normalized counts to CPM from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column, or a \code{list} containing the \code{data.table} object as well as the cell barcodes used to build the Reference Matrix file. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
 #'
 #' @examples
 #' \dontshow{
@@ -81,6 +82,7 @@ Reference_Matrix_Builder = function(
     check.size = FALSE,
     max.matrix.size = 500,
     cell.barcodes = FALSE,
+    output.cell.barcodes = FALSE,
     file.name = "Reference_Matrix",
     file.format = "txt",
     file.sep = "\t",
@@ -223,40 +225,46 @@ Reference_Matrix_Builder = function(
     gc(verbose = FALSE)
 
     if (projected.cell.number >= length(colnames(refmat))) {
-      return(cat("Current estimated Reference Matrix size on CIBERSORTx web portal is between ",
+      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is between ",
           trunc(refmat.size/1.01),
           " and ",
           trunc(refmat.size*1.02),
           " MB :",
           "\n",
           "Matrix of ",
-          length(colnames(refmat)),
+          ncol(refmat),
           " cells by ",
-          length(rownames(refmat)),
+          nrow(refmat),
           " features",
           "\n",
-          "You do not need to downsample your Seurat object","\n",sep=""))
+          "You do not need to downsample your Seurat object","\n",sep="")
     }
 
     else {
-      return(cat("Current estimated Reference Matrix size on CIBERSORTx web portal is between ",
+      props = as.data.frame(table(Idents(seurat_object)))
+      cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
+        WhichCells(seurat_object, idents = celltype, downsample = ceiling(projected.cell.number*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
+      })
+      seurat_object = seurat_object[,unlist(cell.list)]
+      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is between ",
           trunc(refmat.size/1.01),
           " and ",
           trunc(refmat.size*1.02),
           " MB :",
           "\n",
           "Matrix of ",
-          length(colnames(refmat)),
+          ncol(refmat),
           " cells by ",
-          length(rownames(refmat)),
+          nrow(refmat),
           " features",
           "\n",
           "You may want to downsample your Seurat object to ",
-          projected.cell.number,
-          " cells for a Reference Matrix under ",
+          ncol(seurat_object),
+          " cells for a Reference Matrix file under ",
           max.matrix.size,
-          " MB","\n",sep=""))
+          " MB","\n",sep="")
     }
+    return(ncol(seurat_object))
   }
 
   if (length(refmat) > 425000*max.matrix.size/1.02 & isTRUE(write)) {
@@ -274,28 +282,25 @@ Reference_Matrix_Builder = function(
                " Please subset identities, downsample the number of cells or set automatic.downsample = TRUE"))
     }
     else {
-      warning(paste0("The Reference Matrix file is projected to be over the size limit of ",
-      max.matrix.size,
-      " MB on CIBERSORTx web portal :",
-      "\n",
-      " Matrix of ",
-      ncol(refmat),
-      " cells by ",
-      nrow(refmat),
-      " features",
-      "\n",
-      " Automatically downsampling to ",
-      projected.cell.number,
-      " cells to be under the size limit..."),immediate. = T)
       props = as.data.frame(table(Idents(seurat_object)))
       cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
         WhichCells(seurat_object, idents = celltype, downsample = ceiling(projected.cell.number*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
       })
       seurat_object = seurat_object[,unlist(cell.list)]
+      warning(paste0("The Reference Matrix file is projected to be over the size limit of ",
+                     max.matrix.size,
+                     " MB on CIBERSORTx web portal :",
+                     "\n",
+                     " Matrix of ",
+                     ncol(refmat),
+                     " cells by ",
+                     nrow(refmat),
+                     " features",
+                     "\n",
+                     " Automatically downsampling to ",
+                     ncol(seurat_object),
+                     " cells to be under the size limit..."),immediate. = T)
       if (length(Layers(seurat_object, search = layer)) > 1) {
-        if (isTRUE(verbose)) {
-          cat("Joining layers...","\n")
-        }
         seurat_object[[assay]] = JoinLayers(seurat_object[[assay]])
       }
       if (layer == "counts" & assay == "RNA") {
@@ -314,6 +319,9 @@ Reference_Matrix_Builder = function(
   refmat = as.data.frame(refmat)
   refmat = cbind(Gene = rownames(refmat),refmat)
   refmat = setDT(refmat)
+  if (isTRUE(output.cell.barcodes)) {
+    cells.barcodes = colnames(refmat)[!colnames(refmat) == "Gene"]
+  }
   if (isFALSE(cell.barcodes)) {
     colnames(refmat) = c("Gene", as.character(seurat_object@active.ident))
   }
@@ -323,7 +331,7 @@ Reference_Matrix_Builder = function(
       write.path = getwd()
     }
     if (isTRUE(grepl(" ",file.name))) {
-      warning("The file name contains one or several spaces, renaming with underscores as CIBERSORTx will otherwise report an error with the Reference Matrix...",immediate. = T)
+      warning("The file name contains one or several spaces, renaming with underscores as CIBERSORTx will otherwise report an error with the Reference Matrix file...",immediate. = T)
       file.name = gsub(" ","_",file.name)
     }
     if (isTRUE(verbose)) {
@@ -339,5 +347,10 @@ Reference_Matrix_Builder = function(
   if (isTRUE(verbose)) {
     cat("Done.","\n")
   }
-  return(refmat)
+  if (isTRUE(output.cell.barcodes)) {
+    return(list("Reference Matrix" = refmat, "Cell barcodes used" = cells.barcodes))
+  }
+  else {
+    return(refmat)
+  }
 }
