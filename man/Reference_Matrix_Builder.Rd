@@ -22,7 +22,7 @@ Reference_Matrix_Builder(
   downsample.cluster = NULL,
   automatic.downsample = FALSE,
   check.size = FALSE,
-  max.matrix.size = 900,
+  max.matrix.size = 500,
   cell.barcodes = FALSE,
   file.name = "Reference_Matrix",
   file.format = "txt",
@@ -37,7 +37,7 @@ Reference_Matrix_Builder(
 
 \item{assay}{Character. The name of an assay containing the \code{layer} with the expression matrix. If the \code{seurat_object} contains multiple 'RNA' assays, you may specify which one to use (for example 'RNA2' if you have created a second 'RNA' assay you named 'RNA2'. See \href{https://satijalab.org/seurat/articles/seurat5_essential_commands.html#create-seurat-or-assay-objects}{Seurat v5 vignettes} for more information). You may also use another assay, such as 'SCT', if you want to extract the expression matrix for projects other than CIBERSORTx.}
 
-\item{layer}{Character. The name of a layer (formerly known as slot) which stores the expression matrix. Must be 'counts' layer for CIBERSORTx. You may also specify another layer such as 'data' (normalized counts) or any other present in the specified \code{assay} if you want to extract the expression matrix for projects other than CIBERSORTx. If you have split layers the function will always join them before extracting the expression matrix.}
+\item{layer}{Character. The name of a layer (formerly known as slot) which stores the expression matrix. Must be 'counts' layer for CIBERSORTx. You may also specify another layer such as 'data' (log-normalized counts) or any other present in the specified \code{assay} if you want to extract the expression matrix for projects other than CIBERSORTx. If you have split layers the function will always join them before extracting the expression matrix. The raw counts matrix will be normalized to Counts Per Million (CPM) for CIBERSORTx.}
 
 \item{ident.1}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) from which to extract identities as column names in the Reference Matrix. If \code{NULL}, uses the active.ident metadata.}
 
@@ -57,13 +57,13 @@ Reference_Matrix_Builder(
 
 \item{subset.ident.2.invert}{Logical. If \code{TRUE}, inverts the selection from \code{subset.ident.2} (for example, if \code{subset.ident.2} = c('patient1','patient4') and \code{subset.ident.2.invert} = \code{TRUE}, all identities except patient 1 and patient 4 will be kept). Ignored if \code{subset.ident.2} = \code{NULL} or \code{ident.2} = \code{NULL}.}
 
-\item{downsample.object.first}{Numeric. The number of cells to downsample from the entire \code{seurat_object} (not from each identity) before subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. If \code{NULL}, all cells are used.}
+\item{downsample.object.first}{Numeric. The number of cells to downsample from the entire \code{seurat_object} (not from each identity) before subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10\% of total cells, it will remain 10\% after downsampling). If \code{NULL}, all cells are used.}
 
-\item{downsample.object.last}{Numeric. The number of cells to downsample from the entire \code{seurat_object} after subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. If \code{NULL}, all cells are used.}
+\item{downsample.object.last}{Numeric. The number of cells to downsample from the entire \code{seurat_object} after subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10\% of total cells, it will remain 10\% after downsampling). If \code{NULL}, all cells are used.}
 
 \item{downsample.cluster}{Numeric. The number of cells to downsample from each \code{ident.1} identity. Will be performed after \code{downsample.object.last}. If \code{NULL}, all cells are used.}
 
-\item{automatic.downsample}{Logical. If \code{TRUE}, automatically downsamples the \code{seurat_object} so that the Reference Matrix file written to disk would be just under the \code{max.matrix.size} limit (empirically estimated). Performed last. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}. Please \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{report an issue} if you see a significant difference between the file size written to disk and \code{max.matrix.size} (for example, \code{max.matrix.size} is set to 200 MB but the file is 400 MB or 100 MB).}
+\item{automatic.downsample}{Logical. If \code{TRUE}, automatically downsamples the \code{seurat_object} (respecting the relative proportion of each \code{ident.1} identity, it is therefore similar to \code{downsample.object.first} and \code{downsample.object.last}) so that the Reference Matrix file written to disk would be just under the \code{max.matrix.size} limit (empirically estimated). Performed last. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}. Please \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{report an issue} if you see a significant difference between the file size written to disk and \code{max.matrix.size} (for example, \code{max.matrix.size} is set to 200 MB but the file is 400 MB or 100 MB).}
 
 \item{check.size}{Logical. If \code{TRUE}, prints the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.}
 
@@ -84,7 +84,7 @@ Reference_Matrix_Builder(
 \item{verbose}{Logical. If \code{FALSE}, does not print progress messages and output, but warnings and errors will still be printed.}
 }
 \value{
-A \code{data.table} object containing the raw counts from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
+A \code{data.table} object containing the normalized counts to CPM from the \code{seurat_object} or any other specified \code{assay} and \code{layer}, with cell identities or barcodes as column names and feature names as first column. If \code{write} = \code{TRUE}, the \code{data.table} object is also written to disk. If \code{check.size} = \code{TRUE}, will instead print the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
 }
 \description{
 This function builds a Reference Matrix for \href{https://cibersortx.stanford.edu/index.php}{CIBERSORTx} from a \pkg{Seurat} object.
