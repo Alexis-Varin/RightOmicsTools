@@ -19,6 +19,7 @@ Reference_Matrix_Builder(
   subset.ident.2.invert = FALSE,
   downsample.object.first = NULL,
   downsample.object.last = NULL,
+  downsample.threshold = 2,
   downsample.cluster = NULL,
   automatic.downsample = FALSE,
   check.size = FALSE,
@@ -61,6 +62,8 @@ Reference_Matrix_Builder(
 \item{downsample.object.first}{Numeric. The number of cells to downsample from the entire \code{seurat_object} (not from each identity) before subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10\% of total cells, it will remain 10\% after downsampling). If \code{NULL}, all cells are used.}
 
 \item{downsample.object.last}{Numeric. The number of cells to downsample from the entire \code{seurat_object} after subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10\% of total cells, it will remain 10\% after downsampling). If \code{NULL}, all cells are used.}
+
+\item{downsample.threshold}{Numeric. The minimum number of cells (1 or more) or the minimum proportion of cells (between 0 and 1) to take in each cluster when downsampling. Ignored for \code{downsample.cluster}.}
 
 \item{downsample.cluster}{Numeric. The number of cells to downsample from each \code{ident.1} identity. Will be performed after \code{downsample.object.last}. If \code{NULL}, all cells are used.}
 

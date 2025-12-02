@@ -97,7 +97,11 @@ curveSmoothers = function(models,
   }
   predictSmooth.df = predictSmooth.df[predictSmooth.df$lineage %in% lineages, , drop = FALSE]
   mat = cbind(mat, do.call(cbind, lapply(lineages, function(lin) {
-    df = as.data.frame(colData(models)$tradeSeq$dm[ , grep(lin, colnames(colData(models)$tradeSeq$dm)), drop = FALSE])
+    df = as.data.frame(colData(models)$tradeSeq$dm[ , grep(paste0("^t",lin, "|", "^l", lin), colnames(colData(models)$tradeSeq$dm)), drop = FALSE])
+    if (ncol(df) > 2) {
+      all.cond = apply(df[ , grep("^l", colnames(df))], 1, function(row) sum(row))
+      df = cbind(df[ , grep("^t", colnames(df)), drop = FALSE], setNames(data.frame(all.cond), paste0("l", lin)))
+    }
     df[ , grep("^t", colnames(df))] = ifelse(df[ , grep("^l", colnames(df))] == 0, NA, df[ , grep("^t", colnames(df))])
     return(setNames(data.frame(df[ , grep("^t", colnames(df)), drop = TRUE]), paste0("Lineage", lin)))
   })))

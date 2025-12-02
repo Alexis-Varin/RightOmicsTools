@@ -16,6 +16,7 @@
 #' @param subset.ident.2.invert Logical. If \code{TRUE}, inverts the selection from \code{subset.ident.2} (for example, if \code{subset.ident.2} = c('patient1','patient4') and \code{subset.ident.2.invert} = \code{TRUE}, all identities except patient 1 and patient 4 will be kept). Ignored if \code{subset.ident.2} = \code{NULL} or \code{ident.2} = \code{NULL}.
 #' @param downsample.object.first Numeric. The number of cells to downsample from the entire \code{seurat_object} (not from each identity) before subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10% of total cells, it will remain 10% after downsampling). If \code{NULL}, all cells are used.
 #' @param downsample.object.last Numeric. The number of cells to downsample from the entire \code{seurat_object} after subsetting with \code{subset.ident.1} and/or \code{subset.ident.2}. Please note that the relative proportion of each identity will be kept (for example if an identity is 10% of total cells, it will remain 10% after downsampling). If \code{NULL}, all cells are used.
+#' @param downsample.threshold Numeric. The minimum number of cells (1 or more) or the minimum proportion of cells (between 0 and 1) to take in each cluster when downsampling. Ignored for \code{downsample.cluster}.
 #' @param downsample.cluster Numeric. The number of cells to downsample from each \code{ident.1} identity. Will be performed after \code{downsample.object.last}. If \code{NULL}, all cells are used.
 #' @param automatic.downsample Logical. If \code{TRUE}, automatically downsamples the \code{seurat_object} (respecting the relative proportion of each \code{ident.1} identity, it is therefore similar to \code{downsample.object.first} and \code{downsample.object.last}) so that the Reference Matrix file written to disk would be just under the \code{max.matrix.size} limit (empirically estimated). Performed last. Ignored if \code{check.size} = \code{TRUE} or \code{write} = \code{FALSE}. Please \href{https://github.com/Alexis-Varin/RightOmicsTools/issues}{report an issue} if you see a significant difference between the file size written to disk and \code{max.matrix.size} (for example, \code{max.matrix.size} is set to 200 MB but the file is 400 MB or 100 MB).
 #' @param check.size Logical. If \code{TRUE}, prints the estimated size of the Reference Matrix file that would be written to disk and the number of cells to downsample if need be.
@@ -77,6 +78,7 @@ Reference_Matrix_Builder = function(
     subset.ident.2.invert = FALSE,
     downsample.object.first = NULL,
     downsample.object.last = NULL,
+    downsample.threshold = 2,
     downsample.cluster = NULL,
     automatic.downsample = FALSE,
     check.size = FALSE,
@@ -133,8 +135,18 @@ Reference_Matrix_Builder = function(
       warning("downsample.object.first is greater than the number of cells in seurat_object, no downsampling was done",immediate. = T)
     }
     props = as.data.frame(table(Idents(seurat_object)))
-    cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
-      WhichCells(seurat_object, idents = celltype, downsample = ceiling(downsample.object.first*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
+    props = props[order(props$Freq), ]
+    if (downsample.object.first < 1) downsample.object.first = ncol(seurat_object)*downsample.object.first
+    cell.list = lapply(props$Var1, function(celltype) {
+      downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
+      if (downsample.threshold2 == props[props$Var1 == celltype, "Freq"]) warning("downsample.threshold is higher than the number of cells in ", celltype, ", taking all cells;\nThis will prevent accurate validation of the signature matrix with pseudobulk simulation;\nConsider adjusting downsample.threshold to half the smallest cell cluster or subset these clusters")
+      downsample = round(downsample.object.first*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
+      if (downsample < downsample.threshold2) {
+        warning("Less than ",downsample.threshold2," cells downsampled in ",celltype,", adjusting to the downsample.threshold",immediate. = T)
+        downsample.object.first <<- downsample.object.first + downsample - downsample.threshold2
+        downsample = downsample.threshold2
+      }
+      WhichCells(seurat_object, idents = celltype, downsample = downsample)
     })
     seurat_object = seurat_object[,unlist(cell.list)]
   }
@@ -167,8 +179,18 @@ Reference_Matrix_Builder = function(
       warning("downsample.object.last is greater than the number of cells in seurat_object, no downsampling was done",immediate. = T)
     }
     props = as.data.frame(table(Idents(seurat_object)))
-    cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
-      WhichCells(seurat_object, idents = celltype, downsample = ceiling(downsample.object.last*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
+    props = props[order(props$Freq), ]
+    if (downsample.object.last < 1) downsample.object.last = ncol(seurat_object)*downsample.object.last
+    cell.list = lapply(props$Var1, function(celltype) {
+      downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
+      if (downsample.threshold2 == props[props$Var1 == celltype, "Freq"]) warning("downsample.threshold is higher than the number of cells in ", celltype, ", taking all cells;\nThis will prevent accurate validation of the signature matrix with pseudobulk simulation;\nConsider adjusting downsample.threshold to half the smallest cell cluster or subset these clusters")
+      downsample = round(downsample.object.last*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
+      if (downsample < downsample.threshold2) {
+        warning("Less than ",downsample.threshold2," cells downsampled in ",celltype,", adjusting to the downsample.threshold",immediate. = T)
+        downsample.object.last = downsample.object.last + downsample - downsample.threshold2
+        downsample = downsample.threshold2
+      }
+      WhichCells(seurat_object, idents = celltype, downsample = downsample)
     })
     seurat_object = seurat_object[,unlist(cell.list)]
   }
@@ -242,8 +264,15 @@ Reference_Matrix_Builder = function(
 
     else {
       props = as.data.frame(table(Idents(seurat_object)))
-      cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
-        WhichCells(seurat_object, idents = celltype, downsample = ceiling(projected.cell.number*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
+      props = props[order(props$Freq), ]
+      cell.list = lapply(props$Var1, function(celltype) {
+        downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
+        downsample = round(projected.cell.number*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
+        if (downsample < downsample.threshold2) {
+          projected.cell.number = projected.cell.number + downsample - downsample.threshold2
+          downsample = downsample.threshold2
+        }
+        WhichCells(seurat_object, idents = celltype, downsample = downsample)
       })
       seurat_object = seurat_object[,unlist(cell.list)]
       cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is between ",
@@ -282,11 +311,19 @@ Reference_Matrix_Builder = function(
                " Please subset identities, downsample the number of cells or set automatic.downsample = TRUE"))
     }
     else {
+      projected.cell.number2 = projected.cell.number
       props = as.data.frame(table(Idents(seurat_object)))
-      cell.list = lapply(unique(Idents(seurat_object)), function(celltype) {
-        WhichCells(seurat_object, idents = celltype, downsample = ceiling(projected.cell.number*props[props$Var1 == celltype,"Freq"]/ncol(seurat_object)))
+      props = props[order(props$Freq), ]
+      cell.list = lapply(props$Var1, function(celltype) {
+        downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
+        downsample = round(projected.cell.number2*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
+        if (downsample < downsample.threshold2) {
+          projected.cell.number2 = projected.cell.number2 + downsample - downsample.threshold2
+          downsample = downsample.threshold2
+        }
+        WhichCells(seurat_object, idents = celltype, downsample = downsample)
       })
-      seurat_object = seurat_object[,unlist(cell.list)]
+      seurat_object2 = seurat_object[,unlist(cell.list)]
       warning(paste0("The Reference Matrix file is projected to be over the size limit of ",
                      max.matrix.size,
                      " MB on CIBERSORTx web portal :",
@@ -298,8 +335,19 @@ Reference_Matrix_Builder = function(
                      " features",
                      "\n",
                      " Automatically downsampling to ",
-                     ncol(seurat_object),
+                     ncol(seurat_object2),
                      " cells to be under the size limit..."),immediate. = T)
+      cell.list = lapply(props$Var1, function(celltype) {
+        downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
+        if (downsample.threshold2 == props[props$Var1 == celltype, "Freq"]) warning("downsample.threshold is higher than the number of cells in ", celltype, ", taking all cells;\nThis will prevent accurate validation of the signature matrix with pseudobulk simulation;\nConsider adjusting downsample.threshold to half the smallest cell cluster or subset these clusters")
+        downsample = round(projected.cell.number*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
+        if (downsample < downsample.threshold2) {
+          warning("Less than ",downsample.threshold2," cells downsampled in ",celltype,", adjusting to the downsample.threshold",immediate. = T)
+          projected.cell.number = projected.cell.number + downsample - downsample.threshold2
+          downsample = downsample.threshold2
+        }
+        WhichCells(seurat_object, idents = celltype, downsample = downsample)
+      })
       if (length(Layers(seurat_object, search = layer)) > 1) {
         seurat_object[[assay]] = JoinLayers(seurat_object[[assay]])
       }
