@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,7 +195,7 @@ number of genes (nFeature_RNA) and counts (nCount_RNA) per cell:</p>
 <span>        panel.grid.major <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        axis.line <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/mito-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/mito-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>Based on the plot above, we will filter out cells with more than 10%
 mitochondrial genes as well as cells with less than 400 or more than
 2500 genes:</p>
@@ -250,7 +250,7 @@ steps:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot UMAP</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/umap-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/umap-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>Interestingly, compared to the <code>Seurat</code> package tutorial,
 we are missing the platelet cluster, which is likely due to the fact
 that we have a more drastic cutoff for the number of genes per cell, at
@@ -313,14 +313,14 @@ of the <code>ggplot2</code> package:</p>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
 <span>             cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>             show.idents.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/heatmap-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/heatmap-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>Let’s compare it to <code>Seurat</code> package’s default heatmap
 function:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>          features <span class="op">=</span> <span class="va">annotation.markers</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/doheatmap-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/doheatmap-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>While both heatmaps look similar aside from colors, which is on
 purpose with default parameters, <a href="https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.html">Cell_Heatmap</a>
 truly shines in complexity by offering more customization options, such
@@ -346,7 +346,7 @@ and display the UMAP:</p>
 <span><span class="co"># Plot UMAP with cell types</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/annotation-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/annotation-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="cell-proportion">Cell proportion<a class="anchor" aria-label="anchor" href="#cell-proportion"></a>
@@ -361,7 +361,7 @@ with the possibility to group and/or split based on other metadata, and
 many other parameters:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Barplot_Cell_Proportion.html">Barplot_Cell_Proportion</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/proportion-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/proportion-1.png" class="r-plt" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="other-visualizations">Other visualizations<a class="anchor" aria-label="anchor" href="#other-visualizations"></a>
@@ -382,7 +382,7 @@ square grid, both also offering many more options than their
 <span>                cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                cluster.idents <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                rotate.axis <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/dotplot-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/dotplot-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>Comparing it to <code>Seurat</code> package’s default dotplot
 function:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -391,12 +391,12 @@ function:</p>
 <span>        features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">annotation.markers</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">RotatedAxis</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/dotplot_seurat_display-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/dotplot_seurat_display-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 <p>And finally, the grid violin plot:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Grid_VlnPlot.html">Grid_VlnPlot</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span><span class="op">)</span></span></code></pre></div>
-<p><img src="RightOmicsTools_files/figure-html/grid_vln-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="RightOmicsTools_files/figure-html/grid_vln-1.png" class="r-plt" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -444,7 +444,7 @@ functions.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

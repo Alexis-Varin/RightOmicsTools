@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,6 +70,7 @@
 <span>  subset.ident.2.invert <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  downsample.object.first <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  downsample.object.last <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  downsample.threshold <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  downsample.cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  automatic.downsample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -143,6 +144,10 @@
 
 <dt id="arg-downsample-object-last">downsample.object.last<a class="anchor" aria-label="anchor" href="#arg-downsample-object-last"></a></dt>
 <dd><p>Numeric. The number of cells to downsample from the entire <code>seurat_object</code> after subsetting with <code>subset.ident.1</code> and/or <code>subset.ident.2</code>. Please note that the relative proportion of each identity will be kept (for example if an identity is 10% of total cells, it will remain 10% after downsampling). If <code>NULL</code>, all cells are used.</p></dd>
+
+
+<dt id="arg-downsample-threshold">downsample.threshold<a class="anchor" aria-label="anchor" href="#arg-downsample-threshold"></a></dt>
+<dd><p>Numeric. The minimum number of cells (1 or more) or the minimum proportion of cells (between 0 and 1) to take in each cluster when downsampling. Ignored for <code>downsample.cluster</code>.</p></dd>
 
 
 <dt id="arg-downsample-cluster">downsample.cluster<a class="anchor" aria-label="anchor" href="#arg-downsample-cluster"></a></dt>
@@ -247,8 +252,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Normalizing and extracting the expression matrix... </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Current estimated Reference Matrix file size on CIBERSORTx web portal is between 84 and 87 MB :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Matrix of 2700 cells by 13714 features</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> You may want to downsample your Seurat object to 1220 cells for a Reference Matrix file under 40 MB</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> You may want to downsample your Seurat object to 1216 cells for a Reference Matrix file under 40 MB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1216</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -261,7 +266,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

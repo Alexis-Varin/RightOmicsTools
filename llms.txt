@@ -1,0 +1,114 @@
+# RightOmicsTools
+
+This package is a set of tools to facilitate the analysis of single-cell
+RNA-seq data in R. It is currently in development and will be updated
+regularly with new functions and improvements.
+
+## Quick start
+
+You can get started with `RightOmicsTools` by following the [tutorial
+vignette](https://alexis-varin.github.io/RightOmicsTools/articles/RightOmicsTools.html)
+which will guide you through package installation as well as showing
+some examples of the functions available.
+
+## Vignettes
+
+This package also contains three other vignettes, currently under
+construction, one deep diving into [advanced customization of
+visualization
+functions](https://alexis-varin.github.io/RightOmicsTools/articles/Visualization.html),
+another one demonstrating how to [create and visualize gene signatures
+from GSEA
+pathways](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.html),
+and finally a last one showing helper functions designed to [facilitate
+differential gene expression in pseudotime analysis with the tradeSeq
+package](https://alexis-varin.github.io/RightOmicsTools/articles/tradeSeq.html),
+with a focus on a heatmap visualization function of gene expression
+along pseudotime, an often requested feature.
+
+## Reference
+
+All functions are [documented on
+GitHub](https://alexis-varin.github.io/RightOmicsTools/reference/index.html)
+and help may also be accessed using `?` in R.
+
+## Citation
+
+Finally, if you would like to cite this package, you will find all
+information
+[here](https://alexis-varin.github.io/RightOmicsTools/authors.html).
+
+# Package index
+
+## Seurat
+
+### Visualization
+
+- [`Barplot_Cell_Proportion()`](https://alexis-varin.github.io/RightOmicsTools/reference/Barplot_Cell_Proportion.md)
+  : Bar plot of the cell proportions in each identity
+- [`DotPlot_Heatmap()`](https://alexis-varin.github.io/RightOmicsTools/reference/DotPlot_Heatmap.md)
+  : Dot plot or heatmap of average gene expression in each identity
+- [`Cell_Heatmap()`](https://alexis-varin.github.io/RightOmicsTools/reference/Cell_Heatmap.md)
+  : Heatmap of gene expression in each cell
+- [`Grid_VlnPlot()`](https://alexis-varin.github.io/RightOmicsTools/reference/Grid_VlnPlot.md)
+  : Square stacked violin plot of gene expression in each identity
+
+### Helper Functions
+
+- [`Right_DietSeurat()`](https://alexis-varin.github.io/RightOmicsTools/reference/Right_DietSeurat.md)
+  : Reduce the size of a Seurat object
+- [`GSEA_Signatures()`](https://alexis-varin.github.io/RightOmicsTools/reference/GSEA_Signatures.md)
+  : Gene signatures from GSEA-MSigDB pathways
+- [`Find_Annotation_Markers()`](https://alexis-varin.github.io/RightOmicsTools/reference/Find_Annotation_Markers.md)
+  : Get the top markers for fast annotation
+
+## tradeSeq
+
+### Visualization
+
+- [`curveSmoothers()`](https://alexis-varin.github.io/RightOmicsTools/reference/curveSmoothers.md)
+  : Scatterplot of log-transformed counts, and average fitted GAM
+  smoother curves along pseudotime
+- [`heatmapSmoothers()`](https://alexis-varin.github.io/RightOmicsTools/reference/heatmapSmoothers.md)
+  : Heatmap of average fitted GAM smoothers along pseudotime
+
+### Helper Functions
+
+- [`tradeSeqPreprocess()`](https://alexis-varin.github.io/RightOmicsTools/reference/tradeSeqPreprocess.md)
+  :
+
+  Remove genes with very low expression for tradeSeq analysis
+
+- [`tradeSeqTests()`](https://alexis-varin.github.io/RightOmicsTools/reference/tradeSeqTests.md)
+  :
+
+  Perform tradeSeq tests in parallel
+
+## CIBERSORTx
+
+- [`Reference_Matrix_Builder()`](https://alexis-varin.github.io/RightOmicsTools/reference/Reference_Matrix_Builder.md)
+  : Builder of CIBERSORTx Reference Matrix
+- [`Mixture_File_Builder()`](https://alexis-varin.github.io/RightOmicsTools/reference/Mixture_File_Builder.md)
+  : Builder of CIBERSORTx Mixture File
+
+## Data
+
+- [`Right_Data()`](https://alexis-varin.github.io/RightOmicsTools/reference/Right_Data.md)
+  : Data loader for vignettes
+- [`ncRNA_human`](https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.md)
+  : Human non-coding genes
+- [`pseudogenes_mouse`](https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.md)
+  : Mouse pseudogenes
+
+# Articles
+
+### All vignettes
+
+- [Gene signatures from
+  GSEA](https://alexis-varin.github.io/RightOmicsTools/articles/GSEA.md):
+- [Getting Started with
+  RightOmicsTools](https://alexis-varin.github.io/RightOmicsTools/articles/RightOmicsTools.md):
+- [DEG along
+  pseudotime](https://alexis-varin.github.io/RightOmicsTools/articles/tradeSeq.md):
+- [Advanced Seurat's
+  Visualization](https://alexis-varin.github.io/RightOmicsTools/articles/Visualization.md):
