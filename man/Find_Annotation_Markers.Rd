@@ -43,7 +43,7 @@ Find_Annotation_Markers(
 
 \item{filter.ncRNA}{Logical. If \code{TRUE}, non-coding RNA features will be filtered out.}
 
-\item{species}{Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.}
+\item{species}{Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_mouse.html}{ncRNA_mouse} and built from \href{https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M38/gencode.vM38.annotation.gtf.gz}{the gencode M38 annotation gtf} will be used. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.}
 
 \item{parallelized}{Logical. If \code{TRUE}, \code{\link[Seurat]{FindMarkers}} will be parallelized using \pkg{BiocParallel}. Please note that parallelization is complex and depends on your operating system (Windows users might not see a gain or might even experience a slowdown).}
 
@@ -63,7 +63,7 @@ Find_Annotation_Markers(
 A \code{data.frame} object or a \code{list} of \code{data.frame} objects containing the \code{\link[Seurat]{FindMarkers}} results, or a \code{list} of features names, or feature names.
 }
 \description{
-This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as filtering of pseudogenes in mouse. It may also directly return the top X markers for each identity.
+This function is a wrapper around \code{\link[Seurat]{FindMarkers}} that allows for parallelization and filtering of mitochondrial, ribosomal and non-coding RNA features in human, as well as in mouse. It may also directly return the top X markers for each identity.
 }
 \examples{
 \dontshow{

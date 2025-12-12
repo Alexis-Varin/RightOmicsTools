@@ -6,10 +6,14 @@ ncRNA_human = strsplit(ncRNA_human, ",")
 ncRNA_human = unlist(ncRNA_human)
 usethis::use_data(ncRNA_human)
 
-# Raw data (all pseudogenes from all tissues in Mus musculus) were downloaded from https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0 as a txt file
-pseudogenes_mouse = data.frame(data.table::fread("'dreamBase-Expressions_of_psedogenes_2024_05_10_am_28_51.txt"), row.names = 1)
-pseudogenes_mouse = rownames(pseudogenes_mouse)
-usethis::use_data(pseudogenes_mouse)
+# All non-coding RNA symbols in Mus musculus
+gtf_url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M38/gencode.vM38.annotation.gtf.gz"
+gtf_file = "gencode.vM38.annotation.gtf.gz"
+download.file(gtf_url, gtf_file)
+gtf = rtracklayer::import(gtf_file)
+gene_df = as.data.frame(gtf)
+ncRNA_mouse = unique(gene_df[!gene_df$gene_type %in% c("protein_coding", "IG_C_gene", "IG_D_gene", "IG_J_gene", "IG_LV_gene", "IG_V_gene", "Mt_rRNA", "Mt_tRNA", "TR_C_gene", "TR_D_gene", "TR_J_gene", "TR_V_gene"), ]$gene_name)
+usethis::use_data(ncRNA_mouse)
 
 # Data preparation for pbmc3k, to speed up data loading with Right_Data
 utils::download.file("https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz",

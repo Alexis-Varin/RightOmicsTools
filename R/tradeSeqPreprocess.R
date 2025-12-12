@@ -9,7 +9,7 @@
 #' @param filter.mito Logical. If \code{TRUE}, mitochondrial features will be filtered out.
 #' @param filter.ribo Logical. If \code{TRUE}, ribosomal features will be filtered out.
 #' @param filter.ncRNA Logical. If \code{TRUE}, non-coding RNA features will be filtered out.
-#' @param species Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', only pseudogenes will be filtered out based on a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html}{pseudogenes_mouse} and built from \href{https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0}{dreamBase2 database}. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.
+#' @param species Character. The species name to filter out non-coding RNA features. If 'human', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html}{ncRNA_human} built from \href{https://www.genenames.org/data/genegroup/#!/group/475}{genenames database} will be used as reference. If 'mouse', a dataset named \href{https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_mouse.html}{ncRNA_mouse} and built from \href{https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M38/gencode.vM38.annotation.gtf.gz}{the gencode M38 annotation gtf} will be used. These datasets are loaded with \pkg{RightOmicsTools} and may be checked for more information.
 #' @param plot.genes Logical. If \code{TRUE}, a bar plot showing the number of genes removed according to the number of cells with at least 1 count or more is displayed.
 #' @param output.data Logical. If \code{TRUE}, the function will return a \code{list} containing the filtered \pkg{SingleCellExperiment} object, a \code{data.frame} object with the number of cells with at least 1 count or more for each removed gene, and a \code{data.frame} object with the data used to build the bar plot.
 #'
@@ -45,7 +45,7 @@ tradeSeqPreprocess = function(sds,
     to.remove = RightOmicsTools::ncRNA_human
   }
   if (species == "mouse") {
-    to.remove = RightOmicsTools::pseudogenes_mouse
+    to.remove = RightOmicsTools::ncRNA_mouse
   }
 
   if (is.character(condition) || is.factor(condition)) {

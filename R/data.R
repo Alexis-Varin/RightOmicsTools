@@ -8,12 +8,12 @@
 #' @source <https://www.genenames.org/data/genegroup/#!/group/475>
 "ncRNA_human"
 
-#' @title Mouse pseudogenes
+#' @title Mouse non-coding genes
 #'
-#' @description A character vector containing all known pseudogenes in the mouse genome as of may 10th 2024.
+#' @description A character vector containing all known non-coding RNA genes in the mouse genome as of december 12th 2025.
 #'
-#' @format ## pseudogenes_mouse
-#' A character vector with 3663 elements.
+#' @format ## ncRNA_mouse
+#' A character vector with 55720 elements.
 #'
-#' @source <https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0>
-"pseudogenes_mouse"
+#' @source <https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M38/gencode.vM38.annotation.gtf.gz>
+"ncRNA_mouse"
