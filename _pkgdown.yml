@@ -32,7 +32,7 @@ reference:
   - contents:
     - Right_Data
     - ncRNA_human
-    - pseudogenes_mouse
+    - ncRNA_mouse
 
 navbar:
   structure:
@@ -58,4 +58,4 @@ navbar:
       href: authors.html
     about:
       text: "About"
-      href: https://orcid.org/0009-0001-3474-7263
+      href: https://Alexis-Varin.github.io
