@@ -57,5 +57,5 @@
   : Data loader for vignettes
 - [`ncRNA_human`](https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.md)
   : Human non-coding genes
-- [`pseudogenes_mouse`](https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.md)
-  : Mouse pseudogenes
+- [`ncRNA_mouse`](https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_mouse.md)
+  : Mouse non-coding genes

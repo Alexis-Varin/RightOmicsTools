@@ -99,13 +99,12 @@ tradeSeqPreprocess(
   [ncRNA_human](https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_human.html)
   built from [genenames
   database](https://www.genenames.org/data/genegroup/#!/group/475) will
-  be used as reference. If 'mouse', only pseudogenes will be filtered
-  out based on a dataset named
-  [pseudogenes_mouse](https://alexis-varin.github.io/RightOmicsTools/reference/pseudogenes_mouse.html)
-  and built from [dreamBase2
-  database](https://rna.sysu.edu.cn/dreamBase2/scrna.php?SClade=mammal&SOrganism=mm10&SDataId=0&SProteinID=0).
-  These datasets are loaded with RightOmicsTools and may be checked for
-  more information.
+  be used as reference. If 'mouse', a dataset named
+  [ncRNA_mouse](https://alexis-varin.github.io/RightOmicsTools/reference/ncRNA_mouse.html)
+  and built from [the gencode M38 annotation
+  gtf](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M38/gencode.vM38.annotation.gtf.gz)
+  will be used. These datasets are loaded with RightOmicsTools and may
+  be checked for more information.
 
 - plot.genes:
 
