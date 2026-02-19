@@ -195,6 +195,9 @@ Find_Annotation_Markers = function(seurat_object,
       if (species == "human") {
         all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^A[C,L,P][0-9]|^LINC[0-9]|-AS1$", x = all.markers2[[i]]$feature), , drop = FALSE]
       }
+      if (species == "mouse") {
+        all.markers2[[i]] = all.markers2[[i]][!grepl(pattern = "^Gm[0-9]|Rik", x = all.markers2[[i]]$feature), , drop = FALSE]
+      }
     }
 
     if (isTRUE(filter.mito)) {

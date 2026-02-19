@@ -61,6 +61,7 @@
 #' @import Seurat
 #' @import SeuratObject
 #' @import data.table
+#' @importFrom Matrix nnzero
 #' @export
 
 Reference_Matrix_Builder = function(
@@ -239,18 +240,17 @@ Reference_Matrix_Builder = function(
     refmat = LayerData(seurat_object2, assay = assay, layer = layer)
   }
 
-  projected.cell.number = trunc(425000/1.02*max.matrix.size/length(rownames(refmat)))
+  refmat.size = (length(refmat) * 2 + nnzero(refmat) * 15.36 + sum(nchar(rownames(refmat))) + sum(nchar(colnames(refmat)))) / 1e6
+
+  projected.cell.number = floor(max.matrix.size/refmat.size*ncol(refmat))
 
   if (isTRUE(check.size)) {
-    refmat.size = length(refmat)/425000/1.02
 
     gc(verbose = FALSE)
 
-    if (projected.cell.number >= length(colnames(refmat))) {
-      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is between ",
-          trunc(refmat.size/1.01),
-          " and ",
-          trunc(refmat.size*1.02),
+    if (projected.cell.number >= ncol(refmat)) {
+      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is ",
+          trunc(refmat.size),
           " MB :",
           "\n",
           "Matrix of ",
@@ -275,10 +275,8 @@ Reference_Matrix_Builder = function(
         WhichCells(seurat_object, idents = celltype, downsample = downsample)
       })
       seurat_object = seurat_object[,unlist(cell.list)]
-      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is between ",
-          trunc(refmat.size/1.01),
-          " and ",
-          trunc(refmat.size*1.02),
+      cat("Current estimated Reference Matrix file size on CIBERSORTx web portal is ",
+          trunc(refmat.size),
           " MB :",
           "\n",
           "Matrix of ",
@@ -296,7 +294,7 @@ Reference_Matrix_Builder = function(
     return(ncol(seurat_object))
   }
 
-  if (length(refmat) > 425000*max.matrix.size/1.02 & isTRUE(write)) {
+  if (refmat.size > max.matrix.size & isTRUE(write)) {
     if (isFALSE(automatic.downsample)) {
       stop(paste0("The Reference Matrix file is projected to be over the size limit of ",
                max.matrix.size,
@@ -348,6 +346,7 @@ Reference_Matrix_Builder = function(
         }
         WhichCells(seurat_object, idents = celltype, downsample = downsample)
       })
+      seurat_object = seurat_object[,unlist(cell.list)]
       if (length(Layers(seurat_object, search = layer)) > 1) {
         seurat_object[[assay]] = JoinLayers(seurat_object[[assay]])
       }
