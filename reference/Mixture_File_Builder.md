@@ -54,16 +54,15 @@ Mixture_File_Builder(
   Character. The format of the Mixture File written to disk. Must be
   'txt' or 'tsv' for CIBERSORTx, but you may also specify 'csv' for
   example, for projects other than CIBERSORTx. Accepts any format the
-  [`fwrite`](https://rdatatable.gitlab.io/data.table/reference/fwrite.html)
-  function would accept. Ignored if `write` = `FALSE`.
+  [`fwrite`](https://rdrr.io/pkg/data.table/man/fwrite.html) function
+  would accept. Ignored if `write` = `FALSE`.
 
 - file.sep:
 
   Character. The separator to use in the Mixture File written to disk.
   Must be tabulation for CIBERSORTx, but you may also specify a comma
   for example, for projects other than CIBERSORTx. Accepts any separator
-  the
-  [`fwrite`](https://rdatatable.gitlab.io/data.table/reference/fwrite.html)
+  the [`fwrite`](https://rdrr.io/pkg/data.table/man/fwrite.html)
   function would accept. Ignored if `write` = `FALSE`.
 
 - write.path:

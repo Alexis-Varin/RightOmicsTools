@@ -207,9 +207,8 @@ Reference_Matrix_Builder(
   Must be 'txt' or 'tsv' for CIBERSORTx, but you may also specify 'csv'
   for example, if you want to extract the expression matrix for projects
   other than CIBERSORTx. Accepts any format the
-  [`fwrite`](https://rdatatable.gitlab.io/data.table/reference/fwrite.html)
-  function would accept. Ignored if `check.size` = `TRUE` or `write` =
-  `FALSE`.
+  [`fwrite`](https://rdrr.io/pkg/data.table/man/fwrite.html) function
+  would accept. Ignored if `check.size` = `TRUE` or `write` = `FALSE`.
 
 - file.sep:
 
@@ -217,9 +216,8 @@ Reference_Matrix_Builder(
   to disk. Must be tabulation for CIBERSORTx, but you may also specify a
   comma for example, if you want to extract the expression matrix for
   projects other than CIBERSORTx. Accepts any separator the
-  [`fwrite`](https://rdatatable.gitlab.io/data.table/reference/fwrite.html)
-  function would accept. Ignored if `check.size` = `TRUE` or `write` =
-  `FALSE`.
+  [`fwrite`](https://rdrr.io/pkg/data.table/man/fwrite.html) function
+  would accept. Ignored if `check.size` = `TRUE` or `write` = `FALSE`.
 
 - write.path:
 
@@ -297,8 +295,8 @@ Reference_Matrix_Builder(pbmc3k,
                          max.matrix.size = 40)
 #> Starting... 
 #> Normalizing and extracting the expression matrix... 
-#> Current estimated Reference Matrix file size on CIBERSORTx web portal is between 84 and 87 MB :
+#> Current estimated Reference Matrix file size on CIBERSORTx web portal is 109 MB :
 #> Matrix of 2700 cells by 13714 features
-#> You may want to downsample your Seurat object to 1216 cells for a Reference Matrix file under 40 MB
-#> [1] 1216
+#> You may want to downsample your Seurat object to 988 cells for a Reference Matrix file under 40 MB
+#> [1] 988
 ```
