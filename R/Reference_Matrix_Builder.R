@@ -188,7 +188,7 @@ Reference_Matrix_Builder = function(
       downsample = round(downsample.object.last*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
       if (downsample < downsample.threshold2) {
         warning("Less than ",downsample.threshold2," cells downsampled in ",celltype,", adjusting to the downsample.threshold",immediate. = T)
-        downsample.object.last = downsample.object.last + downsample - downsample.threshold2
+        downsample.object.last <<- downsample.object.last + downsample - downsample.threshold2
         downsample = downsample.threshold2
       }
       WhichCells(seurat_object, idents = celltype, downsample = downsample)
@@ -216,8 +216,8 @@ Reference_Matrix_Builder = function(
     Idents(seurat_object) = "ident.1"
   }
 
-   if (length(Layers(seurat_object, search = layer)) > 1) {
-     if (isTRUE(verbose)) {
+  if (length(Layers(seurat_object, search = layer)) > 1) {
+    if (isTRUE(verbose)) {
       cat("Joining layers...","\n")
     }
     seurat_object2 = seurat_object
@@ -269,7 +269,7 @@ Reference_Matrix_Builder = function(
         downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
         downsample = round(projected.cell.number*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
         if (downsample < downsample.threshold2) {
-          projected.cell.number = projected.cell.number + downsample - downsample.threshold2
+          projected.cell.number <<- projected.cell.number + downsample - downsample.threshold2
           downsample = downsample.threshold2
         }
         WhichCells(seurat_object, idents = celltype, downsample = downsample)
@@ -297,16 +297,16 @@ Reference_Matrix_Builder = function(
   if (refmat.size > max.matrix.size & isTRUE(write)) {
     if (isFALSE(automatic.downsample)) {
       stop(paste0("The Reference Matrix file is projected to be over the size limit of ",
-               max.matrix.size,
-               " MB on CIBERSORTx web portal :",
-               "\n",
-               " Matrix of ",
-               ncol(refmat),
-               " cells by ",
-               nrow(refmat),
-               " features",
-               "\n",
-               " Please subset identities, downsample the number of cells or set automatic.downsample = TRUE"))
+                  max.matrix.size,
+                  " MB on CIBERSORTx web portal :",
+                  "\n",
+                  " Matrix of ",
+                  ncol(refmat),
+                  " cells by ",
+                  nrow(refmat),
+                  " features",
+                  "\n",
+                  " Please subset identities, downsample the number of cells or set automatic.downsample = TRUE"))
     }
     else {
       projected.cell.number2 = projected.cell.number
@@ -316,7 +316,7 @@ Reference_Matrix_Builder = function(
         downsample.threshold2 = ifelse(downsample.threshold < 1, round(props[1, "Freq"]*downsample.threshold, 0), min(c(downsample.threshold, props[props$Var1 == celltype, "Freq"])))
         downsample = round(projected.cell.number2*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
         if (downsample < downsample.threshold2) {
-          projected.cell.number2 = projected.cell.number2 + downsample - downsample.threshold2
+          projected.cell.number2 <<- projected.cell.number2 + downsample - downsample.threshold2
           downsample = downsample.threshold2
         }
         WhichCells(seurat_object, idents = celltype, downsample = downsample)
@@ -341,7 +341,7 @@ Reference_Matrix_Builder = function(
         downsample = round(projected.cell.number*props[props$Var1 == celltype, "Freq"]/ncol(seurat_object), 0)
         if (downsample < downsample.threshold2) {
           warning("Less than ",downsample.threshold2," cells downsampled in ",celltype,", adjusting to the downsample.threshold",immediate. = T)
-          projected.cell.number = projected.cell.number + downsample - downsample.threshold2
+          projected.cell.number <<- projected.cell.number + downsample - downsample.threshold2
           downsample = downsample.threshold2
         }
         WhichCells(seurat_object, idents = celltype, downsample = downsample)
