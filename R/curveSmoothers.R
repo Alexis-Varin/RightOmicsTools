@@ -84,6 +84,7 @@ curveSmoothers = function(models,
 
   mat = assays(models)$counts[genes, , drop = FALSE]
   mat = as.data.frame(log1p(t(as.matrix(mat))))
+  predictSmooth.df$yhat = log1p(predictSmooth.df$yhat)
   if (isTRUE(rescale)) {
     predictSmooth.df = do.call(rbind, lapply(genes, function(gene) {
       df = predictSmooth.df[predictSmooth.df$gene == gene, , drop = FALSE]
@@ -91,9 +92,6 @@ curveSmoothers = function(models,
       return(df)
     }))
     mat = apply(mat, 2, rescale, to = rescale.range)
-  }
-  else {
-    predictSmooth.df$yhat = log1p(predictSmooth.df$yhat)
   }
   predictSmooth.df = predictSmooth.df[predictSmooth.df$lineage %in% lineages, , drop = FALSE]
   mat = cbind(mat, do.call(cbind, lapply(lineages, function(lin) {
