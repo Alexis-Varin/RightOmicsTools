@@ -20,7 +20,7 @@
 #' @param facets.scales Character. (from \code{\link[ggplot2]{facet_grid}} documentation) Are scales shared across all facets (the default, "\code{fixed}"), or do they vary across rows ("\code{free_x}"), columns ("\code{free_y}"), or both rows and columns ("\code{free}")?
 #' @param facets.axes Character. (from \code{\link[ggplot2]{facet_grid}} documentation) Determines which axes will be drawn. When "\code{margins}" (default), axes will be drawn at the exterior margins. "\code{all_x}" and "\code{all_y}" will draw the respective axes at the interior panels too, whereas "\code{all}" will draw all axes at all panels.
 #' @param colors Character. The color names for each identity of the metadata excluded from \code{facets} among 'genes', 'lineages' and/or 'conditions' (for example, if \code{facets} = c('genes', 'conditions'), the \code{colors} will be for each of the \code{lineages} provided, or if \code{facets} = 'lineages', the \code{colors} will be for each of the \code{genes} times \code{conditions} provided). If \code{NULL}, uses \pkg{Seurat}'s default colors.
-#' @param axis.text.size Numeric. The font size of the pseudotime and log-transformed counts.
+#' @param axis.text.size Numeric. The font size of the pseudotime and log-transformed count values.
 #' @param axis.title.size Numeric. The font size of the axis title.
 #' @param facets.title.size Numeric. The font size of the facet titles.
 #' @param legend.names Character. You may provide custom names for the colors displayed in the legend, instead of the default names (for example, if \code{facets} = c('genes', 'conditions'), the color names will be 'Lineage' followed by the index of the \code{lineages} provided, you may replace these with any other names).
@@ -46,7 +46,7 @@
 curveSmoothers = function(models,
                           predictSmooth.df = NULL,
                           genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
-                          lineages,
+                          lineages = NULL,
                           lineages.to.remove = NULL,
                           conditions = NULL,
                           facets = c("genes", "conditions"),
@@ -63,7 +63,7 @@ curveSmoothers = function(models,
                           colors = NULL,
                           axis.text.size = 9,
                           axis.title.size = 11,
-                          facets.title.size = 9,
+                          facets.title.size = 12,
                           legend.names = NULL,
                           legend.text.size = 9,
                           nrow = floor(sqrt(length(genes)))) {
@@ -74,6 +74,10 @@ curveSmoothers = function(models,
 
   yhat = time = NULL
   knots = ceiling(unname(metadata(models)$tradeSeq$knots)*100)/100
+
+  if (is.null(lineages)) {
+    lineages = seq_len((ncol(colData(models)$tradeSeq$dm)-2)/2)
+  }
 
   if (is.null(predictSmooth.df)) {
     predictSmooth.df = predictSmooth(models, gene = genes, nPoints = nPoints, tidy = TRUE)

@@ -63,7 +63,7 @@ Barplot_Cell_Proportion(
 
 \item{cellsum.label.size}{Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.}
 
-\item{axis.text.size}{Numeric. The font size of the identity names and cell percent or count.}
+\item{axis.text.size}{Numeric. The font size of the identity names and cell percent or count values.}
 
 \item{x.axis.angle}{Numeric. The rotation angle of the identity names.}
 

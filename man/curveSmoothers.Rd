@@ -8,7 +8,7 @@ curveSmoothers(
   models,
   predictSmooth.df = NULL,
   genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
-  lineages,
+  lineages = NULL,
   lineages.to.remove = NULL,
   conditions = NULL,
   facets = c("genes", "conditions"),
@@ -25,7 +25,7 @@ curveSmoothers(
   colors = NULL,
   axis.text.size = 9,
   axis.title.size = 11,
-  facets.title.size = 9,
+  facets.title.size = 12,
   legend.names = NULL,
   legend.text.size = 9,
   nrow = floor(sqrt(length(genes)))
@@ -68,7 +68,7 @@ curveSmoothers(
 
 \item{colors}{Character. The color names for each identity of the metadata excluded from \code{facets} among 'genes', 'lineages' and/or 'conditions' (for example, if \code{facets} = c('genes', 'conditions'), the \code{colors} will be for each of the \code{lineages} provided, or if \code{facets} = 'lineages', the \code{colors} will be for each of the \code{genes} times \code{conditions} provided). If \code{NULL}, uses \pkg{Seurat}'s default colors.}
 
-\item{axis.text.size}{Numeric. The font size of the pseudotime and log-transformed counts.}
+\item{axis.text.size}{Numeric. The font size of the pseudotime and log-transformed count values.}
 
 \item{axis.title.size}{Numeric. The font size of the axis title.}
 

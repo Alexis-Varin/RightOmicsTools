@@ -16,7 +16,7 @@
 #' @param alpha Numeric. The transparency of the bar colors. A value between 0 and 1.
 #' @param show.cellsum.label Logical. If \code{TRUE}, the cell sum will be shown at the top of each bar.
 #' @param cellsum.label.size Numeric. The font size of the cell sum label. Ignored if \code{show.cellsum.label} = \code{FALSE}.
-#' @param axis.text.size Numeric. The font size of the identity names and cell percent or count.
+#' @param axis.text.size Numeric. The font size of the identity names and cell percent or count values.
 #' @param x.axis.angle Numeric. The rotation angle of the identity names.
 #' @param x.axis.hjust Numeric. The horizontal justification of the identity names.
 #' @param y.axis.title.size Numeric. The font size of the y axis title.

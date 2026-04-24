@@ -59,7 +59,7 @@ heatmapSmoothers = function(sds,
                             models,
                             predictSmooth.df = NULL,
                             genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
-                            lineages,
+                            lineages = NULL,
                             lineages.to.remove = NULL,
                             conditions = NULL,
                             clusters = NULL,
@@ -78,7 +78,7 @@ heatmapSmoothers = function(sds,
                             show.pseudotime = TRUE,
                             show.density = TRUE,
                             show.density.pseudotime.values = TRUE,
-                            data.colors = "Inferno",
+                            data.colors = "Turbo",
                             pseudotime.colors = "Viridis",
                             clusters.colors = NULL,
                             genes.names.size = 6,
@@ -104,6 +104,10 @@ heatmapSmoothers = function(sds,
   }
 
   knots = ceiling(unname(metadata(models)$tradeSeq$knots)*100)/100
+
+  if (is.null(lineages)) {
+    lineages = seq_len((ncol(colData(models)$tradeSeq$dm)-2)/2)
+  }
 
   data = data.frame(slingPseudotime(sds))
   data = ceiling(data*100)/100
@@ -437,7 +441,12 @@ heatmapSmoothers = function(sds,
   }
 
   if (length(data.colors) == 1) {
-    data.colors = colorRamp2(breaks = rescale.range, hcl_palette = data.colors)
+    if (data.colors == "Turbo") {
+      data.colors = colorRamp2(seq(rescale.range[1], rescale.range[2], length.out = 10), colors = pal_viridis(option = "turbo")(10))
+    }
+    else {
+      data.colors = colorRamp2(breaks = rescale.range, hcl_palette = data.colors)
+    }
   }
   else {
     data.colors = colorRamp2(breaks = rescale.range, colors = c(data.colors[1], data.colors[2]))
