@@ -26,6 +26,9 @@
 
 ### Visualization
 
+- [`dimSmoothers()`](https://alexis-varin.github.io/RightOmicsTools/reference/dimSmoothers.md)
+  : Scatterplot of the dimensionality reduction and fitted GAM smoothers
+  for each cell
 - [`curveSmoothers()`](https://alexis-varin.github.io/RightOmicsTools/reference/curveSmoothers.md)
   : Scatterplot of log-transformed counts, and average fitted GAM
   smoother curves along pseudotime

@@ -19,7 +19,7 @@ curveSmoothers(
   models,
   predictSmooth.df = NULL,
   genes = if (is.null(predictSmooth.df)) NA else unique(predictSmooth.df$gene),
-  lineages,
+  lineages = NULL,
   lineages.to.remove = NULL,
   conditions = NULL,
   facets = c("genes", "conditions"),
@@ -36,7 +36,7 @@ curveSmoothers(
   colors = NULL,
   axis.text.size = 9,
   axis.title.size = 11,
-  facets.title.size = 9,
+  facets.title.size = 12,
   legend.names = NULL,
   legend.text.size = 9,
   nrow = floor(sqrt(length(genes)))
@@ -214,7 +214,8 @@ curveSmoothers(
 
 - axis.text.size:
 
-  Numeric. The font size of the pseudotime and log-transformed counts.
+  Numeric. The font size of the pseudotime and log-transformed count
+  values.
 
 - axis.title.size:
 

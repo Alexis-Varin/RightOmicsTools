@@ -114,8 +114,8 @@ Barplot_Cell_Proportion(
 
 - axis.text.size:
 
-  Numeric. The font size of the identity names and cell percent or
-  count.
+  Numeric. The font size of the identity names and cell percent or count
+  values.
 
 - x.axis.angle:
 
