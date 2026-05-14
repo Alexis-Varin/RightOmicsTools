@@ -334,9 +334,12 @@ dimSmoothers = function(sds,
                         ifelse(is.character(clusters) | is.factor(clusters), "Clusters",
                                ifelse(isTRUE("SingleCellExperiment" %in% class(models)),
                                       "Smoothed\nExpression", "Logged\nExpression")))) +
-      labs(title = ifelse(is.character(genes), colnames(dat)[3], "")) +
       theme_classic() +
       theme(plot.title = element_text(hjust = 0.5, size = plot.title.size))
+
+    if (is.character(genes)) {
+      g = g + ggtitle(colnames(dat)[3])
+    }
 
     if (isTRUE(raster)) {
       g = g +
@@ -398,21 +401,26 @@ dimSmoothers = function(sds,
       else {
         for (cu in seq_along(curves)) {
           if (length(lineages.colors) == 1) {
-            g = g + geom_borderpath(data = curves[[cu]], col = lineages.colors, linewidth = lineages.width,
-                                    arrow = lineages.arrow)
+            g = g + geom_borderpath(data = curves[[cu]], col = lineages.colors,
+                                    linewidth = lineages.width, arrow = lineages.arrow)
           }
           else {
             if (cu == 1) {
               g = g + new_scale_color()
             }
-            g = g + geom_borderpath(data = curves[[cu]], aes(x = .data[[colnames(curves[[cu]])[1]]],
-                                                             y = .data[[colnames(curves[[cu]])[2]]],
-                                                             col = lincols),
-                                    linewidth = lineages.width, inherit.aes = FALSE,
-                                    arrow = lineages.arrow)
+            g = g + geom_path(data = curves[[cu]], aes(x = .data[[colnames(curves[[cu]])[1]]],
+                                                       y = .data[[colnames(curves[[cu]])[2]]],
+                                                       col = lincols),
+                              linewidth = lineages.width, inherit.aes = FALSE) +
+              geom_borderpath(data = curves[[cu]], aes(x = .data[[colnames(curves[[cu]])[1]]],
+                                                       y = .data[[colnames(curves[[cu]])[2]]],
+                                                       col = lincols),
+                              linewidth = lineages.width, inherit.aes = FALSE,
+                              arrow = lineages.arrow, show.legend = FALSE)
             if (cu == length(curves)) {
               g = g +
-                scale_color_manual(values = lineages.colors, labels = lineages.legend.names, name = "")
+                scale_color_manual(values = lineages.colors, labels = lineages.legend.names,
+                                   name = "", guide = guide_legend(override.aes = list(linewidth = 2)))
             }
           }
         }

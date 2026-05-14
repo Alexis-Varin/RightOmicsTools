@@ -10,7 +10,13 @@ DotPlot_Heatmap(
   layer = "data",
   data.are.log = TRUE,
   features,
+  group.by = NULL,
   split.by = NULL,
+  annotation.vars = NULL,
+  separate.split = TRUE,
+  annotation.type = "absolute",
+  annotation.plot = c("donut", "violin"),
+  annotation.split = TRUE,
   idents = NULL,
   split.idents = NULL,
   scale = TRUE,
@@ -19,7 +25,7 @@ DotPlot_Heatmap(
   rotate.axis = FALSE,
   dotplot = TRUE,
   dots.type = "square root",
-  dots.size = 4,
+  dots.size = 5,
   show.noexpr.dots = FALSE,
   col.min = ifelse(isTRUE(scale), -2, 0),
   col.max = ifelse(isTRUE(scale), 2, "q100"),
@@ -27,14 +33,23 @@ DotPlot_Heatmap(
   palette.reverse = FALSE,
   na.color = "grey40",
   background.color = "white",
+  background.alpha = 0.7,
   idents.colors = NULL,
+  idents.colors.outer.border = TRUE,
+  idents.colors.inner.border = FALSE,
   show.idents.names.colors = FALSE,
   show.idents.oppo.colors = TRUE,
   split.colors = NULL,
+  split.colors.outer.border = TRUE,
+  split.colors.inner.border = FALSE,
   show.split.names.colors = FALSE,
   show.split.oppo.colors = TRUE,
+  annotation.colors = NULL,
+  annotation.colors.outer.border = TRUE,
+  annotation.colors.inner.border = FALSE,
   order.idents = NULL,
   order.split = NULL,
+  order.annotation = NULL,
   order.colors = TRUE,
   kmeans.repeats = 100,
   cluster.idents = TRUE,
@@ -65,9 +80,13 @@ DotPlot_Heatmap(
   show.idents.legend = TRUE,
   split.legend.name = split.by,
   show.split.legend = TRUE,
+  annotation.legend.name = annotation.vars,
+  show.annotation.legend = TRUE,
   legend.title.size = 10,
   legend.text.size = 10,
   legend.gap = 10,
+  heatmap.width = 10,
+  heatmap.height = 10,
   output.data = FALSE,
   ...
 )
@@ -83,7 +102,19 @@ DotPlot_Heatmap(
 
 \item{features}{Character. The names of one or several features to plot the average expression from.}
 
+\item{group.by}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to use instead of the active.ident metadata. If \code{NULL}, the current active.ident metadata will be used.}
+
 \item{split.by}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the identities of the active.ident metadata by.}
+
+\item{annotation.vars}{Character. The names of one or several metadata (categorical variables) or features (continuous variables) to display as annotation variables.}
+
+\item{separate.split}{Logical. If \code{TRUE}, \code{cluster.features} will be set to \code{FALSE} and the different \code{split.by} identities will split the \code{features} instead of the identities of the active.ident metadata. Ignored if \code{split.by} = \code{NULL}.}
+
+\item{annotation.type}{Character. Either 'absolute', which will calculate the proportion of cells within the whole object (for example, with some visualizations like 'bar', identities with low amount of cells will appear small), or 'relative', which will calculate the proportion of cells independently in each identity of the active.ident metadata, all identities will be displayed with the same relative size, which might distort the perception of the true proportion of cells, so use with caution. Only applies to categorical variables. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{annotation.plot}{Character. The type of plot to use for annotation variables. First for the categorical variables, either 'donut', 'pie', 'treemap', 'treemap_fixed', 'bar' or 'bar_fixed'. Then for the continuous variables, either 'violin', 'violin_median', 'violin_quartiles', 'violin_boxplot', 'boxplot' or 'density'. You must choose any one of each (for example, c('donut', 'violin'), or c('treemap', 'boxplot') etc). You may also provide multiple choices of each if the length matches the number of annotation variables (for example, if you have 3 annotation variables, you may set \code{annotation.plot} = c('treemap', 'boxplot', 'donut'), or 5 annotation variables \code{annotation.plot} = c('pie', 'violin_boxplot', 'violin_boxplot', 'density', 'bar') etc). You need to know beforehand which variables are categorical and which are continuous to set the corresponding choice. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{annotation.split}{Logical. If \code{TRUE}, the annotation variables will be split by the \code{split.by} identities. You may also provide multiple choices if the length matches the number of annotation variables (if you have 3 annotation variables, you may set \code{annotation.split} = c(TRUE, FALSE, TRUE) etc). Ignored if \code{annotation.vars} = \code{NULL} or if \code{split.by} = \code{NULL}.}
 
 \item{idents}{Character. The names of one or several identities in the active.ident metadata to select. If \code{NULL}, all identities are used.}
 
@@ -115,9 +146,15 @@ DotPlot_Heatmap(
 
 \item{na.color}{Character. The color name for missing values (\code{NA}).}
 
-\item{background.color}{Character. The color name for the background behind the dots. Ignored if \code{dotplot} = \code{FALSE}.}
+\item{background.color}{Character. Either a color name or 'data.colors', 'idents.colors' or 'split.colors' for the background behind the dots. Ignored if \code{dotplot} = \code{FALSE}.}
+
+\item{background.alpha}{Numeric. The alpha for the background color. Ignored if \code{dotplot} = \code{FALSE}.}
 
 \item{idents.colors}{Character. The color names for each identity of the active.ident metadata or in \code{idents}. If \code{NULL}, uses \pkg{Seurat}'s default colors.}
+
+\item{idents.colors.outer.border}{Logical. If \code{TRUE}, the function will display a border around each identity slice.}
+
+\item{idents.colors.inner.border}{Logical. If \code{TRUE}, the function will display a border around each identity row or column.}
 
 \item{show.idents.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{idents.colors} next to identity names.}
 
@@ -125,13 +162,25 @@ DotPlot_Heatmap(
 
 \item{split.colors}{Character. The color names for each \code{split.by} identity or in \code{split.idents}. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{split.by} = \code{NULL}.}
 
+\item{split.colors.outer.border}{Logical. If \code{TRUE}, the function will display a border around each \code{split.by} identity slice. Ignored if \code{split.by} = \code{NULL}.}
+
+\item{split.colors.inner.border}{Logical. If \code{TRUE}, the function will display a border around each \code{split.by} identity row or column. Ignored if \code{split.by} = \code{NULL}.}
+
 \item{show.split.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} next to identity names. Ignored if \code{split.by} = \code{NULL}.}
 
 \item{show.split.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} on the opposite side of identity names. Ignored if \code{split.by} = \code{NULL}.}
 
-\item{order.idents}{Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.}
+\item{annotation.colors}{Character or List. The color names for each annotation variable identity. You may also provide a named list if you want to set the colors of multiple annotation variables (for example, if \code{annotation.vars} = c('treatment', 'response'), you may provide \code{annotation.colors} = list('treatment' = c('blue', 'red', 'gold'), 'response' = c('magenta', 'green', 'brown', 'lightblue'))). For categorical variables, the length must match the number of identities in the annotation variable. For continuous variables, the length must match the number of active.ident identities if \code{annotation.split} = FALSE, or the number of \code{split.by} identities if \code{annotation.split} = TRUE. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{annotation.vars} = \code{NULL}.}
 
-\item{order.split}{Character or Numeric. Either 'reverse', or the \code{split.by} identities (as names or as numerical values corresponding to the indices) or in \code{split.idents} to order the cells. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.}
+\item{annotation.colors.outer.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable slice. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{annotation.colors.inner.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable row or column. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{order.idents}{Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the active.ident identities. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.}
+
+\item{order.split}{Character or Numeric. Either 'reverse', or the \code{split.by} identities (as names or as numerical values corresponding to the indices) or in \code{split.idents} to order the \code{split.by} identities. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.}
+
+\item{order.annotation}{Character or Numeric. Either 'reverse', or the annotation variable identities (as names or as numerical values corresponding to the indices) to order the annotation variable identities. Ignored if \code{annotation.vars} = \code{NULL}.}
 
 \item{order.colors}{Logical. If \code{TRUE}, the \code{data.colors} and \code{split.colors} will automatically be ordered according to \code{order.idents} and \code{order.split}. Ignored if \code{order.idents} and \code{order.split} are \code{NULL}.}
 
@@ -193,11 +242,19 @@ DotPlot_Heatmap(
 
 \item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for \code{split.by} identities or \code{split.idents}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
+\item{annotation.legend.name}{Character. The name of the annotation variable legend, the length must match the number of annotation variables. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{show.annotation.legend}{Logical. If \code{TRUE}, the function will display a legend for annotation variable identities. Ignored if \code{annotation.vars} = \code{NULL}.}
+
 \item{legend.title.size}{Numeric. The font size of all legend titles.}
 
 \item{legend.text.size}{Numeric. The font size of all legend texts.}
 
 \item{legend.gap}{Numeric. The gap between the legends and the dot plot or heatmap. This parameter sets the value in the global options of \code{\link[ComplexHeatmap]{ht_opt}}, so it will affect all \code{\link[ComplexHeatmap]{Heatmap}} objects in the same R session. Use \pkg{ComplexHeatmap}::\code{\link[ComplexHeatmap]{ht_opt}}(RESET = \code{TRUE}) to restore default parameters.}
+
+\item{heatmap.width}{Numeric. The width of each column.}
+
+\item{heatmap.height}{Numeric. The height of each row.}
 
 \item{output.data}{Logical. If \code{TRUE}, the function will return a \code{list} containing a \code{matrix} object of the average expression data, scaled or not, and another \code{matrix} object containing the percentage of cells expressing each feature, instead of displaying anything.}
 
