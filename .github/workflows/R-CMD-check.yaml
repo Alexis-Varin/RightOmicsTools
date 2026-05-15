@@ -46,6 +46,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Uninstall magick to avoid segfault on macOS
+        if: runner.os == 'macOS'
+        run: Rscript -e 'try(remove.packages("magick"), silent=TRUE)'
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true

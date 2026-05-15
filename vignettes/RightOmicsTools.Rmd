@@ -207,8 +207,7 @@ These markers may then be directly used for plotting. Since the `Seurat` package
 Cell_Heatmap(pbmc3k,
              features = annotation.markers,
              cluster.features = FALSE,
-             show.idents.legend = FALSE,
-             raster = FALSE)
+             show.idents.legend = FALSE)
 ```
 
 Let's compare it to `Seurat` package's default heatmap function:
@@ -257,7 +256,8 @@ We will conclude by showing the last two visualization functions; [DotPlot_Heatm
 # We will disable some parameters to be as close as possible from Seurat's DotPlot
 # Due to the number of features, we will also lower dots size and flip the axis
 DotPlot_Heatmap(pbmc3k,
-                features = annotation.markers,
+                features = rev(annotation.markers),
+                dots.type = "radius",
                 dots.size = 2,
                 heatmap.height = 4,
                 cluster.features = FALSE,
