@@ -285,7 +285,8 @@ which is reworked using the `ComplexHeatmap` package instead of the
 Cell_Heatmap(pbmc3k,
              features = annotation.markers,
              cluster.features = FALSE,
-             show.idents.legend = FALSE)
+             show.idents.legend = FALSE,
+             raster = FALSE)
 ```
 
 ![](RightOmicsTools_files/figure-html/heatmap-1.png)
@@ -371,6 +372,7 @@ counterparts:
 DotPlot_Heatmap(pbmc3k,
                 features = annotation.markers,
                 dots.size = 2,
+                heatmap.height = 4,
                 cluster.features = FALSE,
                 cluster.idents = FALSE,
                 rotate.axis = TRUE)
