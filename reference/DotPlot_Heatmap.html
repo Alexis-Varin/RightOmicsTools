@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RightOmicsTools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,13 @@
 <span>  layer <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>  data.are.log <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">features</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  annotation.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  separate.split <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  annotation.type <span class="op">=</span> <span class="st">"absolute"</span>,</span>
+<span>  annotation.plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"donut"</span>, <span class="st">"violin"</span><span class="op">)</span>,</span>
+<span>  annotation.split <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  idents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  split.idents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -70,7 +76,7 @@
 <span>  rotate.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dotplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  dots.type <span class="op">=</span> <span class="st">"square root"</span>,</span>
-<span>  dots.size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  dots.size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  show.noexpr.dots <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  col.min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  col.max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="va">scale</span><span class="op">)</span>, <span class="fl">2</span>, <span class="st">"q100"</span><span class="op">)</span>,</span>
@@ -78,14 +84,23 @@
 <span>  palette.reverse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na.color <span class="op">=</span> <span class="st">"grey40"</span>,</span>
 <span>  background.color <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>  background.alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  idents.colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  idents.colors.outer.border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  idents.colors.inner.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show.idents.names.colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show.idents.oppo.colors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  split.colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split.colors.outer.border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  split.colors.inner.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show.split.names.colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show.split.oppo.colors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  annotation.colors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  annotation.colors.outer.border <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  annotation.colors.inner.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  order.idents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  order.split <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  order.annotation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  order.colors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  kmeans.repeats <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  cluster.idents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -116,9 +131,13 @@
 <span>  show.idents.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  split.legend.name <span class="op">=</span> <span class="va">split.by</span>,</span>
 <span>  show.split.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  annotation.legend.name <span class="op">=</span> <span class="va">annotation.vars</span>,</span>
+<span>  show.annotation.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  legend.title.size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  legend.text.size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  legend.gap <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  heatmap.width <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  heatmap.height <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  output.data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -148,8 +167,32 @@
 <dd><p>Character. The names of one or several features to plot the average expression from.</p></dd>
 
 
+<dt id="arg-group-by">group.by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
+<dd><p>Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to use instead of the active.ident metadata. If <code>NULL</code>, the current active.ident metadata will be used.</p></dd>
+
+
 <dt id="arg-split-by">split.by<a class="anchor" aria-label="anchor" href="#arg-split-by"></a></dt>
 <dd><p>Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the identities of the active.ident metadata by.</p></dd>
+
+
+<dt id="arg-annotation-vars">annotation.vars<a class="anchor" aria-label="anchor" href="#arg-annotation-vars"></a></dt>
+<dd><p>Character. The names of one or several metadata (categorical variables) or features (continuous variables) to display as annotation variables.</p></dd>
+
+
+<dt id="arg-separate-split">separate.split<a class="anchor" aria-label="anchor" href="#arg-separate-split"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, <code>cluster.features</code> will be set to <code>FALSE</code> and the different <code>split.by</code> identities will split the <code>features</code> instead of the identities of the active.ident metadata. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-annotation-type">annotation.type<a class="anchor" aria-label="anchor" href="#arg-annotation-type"></a></dt>
+<dd><p>Character. Either 'absolute', which will calculate the proportion of cells within the whole object (for example, with some visualizations like 'bar', identities with low amount of cells will appear small), or 'relative', which will calculate the proportion of cells independently in each identity of the active.ident metadata, all identities will be displayed with the same relative size, which might distort the perception of the true proportion of cells, so use with caution. Only applies to categorical variables. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-annotation-plot">annotation.plot<a class="anchor" aria-label="anchor" href="#arg-annotation-plot"></a></dt>
+<dd><p>Character. The type of plot to use for annotation variables. First for the categorical variables, either 'donut', 'pie', 'treemap', 'treemap_fixed', 'bar' or 'bar_fixed'. Then for the continuous variables, either 'violin', 'violin_median', 'violin_quartiles', 'violin_boxplot', 'boxplot' or 'density'. You must choose any one of each (for example, c('donut', 'violin'), or c('treemap', 'boxplot') etc). You may also provide multiple choices of each if the length matches the number of annotation variables (for example, if you have 3 annotation variables, you may set <code>annotation.plot</code> = c('treemap', 'boxplot', 'donut'), or 5 annotation variables <code>annotation.plot</code> = c('pie', 'violin_boxplot', 'violin_boxplot', 'density', 'bar') etc). You need to know beforehand which variables are categorical and which are continuous to set the corresponding choice. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-annotation-split">annotation.split<a class="anchor" aria-label="anchor" href="#arg-annotation-split"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the annotation variables will be split by the <code>split.by</code> identities. You may also provide multiple choices if the length matches the number of annotation variables (if you have 3 annotation variables, you may set <code>annotation.split</code> = c(TRUE, FALSE, TRUE) etc). Ignored if <code>annotation.vars</code> = <code>NULL</code> or if <code>split.by</code> = <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-idents">idents<a class="anchor" aria-label="anchor" href="#arg-idents"></a></dt>
@@ -213,11 +256,23 @@
 
 
 <dt id="arg-background-color">background.color<a class="anchor" aria-label="anchor" href="#arg-background-color"></a></dt>
-<dd><p>Character. The color name for the background behind the dots. Ignored if <code>dotplot</code> = <code>FALSE</code>.</p></dd>
+<dd><p>Character. Either a color name or 'data.colors', 'idents.colors' or 'split.colors' for the background behind the dots. Ignored if <code>dotplot</code> = <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-background-alpha">background.alpha<a class="anchor" aria-label="anchor" href="#arg-background-alpha"></a></dt>
+<dd><p>Numeric. The alpha for the background color. Ignored if <code>dotplot</code> = <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-idents-colors">idents.colors<a class="anchor" aria-label="anchor" href="#arg-idents-colors"></a></dt>
 <dd><p>Character. The color names for each identity of the active.ident metadata or in <code>idents</code>. If <code>NULL</code>, uses <span class="pkg">Seurat</span>'s default colors.</p></dd>
+
+
+<dt id="arg-idents-colors-outer-border">idents.colors.outer.border<a class="anchor" aria-label="anchor" href="#arg-idents-colors-outer-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each identity slice.</p></dd>
+
+
+<dt id="arg-idents-colors-inner-border">idents.colors.inner.border<a class="anchor" aria-label="anchor" href="#arg-idents-colors-inner-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each identity row or column.</p></dd>
 
 
 <dt id="arg-show-idents-names-colors">show.idents.names.colors<a class="anchor" aria-label="anchor" href="#arg-show-idents-names-colors"></a></dt>
@@ -232,6 +287,14 @@
 <dd><p>Character. The color names for each <code>split.by</code> identity or in <code>split.idents</code>. If <code>NULL</code>, uses a custom set of colors from <code><a href="https://rdrr.io/r/grDevices/colors.html" class="external-link">colors</a></code>. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
 
 
+<dt id="arg-split-colors-outer-border">split.colors.outer.border<a class="anchor" aria-label="anchor" href="#arg-split-colors-outer-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each <code>split.by</code> identity slice. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-split-colors-inner-border">split.colors.inner.border<a class="anchor" aria-label="anchor" href="#arg-split-colors-inner-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each <code>split.by</code> identity row or column. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-show-split-names-colors">show.split.names.colors<a class="anchor" aria-label="anchor" href="#arg-show-split-names-colors"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, the function will display the colors specified in <code>split.colors</code> next to identity names. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
 
@@ -240,12 +303,28 @@
 <dd><p>Logical. If <code>TRUE</code>, the function will display the colors specified in <code>split.colors</code> on the opposite side of identity names. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
 
 
+<dt id="arg-annotation-colors">annotation.colors<a class="anchor" aria-label="anchor" href="#arg-annotation-colors"></a></dt>
+<dd><p>Character or List. The color names for each annotation variable identity. You may also provide a named list if you want to set the colors of multiple annotation variables (for example, if <code>annotation.vars</code> = c('treatment', 'response'), you may provide <code>annotation.colors</code> = list('treatment' = c('blue', 'red', 'gold'), 'response' = c('magenta', 'green', 'brown', 'lightblue'))). For categorical variables, the length must match the number of identities in the annotation variable. For continuous variables, the length must match the number of active.ident identities if <code>annotation.split</code> = FALSE, or the number of <code>split.by</code> identities if <code>annotation.split</code> = TRUE. If <code>NULL</code>, uses a custom set of colors from <code><a href="https://rdrr.io/r/grDevices/colors.html" class="external-link">colors</a></code>. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-annotation-colors-outer-border">annotation.colors.outer.border<a class="anchor" aria-label="anchor" href="#arg-annotation-colors-outer-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each annotation variable slice. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-annotation-colors-inner-border">annotation.colors.inner.border<a class="anchor" aria-label="anchor" href="#arg-annotation-colors-inner-border"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a border around each annotation variable row or column. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-order-idents">order.idents<a class="anchor" aria-label="anchor" href="#arg-order-idents"></a></dt>
-<dd><p>Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in <code>idents</code> to order the cells. If <code>cluster.idents</code> = <code>TRUE</code> or Function, only the legend names will be ordered.</p></dd>
+<dd><p>Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in <code>idents</code> to order the active.ident identities. If <code>cluster.idents</code> = <code>TRUE</code> or Function, only the legend names will be ordered.</p></dd>
 
 
 <dt id="arg-order-split">order.split<a class="anchor" aria-label="anchor" href="#arg-order-split"></a></dt>
-<dd><p>Character or Numeric. Either 'reverse', or the <code>split.by</code> identities (as names or as numerical values corresponding to the indices) or in <code>split.idents</code> to order the cells. If <code>cluster.idents</code> = <code>TRUE</code> or Function, only the legend names will be ordered. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
+<dd><p>Character or Numeric. Either 'reverse', or the <code>split.by</code> identities (as names or as numerical values corresponding to the indices) or in <code>split.idents</code> to order the <code>split.by</code> identities. If <code>cluster.idents</code> = <code>TRUE</code> or Function, only the legend names will be ordered. Ignored if <code>split.by</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-order-annotation">order.annotation<a class="anchor" aria-label="anchor" href="#arg-order-annotation"></a></dt>
+<dd><p>Character or Numeric. Either 'reverse', or the annotation variable identities (as names or as numerical values corresponding to the indices) to order the annotation variable identities. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-order-colors">order.colors<a class="anchor" aria-label="anchor" href="#arg-order-colors"></a></dt>
@@ -368,6 +447,14 @@
 <dd><p>Logical. If <code>TRUE</code>, the function will display a legend for <code>split.by</code> identities or <code>split.idents</code>. Ignored if <code>show.split.names.colors</code> and <code>show.split.oppo.colors</code> are <code>FALSE</code>.</p></dd>
 
 
+<dt id="arg-annotation-legend-name">annotation.legend.name<a class="anchor" aria-label="anchor" href="#arg-annotation-legend-name"></a></dt>
+<dd><p>Character. The name of the annotation variable legend, the length must match the number of annotation variables. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-show-annotation-legend">show.annotation.legend<a class="anchor" aria-label="anchor" href="#arg-show-annotation-legend"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, the function will display a legend for annotation variable identities. Ignored if <code>annotation.vars</code> = <code>NULL</code>.</p></dd>
+
+
 <dt id="arg-legend-title-size">legend.title.size<a class="anchor" aria-label="anchor" href="#arg-legend-title-size"></a></dt>
 <dd><p>Numeric. The font size of all legend titles.</p></dd>
 
@@ -378,6 +465,14 @@
 
 <dt id="arg-legend-gap">legend.gap<a class="anchor" aria-label="anchor" href="#arg-legend-gap"></a></dt>
 <dd><p>Numeric. The gap between the legends and the dot plot or heatmap. This parameter sets the value in the global options of <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/ht_opt.html" class="external-link">ht_opt</a></code>, so it will affect all <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html" class="external-link">Heatmap</a></code> objects in the same R session. Use <span class="pkg">ComplexHeatmap</span>::<code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/ht_opt.html" class="external-link">ht_opt</a></code>(RESET = <code>TRUE</code>) to restore default parameters.</p></dd>
+
+
+<dt id="arg-heatmap-width">heatmap.width<a class="anchor" aria-label="anchor" href="#arg-heatmap-width"></a></dt>
+<dd><p>Numeric. The width of each column.</p></dd>
+
+
+<dt id="arg-heatmap-height">heatmap.height<a class="anchor" aria-label="anchor" href="#arg-heatmap-height"></a></dt>
+<dd><p>Numeric. The height of each row.</p></dd>
 
 
 <dt id="arg-output-data">output.data<a class="anchor" aria-label="anchor" href="#arg-output-data"></a></dt>

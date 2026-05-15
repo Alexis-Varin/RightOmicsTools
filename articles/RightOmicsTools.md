@@ -20,6 +20,7 @@ which, if you don’t have it, may be installed using the following
 command:
 
 ``` r
+
 install.packages("devtools")
 ```
 
@@ -27,6 +28,7 @@ Once installed, you may install `RightOmicsTools` using the following
 command:
 
 ``` r
+
 devtools::install_github("Alexis-Varin/RightOmicsTools")
 ```
 
@@ -45,6 +47,7 @@ Let’s start by loading all the packages we will be using in this
 vignette:
 
 ``` r
+
 library(RightOmicsTools)
 library(Seurat)
 library(ggplot2)
@@ -56,6 +59,7 @@ Next, we will load the `pbmc3k` dataset using our first function from
 which handles all data preparation for us, and check its contents:
 
 ``` r
+
 # Checking available datasets
 Right_Data(list.datasets = TRUE)
 
@@ -97,6 +101,7 @@ columns except for the ‘orig.ident’ metadata to truly start anew.
 is highly customizable, check the documentation for more information:
 
 ``` r
+
 # Reducing the object to the counts layer and the 'orig.ident' metadata
 pbmc3k <- Right_DietSeurat(pbmc3k, idents = "orig.ident")
 
@@ -121,6 +126,7 @@ percentage of mitochondrial genes and plot these results alongside the
 number of genes (nFeature_RNA) and counts (nCount_RNA) per cell:
 
 ``` r
+
 # Calculate percentage of mitochondrial genes
 pbmc3k[["percent.mt"]] <- PercentageFeatureSet(pbmc3k, pattern = "^MT-")
 
@@ -146,6 +152,7 @@ mitochondrial genes as well as cells with less than 400 or more than
 2500 genes:
 
 ``` r
+
 # Filter cells
 pbmc3k <- subset(pbmc3k, subset = nFeature_RNA > 400 &
                               nFeature_RNA < 2500 &
@@ -168,6 +175,7 @@ genes. For convenience, we use the same parameters as in the `Seurat`
 package tutorial:
 
 ``` r
+
 # Normalizing the data with default parameters
 pbmc3k <- NormalizeData(pbmc3k)
 
@@ -185,6 +193,7 @@ clustering. We again use the same parameters as in the `Seurat` package
 tutorial:
 
 ``` r
+
 # Perform PCA
 pbmc3k <- RunPCA(pbmc3k)
 
@@ -199,6 +208,7 @@ pbmc3k <- RunUMAP(pbmc3k, dims = 1:10)
 Finally, we will plot the UMAP, which concludes the preprocessing steps:
 
 ``` r
+
 # Plot UMAP
 DimPlot(pbmc3k)
 ```
@@ -236,6 +246,7 @@ manner. It also provides many more parameters which can be used to
 tailor the function to your specific needs:
 
 ``` r
+
 # Top 5 markers for each cluster, we will name each marker with cluster identity
 annotation.markers <- Find_Annotation_Markers(pbmc3k,
                                               name.features = TRUE)
@@ -270,6 +281,7 @@ which is reworked using the `ComplexHeatmap` package instead of the
 `ggplot2` package:
 
 ``` r
+
 Cell_Heatmap(pbmc3k,
              features = annotation.markers,
              cluster.features = FALSE,
@@ -281,6 +293,7 @@ Cell_Heatmap(pbmc3k,
 Let’s compare it to `Seurat` package’s default heatmap function:
 
 ``` r
+
 DoHeatmap(pbmc3k,
           features = annotation.markers) + 
   NoLegend()
@@ -301,6 +314,7 @@ We will now annotate each cluster with its corresponding cell type and
 display the UMAP:
 
 ``` r
+
 # Annotate clusters
 new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T",
                      "B", "CD8 T", "FCGR3A+ Mono", "NK", "DC")
@@ -331,6 +345,7 @@ with the possibility to group and/or split based on other metadata, and
 many other parameters:
 
 ``` r
+
 Barplot_Cell_Proportion(pbmc3k)
 ```
 
@@ -350,6 +365,7 @@ grid, both also offering many more options than their `Seurat` package’s
 counterparts:
 
 ``` r
+
 # We will disable some parameters to be as close as possible from Seurat's DotPlot
 # Due to the number of features, we will also lower dots size and flip the axis
 DotPlot_Heatmap(pbmc3k,
@@ -365,6 +381,7 @@ DotPlot_Heatmap(pbmc3k,
 Comparing it to `Seurat` package’s default dotplot function:
 
 ``` r
+
 # Seurat's DotPlot function doesn't work well with named features, we will remove names
 DotPlot(pbmc3k,
         features = unname(annotation.markers)) + 
@@ -377,6 +394,7 @@ DotPlot(pbmc3k,
 And finally, the grid violin plot:
 
 ``` r
+
 Grid_VlnPlot(pbmc3k,
              features = annotation.markers)
 ```

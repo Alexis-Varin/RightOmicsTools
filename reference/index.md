@@ -47,6 +47,11 @@
 
   Perform tradeSeq tests in parallel
 
+## ComplexHeatmap
+
+- [`anno_ggplot()`](https://alexis-varin.github.io/RightOmicsTools/reference/anno_ggplot.md)
+  : ggplot annotation for ComplexHeatmap
+
 ## CIBERSORTx
 
 - [`Reference_Matrix_Builder()`](https://alexis-varin.github.io/RightOmicsTools/reference/Reference_Matrix_Builder.md)

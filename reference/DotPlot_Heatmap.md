@@ -19,7 +19,13 @@ DotPlot_Heatmap(
   layer = "data",
   data.are.log = TRUE,
   features,
+  group.by = NULL,
   split.by = NULL,
+  annotation.vars = NULL,
+  separate.split = TRUE,
+  annotation.type = "absolute",
+  annotation.plot = c("donut", "violin"),
+  annotation.split = TRUE,
   idents = NULL,
   split.idents = NULL,
   scale = TRUE,
@@ -28,7 +34,7 @@ DotPlot_Heatmap(
   rotate.axis = FALSE,
   dotplot = TRUE,
   dots.type = "square root",
-  dots.size = 4,
+  dots.size = 5,
   show.noexpr.dots = FALSE,
   col.min = ifelse(isTRUE(scale), -2, 0),
   col.max = ifelse(isTRUE(scale), 2, "q100"),
@@ -36,14 +42,23 @@ DotPlot_Heatmap(
   palette.reverse = FALSE,
   na.color = "grey40",
   background.color = "white",
+  background.alpha = 0.7,
   idents.colors = NULL,
+  idents.colors.outer.border = TRUE,
+  idents.colors.inner.border = FALSE,
   show.idents.names.colors = FALSE,
   show.idents.oppo.colors = TRUE,
   split.colors = NULL,
+  split.colors.outer.border = TRUE,
+  split.colors.inner.border = FALSE,
   show.split.names.colors = FALSE,
   show.split.oppo.colors = TRUE,
+  annotation.colors = NULL,
+  annotation.colors.outer.border = TRUE,
+  annotation.colors.inner.border = FALSE,
   order.idents = NULL,
   order.split = NULL,
+  order.annotation = NULL,
   order.colors = TRUE,
   kmeans.repeats = 100,
   cluster.idents = TRUE,
@@ -74,9 +89,13 @@ DotPlot_Heatmap(
   show.idents.legend = TRUE,
   split.legend.name = split.by,
   show.split.legend = TRUE,
+  annotation.legend.name = annotation.vars,
+  show.annotation.legend = TRUE,
   legend.title.size = 10,
   legend.text.size = 10,
   legend.gap = 10,
+  heatmap.width = 10,
+  heatmap.height = 10,
   output.data = FALSE,
   ...
 )
@@ -121,11 +140,68 @@ DotPlot_Heatmap(
   Character. The names of one or several features to plot the average
   expression from.
 
+- group.by:
+
+  Character. The name of a metadata (for example, 'orig.ident',
+  'seurat_clusters', etc) to use instead of the active.ident metadata.
+  If `NULL`, the current active.ident metadata will be used.
+
 - split.by:
 
   Character. The name of a metadata (for example, 'orig.ident',
   'seurat_clusters', etc) to split the identities of the active.ident
   metadata by.
+
+- annotation.vars:
+
+  Character. The names of one or several metadata (categorical
+  variables) or features (continuous variables) to display as annotation
+  variables.
+
+- separate.split:
+
+  Logical. If `TRUE`, `cluster.features` will be set to `FALSE` and the
+  different `split.by` identities will split the `features` instead of
+  the identities of the active.ident metadata. Ignored if `split.by` =
+  `NULL`.
+
+- annotation.type:
+
+  Character. Either 'absolute', which will calculate the proportion of
+  cells within the whole object (for example, with some visualizations
+  like 'bar', identities with low amount of cells will appear small), or
+  'relative', which will calculate the proportion of cells independently
+  in each identity of the active.ident metadata, all identities will be
+  displayed with the same relative size, which might distort the
+  perception of the true proportion of cells, so use with caution. Only
+  applies to categorical variables. Ignored if `annotation.vars` =
+  `NULL`.
+
+- annotation.plot:
+
+  Character. The type of plot to use for annotation variables. First for
+  the categorical variables, either 'donut', 'pie', 'treemap',
+  'treemap_fixed', 'bar' or 'bar_fixed'. Then for the continuous
+  variables, either 'violin', 'violin_median', 'violin_quartiles',
+  'violin_boxplot', 'boxplot' or 'density'. You must choose any one of
+  each (for example, c('donut', 'violin'), or c('treemap', 'boxplot')
+  etc). You may also provide multiple choices of each if the length
+  matches the number of annotation variables (for example, if you have 3
+  annotation variables, you may set `annotation.plot` = c('treemap',
+  'boxplot', 'donut'), or 5 annotation variables `annotation.plot` =
+  c('pie', 'violin_boxplot', 'violin_boxplot', 'density', 'bar') etc).
+  You need to know beforehand which variables are categorical and which
+  are continuous to set the corresponding choice. Ignored if
+  `annotation.vars` = `NULL`.
+
+- annotation.split:
+
+  Logical. If `TRUE`, the annotation variables will be split by the
+  `split.by` identities. You may also provide multiple choices if the
+  length matches the number of annotation variables (if you have 3
+  annotation variables, you may set `annotation.split` = c(TRUE, FALSE,
+  TRUE) etc). Ignored if `annotation.vars` = `NULL` or if `split.by` =
+  `NULL`.
 
 - idents:
 
@@ -254,13 +330,29 @@ DotPlot_Heatmap(
 
 - background.color:
 
-  Character. The color name for the background behind the dots. Ignored
-  if `dotplot` = `FALSE`.
+  Character. Either a color name or 'data.colors', 'idents.colors' or
+  'split.colors' for the background behind the dots. Ignored if
+  `dotplot` = `FALSE`.
+
+- background.alpha:
+
+  Numeric. The alpha for the background color. Ignored if `dotplot` =
+  `FALSE`.
 
 - idents.colors:
 
   Character. The color names for each identity of the active.ident
   metadata or in `idents`. If `NULL`, uses Seurat's default colors.
+
+- idents.colors.outer.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  identity slice.
+
+- idents.colors.inner.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  identity row or column.
 
 - show.idents.names.colors:
 
@@ -279,6 +371,16 @@ DotPlot_Heatmap(
   [`colors`](https://rdrr.io/r/grDevices/colors.html). Ignored if
   `split.by` = `NULL`.
 
+- split.colors.outer.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  `split.by` identity slice. Ignored if `split.by` = `NULL`.
+
+- split.colors.inner.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  `split.by` identity row or column. Ignored if `split.by` = `NULL`.
+
 - show.split.names.colors:
 
   Logical. If `TRUE`, the function will display the colors specified in
@@ -290,20 +392,55 @@ DotPlot_Heatmap(
   `split.colors` on the opposite side of identity names. Ignored if
   `split.by` = `NULL`.
 
+- annotation.colors:
+
+  Character or List. The color names for each annotation variable
+  identity. You may also provide a named list if you want to set the
+  colors of multiple annotation variables (for example, if
+  `annotation.vars` = c('treatment', 'response'), you may provide
+  `annotation.colors` = list('treatment' = c('blue', 'red', 'gold'),
+  'response' = c('magenta', 'green', 'brown', 'lightblue'))). For
+  categorical variables, the length must match the number of identities
+  in the annotation variable. For continuous variables, the length must
+  match the number of active.ident identities if `annotation.split` =
+  FALSE, or the number of `split.by` identities if `annotation.split` =
+  TRUE. If `NULL`, uses a custom set of colors from
+  [`colors`](https://rdrr.io/r/grDevices/colors.html). Ignored if
+  `annotation.vars` = `NULL`.
+
+- annotation.colors.outer.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  annotation variable slice. Ignored if `annotation.vars` = `NULL`.
+
+- annotation.colors.inner.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  annotation variable row or column. Ignored if `annotation.vars` =
+  `NULL`.
+
 - order.idents:
 
   Character or Numeric. Either 'reverse', or the identities (as names or
   as numerical values corresponding to the indices) of the active.ident
-  metadata or in `idents` to order the cells. If `cluster.idents` =
-  `TRUE` or Function, only the legend names will be ordered.
+  metadata or in `idents` to order the active.ident identities. If
+  `cluster.idents` = `TRUE` or Function, only the legend names will be
+  ordered.
 
 - order.split:
 
   Character or Numeric. Either 'reverse', or the `split.by` identities
   (as names or as numerical values corresponding to the indices) or in
-  `split.idents` to order the cells. If `cluster.idents` = `TRUE` or
-  Function, only the legend names will be ordered. Ignored if `split.by`
-  = `NULL`.
+  `split.idents` to order the `split.by` identities. If `cluster.idents`
+  = `TRUE` or Function, only the legend names will be ordered. Ignored
+  if `split.by` = `NULL`.
+
+- order.annotation:
+
+  Character or Numeric. Either 'reverse', or the annotation variable
+  identities (as names or as numerical values corresponding to the
+  indices) to order the annotation variable identities. Ignored if
+  `annotation.vars` = `NULL`.
 
 - order.colors:
 
@@ -464,6 +601,17 @@ DotPlot_Heatmap(
   identities or `split.idents`. Ignored if `show.split.names.colors` and
   `show.split.oppo.colors` are `FALSE`.
 
+- annotation.legend.name:
+
+  Character. The name of the annotation variable legend, the length must
+  match the number of annotation variables. Ignored if `annotation.vars`
+  = `NULL`.
+
+- show.annotation.legend:
+
+  Logical. If `TRUE`, the function will display a legend for annotation
+  variable identities. Ignored if `annotation.vars` = `NULL`.
+
 - legend.title.size:
 
   Numeric. The font size of all legend titles.
@@ -482,6 +630,14 @@ DotPlot_Heatmap(
   objects in the same R session. Use
   ComplexHeatmap::[`ht_opt`](https://rdrr.io/pkg/ComplexHeatmap/man/ht_opt.html)(RESET
   = `TRUE`) to restore default parameters.
+
+- heatmap.width:
+
+  Numeric. The width of each column.
+
+- heatmap.height:
+
+  Numeric. The height of each row.
 
 - output.data:
 
