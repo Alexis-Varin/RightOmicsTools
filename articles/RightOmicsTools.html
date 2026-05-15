@@ -312,8 +312,7 @@ of the <code>ggplot2</code> package:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Cell_Heatmap.html">Cell_Heatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
 <span>             features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
 <span>             cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>             show.idents.legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>             raster <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>             show.idents.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="RightOmicsTools_files/figure-html/heatmap-1.png" class="r-plt" alt="" width="768" style="display: block; margin: auto;"></p>
 <p>Let’s compare it to <code>Seurat</code> package’s default heatmap
 function:</p>
@@ -378,7 +377,8 @@ square grid, both also offering many more options than their
 <code class="sourceCode R"><span><span class="co"># We will disable some parameters to be as close as possible from Seurat's DotPlot</span></span>
 <span><span class="co"># Due to the number of features, we will also lower dots size and flip the axis</span></span>
 <span><span class="fu"><a href="../reference/DotPlot_Heatmap.html">DotPlot_Heatmap</a></span><span class="op">(</span><span class="va">pbmc3k</span>,</span>
-<span>                features <span class="op">=</span> <span class="va">annotation.markers</span>,</span>
+<span>                features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">annotation.markers</span><span class="op">)</span>,</span>
+<span>                dots.type <span class="op">=</span> <span class="st">"radius"</span>,</span>
 <span>                dots.size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                heatmap.height <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                cluster.features <span class="op">=</span> <span class="cn">FALSE</span>,</span>

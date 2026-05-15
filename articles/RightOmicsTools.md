@@ -285,8 +285,7 @@ which is reworked using the `ComplexHeatmap` package instead of the
 Cell_Heatmap(pbmc3k,
              features = annotation.markers,
              cluster.features = FALSE,
-             show.idents.legend = FALSE,
-             raster = FALSE)
+             show.idents.legend = FALSE)
 ```
 
 ![](RightOmicsTools_files/figure-html/heatmap-1.png)
@@ -370,7 +369,8 @@ counterparts:
 # We will disable some parameters to be as close as possible from Seurat's DotPlot
 # Due to the number of features, we will also lower dots size and flip the axis
 DotPlot_Heatmap(pbmc3k,
-                features = annotation.markers,
+                features = rev(annotation.markers),
+                dots.type = "radius",
                 dots.size = 2,
                 heatmap.height = 4,
                 cluster.features = FALSE,
