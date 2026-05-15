@@ -25,6 +25,9 @@ reference:
   - contents:
     - tradeSeqPreprocess
     - tradeSeqTests
+  - title: ComplexHeatmap
+  - contents:
+    - anno_ggplot
   - title: CIBERSORTx
   - contents:
     - Reference_Matrix_Builder
