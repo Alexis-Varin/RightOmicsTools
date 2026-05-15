@@ -46,10 +46,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Install uwot from CRAN (source) to avoid segfault on binary
-        if: runner.os == 'macOS'
-        run: Rscript -e "install.packages('magick', type = 'source', repos = 'https://cloud.r-project.org')"
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
