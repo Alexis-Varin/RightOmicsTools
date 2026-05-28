@@ -9,8 +9,9 @@
 #' @param features Character. The names of one or several features to plot the average expression from.
 #' @param group.by Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to use instead of the active.ident metadata. If \code{NULL}, the current active.ident metadata will be used.
 #' @param split.by Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the identities of the active.ident metadata by.
-#' @param annotation.vars Character. The names of one or several metadata (categorical variables) or features (continuous variables) to display as annotation variables.
 #' @param separate.split Logical. If \code{TRUE}, \code{cluster.features} will be set to \code{FALSE} and the different \code{split.by} identities will split the \code{features} instead of the identities of the active.ident metadata. Ignored if \code{split.by} = \code{NULL}.
+#' @param annotation.vars Character. The names of one or several metadata (categorical variables) or features (continuous variables) to display as annotation variables.
+#' @param annotation.name Character. The name of the annotation variable, the length must match the number of annotation variables. Also changes the name of the associated legend. Ignored if \code{annotation.vars} = \code{NULL}.
 #' @param annotation.type Character. Either 'absolute', which will calculate the proportion of cells within the whole object (for example, with some visualizations like 'bar', identities with low amount of cells will appear small), or 'relative', which will calculate the proportion of cells independently in each identity of the active.ident metadata, all identities will be displayed with the same relative size, which might distort the perception of the true proportion of cells, so use with caution. Only applies to categorical variables. Ignored if \code{annotation.vars} = \code{NULL}.
 #' @param annotation.plot Character. The type of plot to use for annotation variables. First for the categorical variables, either 'donut', 'pie', 'treemap', 'treemap_fixed', 'bar' or 'bar_fixed'. Then for the continuous variables, either 'violin', 'violin_median', 'violin_quartiles', 'violin_boxplot', 'boxplot' or 'density'. You must choose any one of each (for example, c('donut', 'violin'), or c('treemap', 'boxplot') etc). You may also provide multiple choices of each if the length matches the number of annotation variables (for example, if you have 3 annotation variables, you may set \code{annotation.plot} = c('treemap', 'boxplot', 'donut'), or 5 annotation variables \code{annotation.plot} = c('pie', 'violin_boxplot', 'violin_boxplot', 'density', 'bar') etc). You need to know beforehand which variables are categorical and which are continuous to set the corresponding choice. Ignored if \code{annotation.vars} = \code{NULL}.
 #' @param annotation.split Logical. If \code{TRUE}, the annotation variables will be split by the \code{split.by} identities. You may also provide multiple choices if the length matches the number of annotation variables (if you have 3 annotation variables, you may set \code{annotation.split} = c(TRUE, FALSE, TRUE) etc). Ignored if \code{annotation.vars} = \code{NULL} or if \code{split.by} = \code{NULL}.
@@ -41,9 +42,15 @@
 #' @param split.colors.inner.border Logical. If \code{TRUE}, the function will display a border around each \code{split.by} identity row or column. Ignored if \code{split.by} = \code{NULL}.
 #' @param show.split.names.colors Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} next to identity names. Ignored if \code{split.by} = \code{NULL}.
 #' @param show.split.oppo.colors Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} on the opposite side of identity names. Ignored if \code{split.by} = \code{NULL}.
+#' @param features.colors Character or List. The color names for each feature. You may also provide a list if you want to add multiple colors for each feature (for example, if you want to indicate which features are regulated by a transcription factor and also belong to a GSEA pathway, you can set \code{features.colors} = list('TF' = c('ABCA1' = 'blue', 'ABCG1' = 'blue', 'CD8A' = 'red'), 'pathway' = c('ABCA1' = 'magenta', 'ABCG1' = 'green', 'CD8A' = 'green'))).
+#' @param features.colors.outer.border Logical. If \code{TRUE}, the function will display a border around each feature slice. Ignored if \code{features.colors} = \code{NULL}.
+#' @param features.colors.inner.border Logical. If \code{TRUE}, the function will display a border around each feature row or column. Ignored if \code{features.colors} = \code{NULL}.
+#' @param show.features.names.colors Logical. If \code{TRUE}, the function will display the colors specified in \code{features.colors} next to feature names. Ignored if \code{features.colors} = \code{NULL}.
+#' @param show.features.oppo.colors Logical. If \code{TRUE}, the function will display the colors specified in \code{features.colors} on the opposite side of feature names. Ignored if \code{features.colors} = \code{NULL}.
 #' @param annotation.colors Character or List. The color names for each annotation variable identity. You may also provide a named list if you want to set the colors of multiple annotation variables (for example, if \code{annotation.vars} = c('treatment', 'response'), you may provide \code{annotation.colors} = list('treatment' = c('blue', 'red', 'gold'), 'response' = c('magenta', 'green', 'brown', 'lightblue'))). For categorical variables, the length must match the number of identities in the annotation variable. For continuous variables, the length must match the number of active.ident identities if \code{annotation.split} = FALSE, or the number of \code{split.by} identities if \code{annotation.split} = TRUE. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{annotation.vars} = \code{NULL}.
-#' @param annotation.colors.outer.border Logical. If \code{TRUE}, the function will display a border around each annotation variable slice. Ignored if \code{annotation.vars} = \code{NULL}.
-#' @param annotation.colors.inner.border Logical. If \code{TRUE}, the function will display a border around each annotation variable row or column. Ignored if \code{annotation.vars} = \code{NULL}.
+#' @param annotation.outline Logical. If \code{TRUE}, the function will display a black outline around the plot shape. You may also provide multiple choices if the length matches the number of annotation variables (if you have 3 annotation variables, you may set \code{annotation.outline} = c(TRUE, FALSE, TRUE) etc). Ignored if \code{annotation.vars} = \code{NULL}.
+#' @param annotation.outer.border Logical. If \code{TRUE}, the function will display a border around each annotation variable slice. Ignored if \code{annotation.vars} = \code{NULL}.
+#' @param annotation.inner.border Logical. If \code{TRUE}, the function will display a border around each annotation variable row or column. Ignored if \code{annotation.vars} = \code{NULL}.
 #' @param order.idents Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the active.ident identities. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.
 #' @param order.split Character or Numeric. Either 'reverse', or the \code{split.by} identities (as names or as numerical values corresponding to the indices) or in \code{split.idents} to order the \code{split.by} identities. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered. Ignored if \code{split.by} = \code{NULL}.
 #' @param order.annotation Character or Numeric. Either 'reverse', or the annotation variable identities (as names or as numerical values corresponding to the indices) to order the annotation variable identities. Ignored if \code{annotation.vars} = \code{NULL}.
@@ -65,6 +72,8 @@
 #' @param column.names.angle Numeric. The angle of rotation of the column names.
 #' @param column.names.side Character. The side where the column names will be displayed, either 'top' or 'bottom'. The dendrogram will be displayed on the opposite side.
 #' @param column.names.height Numeric. The height of the column names. Increase this parameter if your column names are truncated.
+#' @param annotation.name.size Numeric. The font size of the annotation variable name.
+#' @param annotation.name.angle Numeric. The angle of rotation of the annotation variable name.
 #' @param inner.border Logical. If \code{TRUE}, the function will display a black outline around each dot if \code{dotplot} = \code{TRUE}, or a black border around each cell of the heatmap if \code{dotplot} = \code{FALSE}.
 #' @param outer.border Logical. If \code{TRUE}, the function will display an outer border around the plot or around each slice if \code{idents.kmeans} and/or \code{features.kmeans} are higher than 1.
 #' @param data.legend.name Character. The name of the data legend.
@@ -77,7 +86,8 @@
 #' @param show.idents.legend Logical. If \code{TRUE}, the function will display a legend for the active.ident metadata identities or \code{idents}. Ignored if \code{show.idents.names.colors} and \code{show.idents.oppo.colors} are \code{FALSE}.
 #' @param split.legend.name Character. The name of the \code{split.by} legend. Ignored if \code{split.by} = \code{NULL}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.
 #' @param show.split.legend Logical. If \code{TRUE}, the function will display a legend for \code{split.by} identities or \code{split.idents}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.
-#' @param annotation.legend.name Character. The name of the annotation variable legend, the length must match the number of annotation variables. Ignored if \code{annotation.vars} = \code{NULL}.
+#' @param features.legend.name Character. The name of the \code{features.colors} legend. Ignored if \code{features.colors} = \code{NULL}. Ignored if \code{show.features.names.colors} and \code{show.features.oppo.colors} are \code{FALSE}.
+#' @param features.legend Character or List. You may add a custom legend for the \code{features.colors} (for example, if you have 2 different colors in \code{features.colors} corresponding to transcription factor regulation, you can set \code{features.legend} = c('yes' = 'blue', 'no' = 'red')). You may also provide a named list if you provided a named list to \code{features.colors} (for example, if you have 2 different colors in \code{features.colors} corresponding to transcription factor regulation and 2 others for a GSEA pathway, you can set \code{features.legend} = list('TF' = c('yes' = 'blue', 'no' = 'red'), 'pathway' = c('yes' = 'green', 'no' = 'magenta'))). Ignored if \code{features.colors} = \code{NULL}.
 #' @param show.annotation.legend Logical. If \code{TRUE}, the function will display a legend for annotation variable identities. Ignored if \code{annotation.vars} = \code{NULL}.
 #' @param legend.title.size Numeric. The font size of all legend titles.
 #' @param legend.text.size Numeric. The font size of all legend texts.
@@ -121,11 +131,12 @@ DotPlot_Heatmap = function(seurat_object,
                            features,
                            group.by = NULL,
                            split.by = NULL,
-                           annotation.vars = NULL,
                            separate.split = TRUE,
+                           annotation.vars = NULL,
+                           annotation.name = annotation.vars,
                            annotation.type = "absolute",
                            annotation.plot = c("donut", "violin"),
-                           annotation.split = TRUE,
+                           annotation.split = FALSE,
                            idents = NULL,
                            split.idents = NULL,
                            scale = TRUE,
@@ -134,7 +145,7 @@ DotPlot_Heatmap = function(seurat_object,
                            rotate.axis = FALSE,
                            dotplot = TRUE,
                            dots.type = "square root",
-                           dots.size = 5,
+                           dots.size = 3,
                            show.noexpr.dots = FALSE,
                            col.min = ifelse(isTRUE(scale), -2, 0),
                            col.max = ifelse(isTRUE(scale), 2, "q100"),
@@ -153,9 +164,15 @@ DotPlot_Heatmap = function(seurat_object,
                            split.colors.inner.border = FALSE,
                            show.split.names.colors = FALSE,
                            show.split.oppo.colors = TRUE,
+                           features.colors = NULL,
+                           features.colors.outer.border = TRUE,
+                           features.colors.inner.border = FALSE,
+                           show.features.names.colors = FALSE,
+                           show.features.oppo.colors = TRUE,
                            annotation.colors = NULL,
-                           annotation.colors.outer.border = TRUE,
-                           annotation.colors.inner.border = FALSE,
+                           annotation.outline = TRUE,
+                           annotation.outer.border = TRUE,
+                           annotation.inner.border = FALSE,
                            order.idents = NULL,
                            order.split = NULL,
                            order.annotation = NULL,
@@ -177,6 +194,8 @@ DotPlot_Heatmap = function(seurat_object,
                            column.names.angle = 45,
                            column.names.side = "bottom",
                            column.names.height = 15,
+                           annotation.name.size = 9,
+                           annotation.name.angle = 45,
                            inner.border = TRUE,
                            outer.border = TRUE,
                            data.legend.name = ifelse(isTRUE(scale),"Z-Score","Average Expression"),
@@ -189,15 +208,18 @@ DotPlot_Heatmap = function(seurat_object,
                            show.idents.legend = TRUE,
                            split.legend.name = split.by,
                            show.split.legend = TRUE,
-                           annotation.legend.name = annotation.vars,
+                           features.legend.name = NULL,
+                           features.legend = NULL,
                            show.annotation.legend = TRUE,
                            legend.title.size = 10,
                            legend.text.size = 10,
                            legend.gap = 10,
-                           heatmap.width = 10,
-                           heatmap.height = 10,
+                           heatmap.width = 6,
+                           heatmap.height = 6,
                            output.data = FALSE,
                            ...) {
+
+  custom.colors = Right_Palette()
 
   if (isFALSE(any(Seurat::Assays(seurat_object) %in% assay))) {
     message("Assay '",assay,"' was not found in the Seurat object, using 'RNA' instead")
@@ -224,7 +246,7 @@ DotPlot_Heatmap = function(seurat_object,
   if (is.character(idents)) {
     ident.1 = ident.1[ident.1 %in% idents]
     if (length(ident.1) == 0) {
-      stop("None of the identities supplied to idents were found")
+      stop("None of the identities supplied to idents were found", call. = FALSE)
     }
     if (length(ident.1) < length(idents)) {
       message("The following identities supplied to idents were not found:\n", paste0(setdiff(idents, ident.1), collapse = ", "))
@@ -244,12 +266,12 @@ DotPlot_Heatmap = function(seurat_object,
         ident.1 = rev(ident.1)
       }
       else {
-        stop("order.idents needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
+        stop("order.idents needs to be 'reverse' or a character/numeric vector of same length as the number of identities", call. = FALSE)
       }
     }
   }
   if (length(ident.1) == 1 & is.null(split.by)) {
-    stop("Only one identity in the active.ident identity, cannot compare features expression")
+    stop("Only one identity in the active.ident identity, cannot compare features expression", call. = FALSE)
   }
 
   if (is.character(split.by)) {
@@ -273,7 +295,7 @@ DotPlot_Heatmap = function(seurat_object,
       if (is.character(split.idents)) {
         ident.2 = ident.2[ident.2 %in% split.idents]
         if (length(ident.2) == 0) {
-          stop("None of the identities supplied to split.idents were found")
+          stop("None of the identities supplied to split.idents were found", call. = FALSE)
         }
         if (length(ident.2) < length(split.idents)) {
           message("The following identities supplied to split.idents were not found:\n", paste0(setdiff(split.idents, ident.2), collapse = ", "))
@@ -293,7 +315,7 @@ DotPlot_Heatmap = function(seurat_object,
             ident.2 = rev(ident.2)
           }
           else {
-            stop("order.split needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
+            stop("order.split needs to be 'reverse' or a character/numeric vector of same length as the number of identities", call. = FALSE)
           }
         }
       }
@@ -305,7 +327,7 @@ DotPlot_Heatmap = function(seurat_object,
       }
     }
     if (length(ident.3) == 1) {
-      stop("Only one identity in the active.ident and split.by identities, cannot compare features expression")
+      stop("Only one identity in the active.ident and split.by identities, cannot compare features expression", call. = FALSE)
     }
   }
   else {
@@ -317,11 +339,11 @@ DotPlot_Heatmap = function(seurat_object,
     data[ , 2] = NULL
   }
   if (ncol(data) == 1) {
-    stop("None of the features were found")
+    stop("None of the features were found", call. = FALSE)
   }
   data$ident = as.character(data$ident)
   if (sum(is.na(data$ident)) > 0) {
-    warning("NA values found in the identities")
+    warning("NA values found in the identities", call. = FALSE, immediate. = TRUE)
     data$ident[is.na(data$ident)] = "NA"
 
   }
@@ -356,13 +378,13 @@ DotPlot_Heatmap = function(seurat_object,
   dot = dot[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
   mat = mat[rowSums(is.na(mat)) < ncol(mat), , drop = FALSE]
   if (nrow(mat) < 2) {
-    stop("Less than two identities left, cannot compare features expression")
+    stop("Less than two identities left, cannot compare features expression", call. = FALSE)
   }
   idents.removed = setdiff(ident.3, rownames(mat))
   dot = dot[ , colSums(mat) > 0, drop = FALSE]
   mat = mat[ , colSums(mat) > 0, drop = FALSE]
   if (ncol(mat) == 0) {
-    stop("None of the features were expressed in any cells")
+    stop("None of the features were expressed in any cells", call. = FALSE)
   }
   features.removed = c(features.removed,setdiff(colnames(data), colnames(mat)))
   features.removed = features.removed[!features.removed == "ident"]
@@ -437,7 +459,7 @@ DotPlot_Heatmap = function(seurat_object,
   }
   if (!is.function(data.colors)) {
     if (length(data.colors) > 3) {
-      stop("data.colors must have 2 or 3 colors or must be a palette")
+      stop("data.colors must have 2 or 3 colors or must be a palette", call. = FALSE)
     }
     if (background.color == "data.colors") {
       if (!is.function(data.colors)) {
@@ -471,11 +493,8 @@ DotPlot_Heatmap = function(seurat_object,
   }
 
   if (!is.character(split.colors) & is.character(split.by)) {
-    current.seed = .Random.seed
-    set.seed(1234)
-    CustomColors = colors()[grep('gr(a|e)y|white|black', colors(), invert = T)]
-    split.colors = sample(CustomColors, length(ident.2))
-    .Random.seed = current.seed
+    split.colors = custom.colors[1:length(ident.2)]
+    custom.colors = custom.colors[(length(ident.2)+1):length(custom.colors)]
   }
 
   if (!is.character(idents.colors)) {
@@ -513,6 +532,22 @@ DotPlot_Heatmap = function(seurat_object,
       }
     }
   }
+
+  if (is.list(features.colors)) {
+    features.colors = lapply(features.colors, function(cols) {
+      if (is.null(names(cols))) {
+        names(cols) = features
+      }
+      cols = cols[setdiff(features, features.removed)]
+    })
+  }
+  else if (is.character(features.colors)) {
+    if (is.null(names(features.colors))) {
+      names(features.colors) = features
+    }
+    features.colors = list(features.colors[setdiff(features, features.removed)])
+  }
+
   idents.colors2 = idents.colors
   if (is.character(split.by)) {
     split.colors2 = split.colors
@@ -533,6 +568,13 @@ DotPlot_Heatmap = function(seurat_object,
         dup.colors2[[i]] = split.colors
       }
       split.colors = unlist(dup.colors2)
+      features.colors = lapply(features.colors, function(cols) {
+        dup.cols = list()
+        for (i in 1:length(cols)) {
+          dup.cols[[i]] = rep(cols[i], length(ident.2))
+        }
+        unlist(dup.cols)
+      })
       names(idents.colors) = ident.3
       names(split.colors) = rep(ident.2, length(setdiff(features, features.removed)))
       idents.colors = idents.colors[!names(idents.colors) %in% idents.removed]
@@ -571,11 +613,34 @@ DotPlot_Heatmap = function(seurat_object,
                           title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
                           labels_gp = gpar(fontsize = legend.text.size))
   }
+  if (is.list(features.legend)) {
+    features.legend = lapply(seq_along(features.legend), function(leg) {
+      Legend(at = names(features.legend[[leg]]),
+             legend_gp = gpar(fill = features.legend[[leg]]),
+             title = features.legend.name[leg],
+             gap = unit(0.5, "cm"),
+             border = TRUE,
+             title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+             labels_gp = gpar(fontsize = legend.text.size))
+    })
+  }
+  else if (is.character(features.legend)) {
+    features.legend = list(Legend(at = names(features.legend),
+                                  legend_gp = gpar(fill = features.legend),
+                                  title = features.legend.name,
+                                  gap = unit(0.5, "cm"),
+                                  border = TRUE,
+                                  title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
+                                  labels_gp = gpar(fontsize = legend.text.size)))
+  }
   if (!is.null(idents.legend)) {
     anno.legend = c(anno.legend, list(idents.legend))
   }
   if (!is.null(split.legend)) {
     anno.legend = c(anno.legend, list(split.legend))
+  }
+  if (!is.null(features.legend)) {
+    anno.legend = c(anno.legend, features.legend)
   }
   if (is.character(annotation.vars)) {
     data2 = suppressWarnings(FetchData(object = seurat_object, vars = annotation.vars, layer = layer))
@@ -586,6 +651,8 @@ DotPlot_Heatmap = function(seurat_object,
     anno.vars = lapply(seq_along(colnames(data2)), function(col) {
       if (length(annotation.split) > 1) anno.split = annotation.split[col]
       else anno.split = annotation.split
+      if (length(annotation.outline) > 1) anno.outline = annotation.outline[col]
+      else anno.outline = annotation.outline
       df = data2[ , col, drop = F]
       if (is.character(split.by) & isFALSE(separate.split)) {
         df = cbind(df, data[ , "ident", drop = F])
@@ -597,9 +664,9 @@ DotPlot_Heatmap = function(seurat_object,
       df = df[df$ident %in% ident.3, ]
       if (is.character(df[[1]]) | is.factor(df[[1]])) {
         if (length(unique(df[[1]])) == 1 || (is.character(split.by) && colnames(data2)[col] == split.by & ((isTRUE(anno.split) & isTRUE(separate.split)) | isFALSE(separate.split)))) {
-          if (length(unique(df[[1]])) == 1) warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\n", immediate. = TRUE)
-          else if (isFALSE(separate.split)) warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\nThis happens when '", colnames(data2)[col], "' is also used in split.by\nConsider setting separate.split to TRUE and annotation.split to FALSE", immediate. = TRUE)
-          else warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\nThis happens when '", colnames(data2)[col], "' is also used in split.by\nConsider setting annotation.split to FALSE", immediate. = TRUE)
+          if (length(unique(df[[1]])) == 1) warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\n", call. = FALSE, immediate. = TRUE)
+          else if (isFALSE(separate.split)) warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\nThis happens when '", colnames(data2)[col], "' is also used in split.by\nConsider setting separate.split to TRUE and annotation.split to FALSE", call. = FALSE, immediate. = TRUE)
+          else warning("'", colnames(data2)[col], "' annotation has a single identity in the proportion of cells\nThis happens when '", colnames(data2)[col], "' is also used in split.by\nConsider setting annotation.split to FALSE", call. = FALSE, immediate. = TRUE)
         }
         if (is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split)) {
           df[[1]] = paste(df[[1]], "in", df[[3]])
@@ -622,11 +689,8 @@ DotPlot_Heatmap = function(seurat_object,
             anno.colors = split.colors2
           }
           else {
-            current.seed = .Random.seed
-            set.seed(1234+col*42)
-            CustomColors = colors()[grep('gr(a|e)y|white|black', colors(), invert = T)]
-            anno.colors = sample(CustomColors, length(unique(df[[1]])))
-            .Random.seed = current.seed
+            anno.colors = custom.colors[1:length(unique(df[[1]]))]
+            custom.colors <<- custom.colors[(length(unique(df[[1]]))+1):length(custom.colors)]
           }
         }
         if (is.character(split.by) && colnames(data2)[col] == split.by) {
@@ -648,7 +712,7 @@ DotPlot_Heatmap = function(seurat_object,
                 annotation.idents = rev(annotation.idents)
               }
               else {
-                stop("order.annotation needs to be 'reverse' or a character/numeric vector of same length as the number of identities")
+                stop("order.annotation needs to be 'reverse' or a character/numeric vector of same length as the number of identities", call. = FALSE)
               }
             }
           }
@@ -658,55 +722,76 @@ DotPlot_Heatmap = function(seurat_object,
         df[ , 2:ncol(df)] = df[ , 2:ncol(df), drop = F][ , ident.3, drop = F]
         condition = gsub(".* in ", "", df[[1]])
         df[[1]] = gsub(" in .*", "", df[[1]])
-        if (length(unique(df[[1]])) > 3 & !grepl("^treemap|bar$", annotation.plot[1]) & !grepl("^treemap|bar$", annotation.plot[col])) message("'", colnames(data2)[col], "' annotation has more than 3 identities, which might make it difficult to compare the proportion of cells\nConsider using 'treemap', 'treemap_fixed' or 'bar' in annotation.plot for better visualization")
+        if (length(unique(df[[1]])) > 3 & (!grepl("^treemap|^bar", annotation.plot[1]) & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && !grepl("^treemap|^bar|violin|boxplot|density", annotation.plot[col]))) message("'", colnames(data2)[col], "' annotation has more than 3 identities, which might make it difficult to compare the proportion\nConsider using 'treemap', 'treemap_fixed', 'bar' or 'bar_fixed' for better visualization")
         anno = HeatmapAnnotation(gganno = anno_ggplot(panel_fun = function(index, nm) {
-          g = ggplot(df, aes(x = 2, y = .data[[colnames(df)[index+1]]], fill = factor(.data[[colnames(df)[1]]],
-                                                                                      levels = annotation.idents))) +
-            scale_fill_manual(values = anno.colors) +
-            theme_void()
-          if ((annotation.plot[1] == "treemap" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "treemap") {
-            g = g + geom_treemap(aes(area = .data[[colnames(df)[index+1]]]), col = "black", show.legend = F)
+          if (is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split)) {
+            df$condition = condition
+            if ((isTRUE(rotate.axis) & !grepl("donut|pie", annotation.plot[1]) & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (isTRUE(rotate.axis) & length(annotation.plot) == length(annotation.vars) && !grepl("donut|pie", annotation.plot[col]))) {
+              g = ggplot(df, aes(x = 2, y = .data[[colnames(df)[index+1]]], fill = factor(.data[[colnames(df)[1]]],
+                                                                                          levels = rev(annotation.idents)))) +
+                scale_fill_manual(values = anno.colors) +
+                theme_void() +
+                coord_flip() +
+                facet_wrap(~factor(condition, ident.2), scales = ifelse((grepl("donut|pie", annotation.plot[1]) & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && grepl("donut|pie", annotation.plot[col])), "free", "fixed"),
+                           ncol = ifelse(isFALSE(rotate.axis), length(ident.2), 1)) +
+                theme(strip.text = element_blank(),
+                      strip.background = element_blank())
+            }
+            else {
+              g = ggplot(df, aes(x = 2, y = .data[[colnames(df)[index+1]]], fill = factor(.data[[colnames(df)[1]]],
+                                                                                          levels = annotation.idents))) +
+                scale_fill_manual(values = anno.colors) +
+                theme_void() +
+                facet_wrap(~factor(condition, ident.2), scales = ifelse((grepl("donut|pie", annotation.plot[1]) & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && grepl("donut|pie", annotation.plot[col])), "free", "fixed"),
+                           ncol = ifelse(isFALSE(rotate.axis), length(ident.2), 1)) +
+                theme(strip.text = element_blank(),
+                      strip.background = element_blank())
+            }
           }
-          else if ((annotation.plot[1] == "treemap_fixed" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "treemap_fixed") {
-            g = g + geom_treemap(aes(area = .data[[colnames(df)[index+1]]]), layout = "fixed", col = "black", show.legend = F)
+          else {
+            g = ggplot(df, aes(x = 2, y = .data[[colnames(df)[index+1]]], fill = factor(.data[[colnames(df)[1]]],
+                                                                                        levels = annotation.idents))) +
+              scale_fill_manual(values = anno.colors) +
+              theme_void()
           }
-          else if ((annotation.plot[1] == "donut" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "donut") {
-            g = g + geom_col(col = "black", width = 1, show.legend = F) +
+          if ((annotation.plot[1] == "treemap" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "treemap")) {
+            g = g + geom_treemap(aes(area = .data[[colnames(df)[index+1]]]),
+                                 col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F)
+          }
+          else if ((annotation.plot[1] == "treemap_fixed" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "treemap_fixed")) {
+            g = g + geom_treemap(aes(area = .data[[colnames(df)[index+1]]]), layout = "fixed",
+                                 col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F)
+          }
+          else if ((annotation.plot[1] == "donut" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "donut")) {
+            g = g + geom_col(col = ifelse(isTRUE(anno.outline), "black", "transparent"), width = 1, show.legend = F) +
               coord_polar("y", start = 0, direction = -1) +
               xlim(0.75, 2.5)
           }
-          else if ((annotation.plot[1] == "pie" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "pie") {
-            g = g + geom_col(col = "black", width = 1, show.legend = F) +
+          else if ((annotation.plot[1] == "pie" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "pie")) {
+            g = g + geom_col(col = ifelse(isTRUE(anno.outline), "black", "transparent"), width = 1, show.legend = F) +
               coord_polar("y", start = 0, direction = -1)
           }
-          else if ((annotation.plot[1] == "bar" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "bar") {
-            g = g + geom_col(position = "dodge", col = "black", width = 1, show.legend = F) +
+          else if ((annotation.plot[1] == "bar" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "bar")) {
+            g = g + geom_col(position = "dodge", col = ifelse(isTRUE(anno.outline), "black", "transparent"), width = 1, show.legend = F) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
           }
-          else if ((annotation.plot[1] == "bar_fixed" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || annotation.plot[col] == "bar_fixed") {
+          else if ((annotation.plot[1] == "bar_fixed" & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "bar_fixed")) {
             gg.max = max(df[ , 2:ncol(df)], na.rm = T)
-            g = g + geom_col(position = "dodge", col = "black", width = 1, show.legend = F) +
+            g = g + geom_col(position = "dodge", col = ifelse(isTRUE(anno.outline), "black", "transparent"), width = 1, show.legend = F) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else stop("annotation.plot must be either 'treemap', 'treemap_fixed', donut', 'pie', 'bar' or 'bar_fixed' for categorical variables")
-          if (is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split)) {
-            df$condition = condition
-            g = g + facet_wrap(~factor(condition, ident.2), scales = ifelse((grepl("donut|pie", annotation.plot[1]) & grepl("violin|boxplot|density", annotation.plot[2]) & length(annotation.plot == 2)) || grepl("donut|pie", annotation.plot[col]), "free", "fixed"),
-                               ncol = ifelse(isFALSE(rotate.axis), length(ident.2), 1)) +
-              theme(strip.text = element_blank(),
-                    strip.background = element_blank())
-          }
+          else stop("annotation.plot must be either 'treemap', 'treemap_fixed', donut', 'pie', 'bar' or 'bar_fixed' for categorical variables", call. = FALSE)
           return(g)
         },
         which = annotation.side,
-        outer.border = ifelse(isTRUE(annotation.colors.outer.border), TRUE, FALSE),
-        inner.border = ifelse(isTRUE(annotation.colors.inner.border), TRUE, FALSE),
+        outer.border = ifelse(isTRUE(annotation.outer.border), TRUE, FALSE),
+        inner.border = ifelse(isTRUE(annotation.inner.border), TRUE, FALSE),
         width = unit(ifelse(isTRUE(rotate.axis), heatmap.width/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split), heatmap.width*length(ident.2)/20, heatmap.width/20)), "inches"),
         height = unit(ifelse(isFALSE(rotate.axis), heatmap.height/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split), heatmap.height*length(ident.2)/20, heatmap.height/20)), "inches")),
-        annotation_label = colnames(df)[1],
-        annotation_name_rot = ifelse(isFALSE(rotate.axis), column.names.angle, 0),
+        annotation_label = annotation.name[col],
+        annotation_name_rot = ifelse(isFALSE(rotate.axis), annotation.name.angle, 0),
         annotation_name_side = ifelse(isFALSE(rotate.axis), ifelse(column.names.side == "top", "top", "bottom"), ifelse((row.names.side == "right" & isTRUE(separate.split)) | (row.names.side == "left" & isFALSE(separate.split)), "left", "right")),
-        annotation_name_gp = gpar(fontsize = features.names.size),
+        annotation_name_gp = gpar(fontsize = annotation.name.size),
         annotation_name_offset = unit(2, "mm"),
         which = annotation.side)
         anno@anno_list$gganno@name = paste0("gganno_", col)
@@ -714,7 +799,7 @@ DotPlot_Heatmap = function(seurat_object,
         if (!is.character(split.by) || (colnames(data2)[col] != split.by | length(setdiff(anno.colors, split.colors2)) > 0)) {
           anno.legend <<- c(anno.legend, list(Legend(at = annotation.idents,
                                                      legend_gp = gpar(fill = anno.colors),
-                                                     title = annotation.legend.name[col],
+                                                     title = annotation.name[col],
                                                      gap = unit(0.5, "cm"),
                                                      border = TRUE,
                                                      title_gp = gpar(fontsize = legend.title.size, fontface = "bold"),
@@ -737,61 +822,71 @@ DotPlot_Heatmap = function(seurat_object,
           gg.max = max(df[[1]], na.rm = T)
           df = df[df$ident == ident.3[index], , drop = F]
           if (ncol(df) == 3) {
-            g = ggplot(df, aes(x = .data[["condition"]], y = .data[[colnames(df)[1]]], fill = .data[["condition"]])) +
-              scale_fill_manual(values = anno.colors) +
-              theme_void()
+            if ((isTRUE(rotate.axis) & annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (isTRUE(rotate.axis) & length(annotation.plot) == length(annotation.vars) && annotation.plot[col] != "density")) {
+              g = ggplot(df, aes(x = factor(.data[["condition"]], rev(ident.2)), y = .data[[colnames(df)[1]]], fill = .data[["condition"]])) +
+                scale_fill_manual(values = anno.colors) +
+                coord_flip() +
+                theme_void()
+            }
+            else {
+              g = ggplot(df, aes(x = factor(.data[["condition"]], ident.2), y = .data[[colnames(df)[1]]], fill = .data[["condition"]])) +
+                scale_fill_manual(values = anno.colors) +
+                theme_void()
+            }
           }
           else {
             g = ggplot(df, aes(x = .data[["ident"]], y = .data[[colnames(df)[1]]], fill = .data[["ident"]])) +
               scale_fill_manual(values = anno.colors) +
               theme_void()
           }
-          if ((annotation.plot[2] == "violin" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "violin") {
-            g = g + geom_violin(col = "black", show.legend = F) +
+          if ((annotation.plot[2] == "violin" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "violin")) {
+            g = g + geom_violin(col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else if ((annotation.plot[2] == "violin_median" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "violin_median") {
-            g = g + geom_violin(col = "black", show.legend = F, draw_quantiles = c(0.5)) +
+          else if ((annotation.plot[2] == "violin_median" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "violin_median")) {
+            g = g + geom_violin(col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F, draw_quantiles = c(0.5)) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else if ((annotation.plot[2] == "violin_quartiles" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "violin_quartiles") {
-            g = g + geom_violin(col = "black", show.legend = F, draw_quantiles = c(0.25, 0.5, 0.75)) +
+          else if ((annotation.plot[2] == "violin_quartiles" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "violin_quartiles")) {
+            g = g + geom_violin(col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F, draw_quantiles = c(0.25, 0.5, 0.75)) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else if ((annotation.plot[2] == "violin_boxplot" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "violin_boxplot") {
-            g = g + geom_violin(col = "black", show.legend = F) +
-              geom_boxplot(col = "black", fill = "white", width = 0.1, show.legend = F, outliers = F) +
+          else if ((annotation.plot[2] == "violin_boxplot" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "violin_boxplot")) {
+            g = g + geom_violin(col = ifelse(isTRUE(anno.outline), "black", "transparent"), show.legend = F) +
+              geom_boxplot(col = "black", fill = "white", width = 0.1, fatten = 1, show.legend = F, outliers = F) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else if ((annotation.plot[2] == "boxplot" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "boxplot") {
-            g = g + geom_boxplot(col = "black", show.legend = F, outliers = F) +
+          else if ((annotation.plot[2] == "boxplot" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "boxplot")) {
+            g = g + geom_boxplot(col = ifelse(isTRUE(anno.outline), "black", "transparent"), fatten = 1, show.legend = F, outliers = F) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, gg.max))
           }
-          else if ((annotation.plot[2] == "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] == "density") {
+          else if ((annotation.plot[2] == "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] == "density")) {
             if (ncol(df) == 3) {
-              g = g + geom_density(aes(x = .data[[colnames(df)[1]]], fill = .data[["condition"]]), col = "black",
+              g = g + geom_density(aes(x = .data[[colnames(df)[1]]], fill = .data[["condition"]]),
+                                   col = ifelse(isTRUE(anno.outline), "black", "transparent"),
                                    alpha = 0.7, show.legend = F, inherit.aes = FALSE)
             }
             else {
-              g = g + geom_density(aes(x = .data[[colnames(df)[1]]], fill = .data[["ident"]]), col = "black",
+              g = g + geom_density(aes(x = .data[[colnames(df)[1]]], fill = .data[["ident"]]),
+                                   col = ifelse(isTRUE(anno.outline), "black", "transparent"),
                                    alpha = 0.7, show.legend = F, inherit.aes = FALSE)
             }
             g = g +
               scale_x_continuous(expand = expansion(mult = c(0.1, 0.1)), limits = c(0, gg.max)) +
               scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
           }
-          else stop("annotation.plot must be either 'violin', 'violin_median', 'violin_quartiles', 'violin_boxplot', 'boxplot' or 'density' for continuous variables")
+          else stop("annotation.plot must be either 'violin', 'violin_median', 'violin_quartiles', 'violin_boxplot', 'boxplot' or 'density' for continuous variables", call. = FALSE)
           return(g)
         },
         which = annotation.side,
-        outer.border = ifelse(isTRUE(annotation.colors.outer.border), TRUE, FALSE),
-        inner.border = ifelse(isTRUE(annotation.colors.inner.border), TRUE, FALSE),
-        width = unit(ifelse(isTRUE(rotate.axis), heatmap.width/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] != "density"), heatmap.width*length(ident.2)/20, heatmap.width/20)), "inches"),
-        height = unit(ifelse(isFALSE(rotate.axis), heatmap.height/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[col] != "density"), heatmap.height*length(ident.2)/20, heatmap.height/20)), "inches")),
-        annotation_label = colnames(df)[1],
-        annotation_name_rot = ifelse(isFALSE(rotate.axis), column.names.angle, 0),
+        outer.border = ifelse(isTRUE(annotation.outer.border), TRUE, FALSE),
+        inner.border = ifelse(isTRUE(annotation.inner.border), TRUE, FALSE),
+        width = unit(ifelse(isTRUE(rotate.axis), heatmap.width/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] != "density")), heatmap.width*length(ident.2)/20, heatmap.width/20)), "inches"),
+        height = unit(ifelse(isFALSE(rotate.axis), heatmap.height/20*(length(ident.3)-1), ifelse(is.character(split.by) & isTRUE(separate.split) & isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || (length(annotation.plot) == length(annotation.vars) && annotation.plot[col] != "density")), heatmap.height*length(ident.2)/20, heatmap.height/20)), "inches")),
+        annotation_label = annotation.name[col],
+        annotation_name_rot = ifelse(isFALSE(rotate.axis), annotation.name.angle, 0),
         annotation_name_side = ifelse(isFALSE(rotate.axis), ifelse(column.names.side == "top", "top", "bottom"), ifelse((row.names.side == "right" & isTRUE(separate.split)) | (row.names.side == "left" & isFALSE(separate.split)), "left", "right")),
-        annotation_name_gp = gpar(fontsize = features.names.size),
+        annotation_name_gp = gpar(fontsize = annotation.name.size),
         annotation_name_offset = unit(2, "mm"),
         which = annotation.side)
         anno@anno_list$gganno@name = paste0("gganno_", col)
@@ -829,6 +924,23 @@ DotPlot_Heatmap = function(seurat_object,
                                         show_legend = FALSE))
   }
   else anno.split = NULL
+  if (is.list(features.colors)) {
+    anno.features = lapply(seq_along(features.colors), function(i) {
+      anno = HeatmapAnnotation(Feature = names(features.colors[[i]]),
+                               col = list(Feature = features.colors[[i]]),
+                               na_col = na.color,
+                               which = annotation.side2,
+                               border = ifelse(isTRUE(features.colors.outer.border), TRUE, FALSE),
+                               gp = gpar(col = ifelse(isTRUE(features.colors.inner.border), "black", NA)),
+                               show_annotation_name = FALSE,
+                               show_legend = FALSE)
+      anno@anno_list$Feature@name = paste0("Feature_", i)
+      names(anno@anno_list) = paste0("Feature_", i)
+      return(anno)
+    })
+  }
+  else anno.features = NULL
+
   if (is.character(split.by) & isTRUE(separate.split)) {
     if (isFALSE(rotate.axis)) {
       column.names.side = ifelse(column.names.side == "top", "bottom", "top")
@@ -843,37 +955,11 @@ DotPlot_Heatmap = function(seurat_object,
       cluster.features = FALSE
       message("Setting cluster.features to FALSE since separate.split is TRUE.")
     }
-    if (isTRUE(show.split.names.colors) & isTRUE(show.idents.names.colors)) {
-      if (isFALSE(rotate.axis)) {
-        if (row.names.side == "left") {
-          left.anno = anno.idents
-        }
-        else {
-          right.anno = anno.idents
-        }
-        if (column.names.side == "top") {
-          top.anno = anno.split
-        }
-        else {
-          bottom.anno = anno.split
-        }
-      }
-      else {
-        if (column.names.side == "top") {
-          top.anno = anno.idents
-        }
-        else {
-          bottom.anno = anno.idents
-        }
-        if (row.names.side == "left") {
-          left.anno = anno.split
-        }
-        else {
-          right.anno = anno.split
-        }
-      }
+    if (features.kmeans > 1) {
+      features.kmeans = 1
+      message("Setting features.kmeans to 1 since separate.split is TRUE.")
     }
-    else if (isTRUE(show.idents.names.colors)) {
+    if (isTRUE(show.idents.names.colors)) {
       if (isFALSE(rotate.axis)) {
         if (row.names.side == "left") {
           left.anno = anno.idents
@@ -891,7 +977,7 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
     }
-    else if (isTRUE(show.split.names.colors)) {
+    if (isTRUE(show.split.names.colors)) {
       if (isFALSE(rotate.axis)) {
         if (column.names.side == "top") {
           top.anno = anno.split
@@ -909,14 +995,44 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
     }
-    if (isTRUE(show.split.oppo.colors) & isTRUE(show.idents.oppo.colors)) {
+    if (isTRUE(show.features.names.colors)) {
       if (isFALSE(rotate.axis)) {
-        if (row.names.side == "left") {
-          right.anno = c(anno.vars, anno.idents)
+        if (column.names.side == "top") {
+          top.anno = c(rev(anno.features), top.anno)
         }
         else {
-          left.anno = c(anno.idents, rev(anno.vars))
+          bottom.anno = c(bottom.anno, anno.features)
         }
+      }
+      else {
+        if (row.names.side == "left") {
+          left.anno = c(rev(anno.features), left.anno)
+        }
+        else {
+          right.anno = c(right.anno, anno.features)
+        }
+      }
+    }
+    if (isTRUE(show.idents.oppo.colors)) {
+      if (isFALSE(rotate.axis)) {
+        if (row.names.side == "left") {
+          right.anno = anno.idents
+        }
+        else {
+          left.anno = anno.idents
+        }
+      }
+      else {
+        if (column.names.side == "top") {
+          bottom.anno = anno.idents
+        }
+        else {
+          top.anno = anno.idents
+        }
+      }
+    }
+    if (isTRUE(show.split.oppo.colors)) {
+      if (isFALSE(rotate.axis)) {
         if (column.names.side == "top") {
           bottom.anno = anno.split
         }
@@ -925,12 +1041,6 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
       else {
-        if (column.names.side == "top") {
-          bottom.anno = c(anno.vars, anno.idents)
-        }
-        else {
-          top.anno = c(anno.idents, rev(anno.vars))
-        }
         if (row.names.side == "left") {
           right.anno = anno.split
         }
@@ -939,70 +1049,38 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
     }
-    else if (isTRUE(show.idents.oppo.colors)) {
+    if (isTRUE(show.features.oppo.colors)) {
       if (isFALSE(rotate.axis)) {
-        if (row.names.side == "left") {
-          right.anno = c(anno.vars, anno.idents)
+        if (column.names.side == "top") {
+          bottom.anno = c(bottom.anno, anno.features)
         }
         else {
-          left.anno = c(anno.idents, rev(anno.vars))
+          top.anno = c(rev(anno.features), top.anno)
         }
       }
       else {
-        if (column.names.side == "top") {
-          bottom.anno = c(anno.vars, anno.idents)
+        if (row.names.side == "left") {
+          right.anno = c(right.anno, anno.features)
         }
         else {
-          top.anno = c(anno.idents, rev(anno.vars))
+          left.anno = c(rev(anno.features), left.anno)
         }
       }
     }
-    else if (isTRUE(show.split.oppo.colors)) {
-      if (isFALSE(rotate.axis)) {
-        if (row.names.side == "left") {
-          right.anno = anno.vars
-        }
-        else {
-          left.anno = rev(anno.vars)
-        }
-        if (column.names.side == "top") {
-          bottom.anno = anno.split
-        }
-        else {
-          top.anno = anno.split
-        }
+    if (isFALSE(rotate.axis)) {
+      if (row.names.side == "left") {
+        right.anno = c(anno.vars, right.anno)
       }
       else {
-        if (column.names.side == "top") {
-          bottom.anno = anno.vars
-        }
-        else {
-          top.anno = rev(anno.vars)
-        }
-        if (row.names.side == "left") {
-          right.anno = anno.split
-        }
-        else {
-          left.anno = anno.split
-        }
+        left.anno = c(left.anno, rev(anno.vars))
       }
     }
     else {
-      if (isFALSE(rotate.axis)) {
-        if (row.names.side == "left") {
-          right.anno = anno.vars
-        }
-        else {
-          left.anno = rev(anno.vars)
-        }
+      if (column.names.side == "top") {
+        bottom.anno = c(anno.vars, bottom.anno)
       }
       else {
-        if (column.names.side == "top") {
-          bottom.anno = anno.vars
-        }
-        else {
-          top.anno = rev(anno.vars)
-        }
+        top.anno = c(top.anno, rev(anno.vars))
       }
     }
   }
@@ -1133,6 +1211,42 @@ DotPlot_Heatmap = function(seurat_object,
         }
       }
     }
+    if (isTRUE(show.features.names.colors)) {
+      if (isFALSE(rotate.axis)) {
+        if (column.names.side == "top") {
+          top.anno = rev(anno.features)
+        }
+        else {
+          bottom.anno = anno.features
+        }
+      }
+      else {
+        if (row.names.side == "left") {
+          left.anno = rev(anno.features)
+        }
+        else {
+          right.anno = anno.features
+        }
+      }
+    }
+    if (isTRUE(show.features.oppo.colors)) {
+      if (isFALSE(rotate.axis)) {
+        if (column.names.side == "top") {
+          bottom.anno = anno.features
+        }
+        else {
+          top.anno = rev(anno.features)
+        }
+      }
+      else {
+        if (row.names.side == "left") {
+          right.anno = anno.features
+        }
+        else {
+          left.anno = rev(anno.features)
+        }
+      }
+    }
   }
   if (length(left.anno) > 0) {
     left.anno = do.call(c, left.anno)
@@ -1162,9 +1276,9 @@ DotPlot_Heatmap = function(seurat_object,
     column.dend.side = column.title.side = "bottom"
   }
   idents.names.gp = gpar(fontsize = idents.names.size)
-  features.names.gp = gpar(fontsize = features.names.size, fontface = ifelse(isFALSE(rotate.axis) & isFALSE(separate.split), features.names.style, "plain"))
+  features.names.gp = gpar(fontsize = features.names.size, fontface = ifelse(isTRUE(separate.split) & is.character(split.by), "plain", features.names.style))
   idents.title.gp = gpar(fontsize = idents.kmeans.numbers.size, col = idents.kmeans.color)
-  features.title.gp = gpar(fontsize = features.kmeans.numbers.size, col = features.kmeans.color, fontface = ifelse(isFALSE(separate.split), "plain", features.names.style))
+  features.title.gp = gpar(fontsize = features.kmeans.numbers.size, col = features.kmeans.color, fontface = ifelse(isTRUE(separate.split) & is.character(split.by), features.names.style, "plain"))
 
   if (isFALSE(dotplot)) {
     if (sum(is.na(mat)) > 0) {
@@ -1236,7 +1350,7 @@ DotPlot_Heatmap = function(seurat_object,
         }
         else {
           if (isFALSE(background.warning)) {
-            warning("background.color is incorrect, setting to 'white'", immediate. = T)
+            warning("background.color is incorrect, setting to 'white'", call. = FALSE, immediate. = TRUE)
             background.warning <<- TRUE
           }
           grid.rect(x = x, y = y, width = w, height = h,
@@ -1296,7 +1410,7 @@ DotPlot_Heatmap = function(seurat_object,
         }
         else {
           if (isFALSE(background.warning)) {
-            warning("background.color is incorrect, setting to 'white'", immediate. = T)
+            warning("background.color is incorrect, setting to 'white'", call. = FALSE, immediate. = TRUE)
             background.warning <<- TRUE
           }
           grid.rect(x = x, y = y, width = w, height = h,
@@ -1414,7 +1528,7 @@ DotPlot_Heatmap = function(seurat_object,
     for (i in 1:length(anno.vars)) {
       if (length(annotation.split) > 1) anno.split = annotation.split[i]
       else anno.split = annotation.split
-      if (isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot == 2)) || annotation.plot[i] != "density")) {
+      if (isTRUE(anno.split) & ((annotation.plot[2] != "density" & grepl("tree|donut|pie|bar", annotation.plot[1]) & length(annotation.plot) == 2) || annotation.plot[i] != "density")) {
         for (j in 1:length(ident.2)) {
           if (isFALSE(rotate.axis)) {
             if (column.names.side == "bottom") {

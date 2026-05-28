@@ -12,11 +12,12 @@ DotPlot_Heatmap(
   features,
   group.by = NULL,
   split.by = NULL,
-  annotation.vars = NULL,
   separate.split = TRUE,
+  annotation.vars = NULL,
+  annotation.name = annotation.vars,
   annotation.type = "absolute",
   annotation.plot = c("donut", "violin"),
-  annotation.split = TRUE,
+  annotation.split = FALSE,
   idents = NULL,
   split.idents = NULL,
   scale = TRUE,
@@ -25,7 +26,7 @@ DotPlot_Heatmap(
   rotate.axis = FALSE,
   dotplot = TRUE,
   dots.type = "square root",
-  dots.size = 5,
+  dots.size = 3,
   show.noexpr.dots = FALSE,
   col.min = ifelse(isTRUE(scale), -2, 0),
   col.max = ifelse(isTRUE(scale), 2, "q100"),
@@ -44,9 +45,15 @@ DotPlot_Heatmap(
   split.colors.inner.border = FALSE,
   show.split.names.colors = FALSE,
   show.split.oppo.colors = TRUE,
+  features.colors = NULL,
+  features.colors.outer.border = TRUE,
+  features.colors.inner.border = FALSE,
+  show.features.names.colors = FALSE,
+  show.features.oppo.colors = TRUE,
   annotation.colors = NULL,
-  annotation.colors.outer.border = TRUE,
-  annotation.colors.inner.border = FALSE,
+  annotation.outline = TRUE,
+  annotation.outer.border = TRUE,
+  annotation.inner.border = FALSE,
   order.idents = NULL,
   order.split = NULL,
   order.annotation = NULL,
@@ -68,6 +75,8 @@ DotPlot_Heatmap(
   column.names.angle = 45,
   column.names.side = "bottom",
   column.names.height = 15,
+  annotation.name.size = 9,
+  annotation.name.angle = 45,
   inner.border = TRUE,
   outer.border = TRUE,
   data.legend.name = ifelse(isTRUE(scale), "Z-Score", "Average Expression"),
@@ -80,13 +89,14 @@ DotPlot_Heatmap(
   show.idents.legend = TRUE,
   split.legend.name = split.by,
   show.split.legend = TRUE,
-  annotation.legend.name = annotation.vars,
+  features.legend.name = NULL,
+  features.legend = NULL,
   show.annotation.legend = TRUE,
   legend.title.size = 10,
   legend.text.size = 10,
   legend.gap = 10,
-  heatmap.width = 10,
-  heatmap.height = 10,
+  heatmap.width = 6,
+  heatmap.height = 6,
   output.data = FALSE,
   ...
 )
@@ -106,9 +116,11 @@ DotPlot_Heatmap(
 
 \item{split.by}{Character. The name of a metadata (for example, 'orig.ident', 'seurat_clusters', etc) to split the identities of the active.ident metadata by.}
 
+\item{separate.split}{Logical. If \code{TRUE}, \code{cluster.features} will be set to \code{FALSE} and the different \code{split.by} identities will split the \code{features} instead of the identities of the active.ident metadata. Ignored if \code{split.by} = \code{NULL}.}
+
 \item{annotation.vars}{Character. The names of one or several metadata (categorical variables) or features (continuous variables) to display as annotation variables.}
 
-\item{separate.split}{Logical. If \code{TRUE}, \code{cluster.features} will be set to \code{FALSE} and the different \code{split.by} identities will split the \code{features} instead of the identities of the active.ident metadata. Ignored if \code{split.by} = \code{NULL}.}
+\item{annotation.name}{Character. The name of the annotation variable, the length must match the number of annotation variables. Also changes the name of the associated legend. Ignored if \code{annotation.vars} = \code{NULL}.}
 
 \item{annotation.type}{Character. Either 'absolute', which will calculate the proportion of cells within the whole object (for example, with some visualizations like 'bar', identities with low amount of cells will appear small), or 'relative', which will calculate the proportion of cells independently in each identity of the active.ident metadata, all identities will be displayed with the same relative size, which might distort the perception of the true proportion of cells, so use with caution. Only applies to categorical variables. Ignored if \code{annotation.vars} = \code{NULL}.}
 
@@ -170,11 +182,23 @@ DotPlot_Heatmap(
 
 \item{show.split.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{split.colors} on the opposite side of identity names. Ignored if \code{split.by} = \code{NULL}.}
 
+\item{features.colors}{Character or List. The color names for each feature. You may also provide a list if you want to add multiple colors for each feature (for example, if you want to indicate which features are regulated by a transcription factor and also belong to a GSEA pathway, you can set \code{features.colors} = list('TF' = c('ABCA1' = 'blue', 'ABCG1' = 'blue', 'CD8A' = 'red'), 'pathway' = c('ABCA1' = 'magenta', 'ABCG1' = 'green', 'CD8A' = 'green'))).}
+
+\item{features.colors.outer.border}{Logical. If \code{TRUE}, the function will display a border around each feature slice. Ignored if \code{features.colors} = \code{NULL}.}
+
+\item{features.colors.inner.border}{Logical. If \code{TRUE}, the function will display a border around each feature row or column. Ignored if \code{features.colors} = \code{NULL}.}
+
+\item{show.features.names.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{features.colors} next to feature names. Ignored if \code{features.colors} = \code{NULL}.}
+
+\item{show.features.oppo.colors}{Logical. If \code{TRUE}, the function will display the colors specified in \code{features.colors} on the opposite side of feature names. Ignored if \code{features.colors} = \code{NULL}.}
+
 \item{annotation.colors}{Character or List. The color names for each annotation variable identity. You may also provide a named list if you want to set the colors of multiple annotation variables (for example, if \code{annotation.vars} = c('treatment', 'response'), you may provide \code{annotation.colors} = list('treatment' = c('blue', 'red', 'gold'), 'response' = c('magenta', 'green', 'brown', 'lightblue'))). For categorical variables, the length must match the number of identities in the annotation variable. For continuous variables, the length must match the number of active.ident identities if \code{annotation.split} = FALSE, or the number of \code{split.by} identities if \code{annotation.split} = TRUE. If \code{NULL}, uses a custom set of colors from \code{\link[grDevices]{colors}}. Ignored if \code{annotation.vars} = \code{NULL}.}
 
-\item{annotation.colors.outer.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable slice. Ignored if \code{annotation.vars} = \code{NULL}.}
+\item{annotation.outline}{Logical. If \code{TRUE}, the function will display a black outline around the plot shape. You may also provide multiple choices if the length matches the number of annotation variables (if you have 3 annotation variables, you may set \code{annotation.outline} = c(TRUE, FALSE, TRUE) etc). Ignored if \code{annotation.vars} = \code{NULL}.}
 
-\item{annotation.colors.inner.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable row or column. Ignored if \code{annotation.vars} = \code{NULL}.}
+\item{annotation.outer.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable slice. Ignored if \code{annotation.vars} = \code{NULL}.}
+
+\item{annotation.inner.border}{Logical. If \code{TRUE}, the function will display a border around each annotation variable row or column. Ignored if \code{annotation.vars} = \code{NULL}.}
 
 \item{order.idents}{Character or Numeric. Either 'reverse', or the identities (as names or as numerical values corresponding to the indices) of the active.ident metadata or in \code{idents} to order the active.ident identities. If \code{cluster.idents} = \code{TRUE} or Function, only the legend names will be ordered.}
 
@@ -218,6 +242,10 @@ DotPlot_Heatmap(
 
 \item{column.names.height}{Numeric. The height of the column names. Increase this parameter if your column names are truncated.}
 
+\item{annotation.name.size}{Numeric. The font size of the annotation variable name.}
+
+\item{annotation.name.angle}{Numeric. The angle of rotation of the annotation variable name.}
+
 \item{inner.border}{Logical. If \code{TRUE}, the function will display a black outline around each dot if \code{dotplot} = \code{TRUE}, or a black border around each cell of the heatmap if \code{dotplot} = \code{FALSE}.}
 
 \item{outer.border}{Logical. If \code{TRUE}, the function will display an outer border around the plot or around each slice if \code{idents.kmeans} and/or \code{features.kmeans} are higher than 1.}
@@ -242,7 +270,9 @@ DotPlot_Heatmap(
 
 \item{show.split.legend}{Logical. If \code{TRUE}, the function will display a legend for \code{split.by} identities or \code{split.idents}. Ignored if \code{show.split.names.colors} and \code{show.split.oppo.colors} are \code{FALSE}.}
 
-\item{annotation.legend.name}{Character. The name of the annotation variable legend, the length must match the number of annotation variables. Ignored if \code{annotation.vars} = \code{NULL}.}
+\item{features.legend.name}{Character. The name of the \code{features.colors} legend. Ignored if \code{features.colors} = \code{NULL}. Ignored if \code{show.features.names.colors} and \code{show.features.oppo.colors} are \code{FALSE}.}
+
+\item{features.legend}{Character or List. You may add a custom legend for the \code{features.colors} (for example, if you have 2 different colors in \code{features.colors} corresponding to transcription factor regulation, you can set \code{features.legend} = c('yes' = 'blue', 'no' = 'red')). You may also provide a named list if you provided a named list to \code{features.colors} (for example, if you have 2 different colors in \code{features.colors} corresponding to transcription factor regulation and 2 others for a GSEA pathway, you can set \code{features.legend} = list('TF' = c('yes' = 'blue', 'no' = 'red'), 'pathway' = c('yes' = 'green', 'no' = 'magenta'))). Ignored if \code{features.colors} = \code{NULL}.}
 
 \item{show.annotation.legend}{Logical. If \code{TRUE}, the function will display a legend for annotation variable identities. Ignored if \code{annotation.vars} = \code{NULL}.}
 

@@ -32,6 +32,9 @@ reference:
   - contents:
     - Reference_Matrix_Builder
     - Mixture_File_Builder
+  - title: Utils
+  - contents:
+    - Right_Palette
   - title: Data
   - contents:
     - Right_Data
