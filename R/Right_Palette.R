@@ -126,7 +126,7 @@ Right_Palette = function(n = NULL,
   lab = lab[!hue.excluded, ]
 
   if (isFALSE(starting.color %in% rownames(lab))) {
-    message("'", starting.color, "' is not present with the current parameters, using '", rownames(lab)[1], "' instead", call. = FALSE)
+    message("'", starting.color, "' is not present with the current parameters, using '", rownames(lab)[1], "' instead")
     starting.color = rownames(lab)[1]
   }
 
