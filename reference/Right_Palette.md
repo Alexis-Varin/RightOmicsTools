@@ -78,22 +78,22 @@ show_col(Right_Palette(100, starting.color = "green"), labels = FALSE)
 
 # Example 5: pastel colors palette, high luminance and low saturation
 show_col(Right_Palette(30, lum.range = c(0.7, 1), sat.range = c(0, 0.3)), labels = FALSE)
-#> 'orange' is not present with the current parameters, using 'antiquewhite' insteadFALSE
+#> 'orange' is not present with the current parameters, using 'antiquewhite' instead
 
 
 # Example 6: contrasted colors palette, low luminance and high saturation
 show_col(Right_Palette(30, lum.range = c(0, 0.4), sat.range = c(0.6, 1)), labels = FALSE)
-#> 'orange' is not present with the current parameters, using 'blue' insteadFALSE
+#> 'orange' is not present with the current parameters, using 'blue' instead
 
 
 # Example 7: washed-out colors palette, low luminance and low saturation
 show_col(Right_Palette(30, lum.range = c(0, 0.4), sat.range = c(0, 0.4)), labels = FALSE)
-#> 'orange' is not present with the current parameters, using 'antiquewhite4' insteadFALSE
+#> 'orange' is not present with the current parameters, using 'antiquewhite4' instead
 
 
 # Example 8: vivid colors palette, high luminance and high saturation
 show_col(Right_Palette(30, lum.range = c(0.5, 1), sat.range = c(0.5, 1)), labels = FALSE)
-#> 'orange' is not present with the current parameters, using 'aquamarine' insteadFALSE
+#> 'orange' is not present with the current parameters, using 'aquamarine' instead
 
 
 # Example 9: excluding some shades of colors
@@ -105,6 +105,6 @@ show_col(Right_Palette(100, exclude.hues = "green"), labels = FALSE)
 
 show_col(Right_Palette(20, exclude.hues = c("red", "orange", "yellow", "cyan",
                                             "blue", "purple", "pink")), labels = FALSE)
-#> 'orange' is not present with the current parameters, using 'chartreuse' insteadFALSE
+#> 'orange' is not present with the current parameters, using 'chartreuse' instead
 
 ```
