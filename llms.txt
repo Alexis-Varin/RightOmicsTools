@@ -99,6 +99,11 @@ information
 - [`Mixture_File_Builder()`](https://alexis-varin.github.io/RightOmicsTools/reference/Mixture_File_Builder.md)
   : Builder of CIBERSORTx Mixture File
 
+## Utils
+
+- [`Right_Palette()`](https://alexis-varin.github.io/RightOmicsTools/reference/Right_Palette.md)
+  : Discrete palette
+
 ## Data
 
 - [`Right_Data()`](https://alexis-varin.github.io/RightOmicsTools/reference/Right_Data.md)

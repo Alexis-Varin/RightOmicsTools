@@ -21,11 +21,12 @@ DotPlot_Heatmap(
   features,
   group.by = NULL,
   split.by = NULL,
-  annotation.vars = NULL,
   separate.split = TRUE,
+  annotation.vars = NULL,
+  annotation.name = annotation.vars,
   annotation.type = "absolute",
   annotation.plot = c("donut", "violin"),
-  annotation.split = TRUE,
+  annotation.split = FALSE,
   idents = NULL,
   split.idents = NULL,
   scale = TRUE,
@@ -34,7 +35,7 @@ DotPlot_Heatmap(
   rotate.axis = FALSE,
   dotplot = TRUE,
   dots.type = "square root",
-  dots.size = 5,
+  dots.size = 3,
   show.noexpr.dots = FALSE,
   col.min = ifelse(isTRUE(scale), -2, 0),
   col.max = ifelse(isTRUE(scale), 2, "q100"),
@@ -53,9 +54,15 @@ DotPlot_Heatmap(
   split.colors.inner.border = FALSE,
   show.split.names.colors = FALSE,
   show.split.oppo.colors = TRUE,
+  features.colors = NULL,
+  features.colors.outer.border = TRUE,
+  features.colors.inner.border = FALSE,
+  show.features.names.colors = FALSE,
+  show.features.oppo.colors = TRUE,
   annotation.colors = NULL,
-  annotation.colors.outer.border = TRUE,
-  annotation.colors.inner.border = FALSE,
+  annotation.outline = TRUE,
+  annotation.outer.border = TRUE,
+  annotation.inner.border = FALSE,
   order.idents = NULL,
   order.split = NULL,
   order.annotation = NULL,
@@ -77,6 +84,8 @@ DotPlot_Heatmap(
   column.names.angle = 45,
   column.names.side = "bottom",
   column.names.height = 15,
+  annotation.name.size = 9,
+  annotation.name.angle = 45,
   inner.border = TRUE,
   outer.border = TRUE,
   data.legend.name = ifelse(isTRUE(scale), "Z-Score", "Average Expression"),
@@ -89,13 +98,14 @@ DotPlot_Heatmap(
   show.idents.legend = TRUE,
   split.legend.name = split.by,
   show.split.legend = TRUE,
-  annotation.legend.name = annotation.vars,
+  features.legend.name = NULL,
+  features.legend = NULL,
   show.annotation.legend = TRUE,
   legend.title.size = 10,
   legend.text.size = 10,
   legend.gap = 10,
-  heatmap.width = 10,
-  heatmap.height = 10,
+  heatmap.width = 6,
+  heatmap.height = 6,
   output.data = FALSE,
   ...
 )
@@ -152,18 +162,24 @@ DotPlot_Heatmap(
   'seurat_clusters', etc) to split the identities of the active.ident
   metadata by.
 
-- annotation.vars:
-
-  Character. The names of one or several metadata (categorical
-  variables) or features (continuous variables) to display as annotation
-  variables.
-
 - separate.split:
 
   Logical. If `TRUE`, `cluster.features` will be set to `FALSE` and the
   different `split.by` identities will split the `features` instead of
   the identities of the active.ident metadata. Ignored if `split.by` =
   `NULL`.
+
+- annotation.vars:
+
+  Character. The names of one or several metadata (categorical
+  variables) or features (continuous variables) to display as annotation
+  variables.
+
+- annotation.name:
+
+  Character. The name of the annotation variable, the length must match
+  the number of annotation variables. Also changes the name of the
+  associated legend. Ignored if `annotation.vars` = `NULL`.
 
 - annotation.type:
 
@@ -392,6 +408,38 @@ DotPlot_Heatmap(
   `split.colors` on the opposite side of identity names. Ignored if
   `split.by` = `NULL`.
 
+- features.colors:
+
+  Character or List. The color names for each feature. You may also
+  provide a list if you want to add multiple colors for each feature
+  (for example, if you want to indicate which features are regulated by
+  a transcription factor and also belong to a GSEA pathway, you can set
+  `features.colors` = list('TF' = c('ABCA1' = 'blue', 'ABCG1' = 'blue',
+  'CD8A' = 'red'), 'pathway' = c('ABCA1' = 'magenta', 'ABCG1' = 'green',
+  'CD8A' = 'green'))).
+
+- features.colors.outer.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  feature slice. Ignored if `features.colors` = `NULL`.
+
+- features.colors.inner.border:
+
+  Logical. If `TRUE`, the function will display a border around each
+  feature row or column. Ignored if `features.colors` = `NULL`.
+
+- show.features.names.colors:
+
+  Logical. If `TRUE`, the function will display the colors specified in
+  `features.colors` next to feature names. Ignored if `features.colors`
+  = `NULL`.
+
+- show.features.oppo.colors:
+
+  Logical. If `TRUE`, the function will display the colors specified in
+  `features.colors` on the opposite side of feature names. Ignored if
+  `features.colors` = `NULL`.
+
 - annotation.colors:
 
   Character or List. The color names for each annotation variable
@@ -408,12 +456,20 @@ DotPlot_Heatmap(
   [`colors`](https://rdrr.io/r/grDevices/colors.html). Ignored if
   `annotation.vars` = `NULL`.
 
-- annotation.colors.outer.border:
+- annotation.outline:
+
+  Logical. If `TRUE`, the function will display a black outline around
+  the plot shape. You may also provide multiple choices if the length
+  matches the number of annotation variables (if you have 3 annotation
+  variables, you may set `annotation.outline` = c(TRUE, FALSE, TRUE)
+  etc). Ignored if `annotation.vars` = `NULL`.
+
+- annotation.outer.border:
 
   Logical. If `TRUE`, the function will display a border around each
   annotation variable slice. Ignored if `annotation.vars` = `NULL`.
 
-- annotation.colors.inner.border:
+- annotation.inner.border:
 
   Logical. If `TRUE`, the function will display a border around each
   annotation variable row or column. Ignored if `annotation.vars` =
@@ -535,6 +591,14 @@ DotPlot_Heatmap(
   Numeric. The height of the column names. Increase this parameter if
   your column names are truncated.
 
+- annotation.name.size:
+
+  Numeric. The font size of the annotation variable name.
+
+- annotation.name.angle:
+
+  Numeric. The angle of rotation of the annotation variable name.
+
 - inner.border:
 
   Logical. If `TRUE`, the function will display a black outline around
@@ -601,11 +665,24 @@ DotPlot_Heatmap(
   identities or `split.idents`. Ignored if `show.split.names.colors` and
   `show.split.oppo.colors` are `FALSE`.
 
-- annotation.legend.name:
+- features.legend.name:
 
-  Character. The name of the annotation variable legend, the length must
-  match the number of annotation variables. Ignored if `annotation.vars`
-  = `NULL`.
+  Character. The name of the `features.colors` legend. Ignored if
+  `features.colors` = `NULL`. Ignored if `show.features.names.colors`
+  and `show.features.oppo.colors` are `FALSE`.
+
+- features.legend:
+
+  Character or List. You may add a custom legend for the
+  `features.colors` (for example, if you have 2 different colors in
+  `features.colors` corresponding to transcription factor regulation,
+  you can set `features.legend` = c('yes' = 'blue', 'no' = 'red')). You
+  may also provide a named list if you provided a named list to
+  `features.colors` (for example, if you have 2 different colors in
+  `features.colors` corresponding to transcription factor regulation and
+  2 others for a GSEA pathway, you can set `features.legend` = list('TF'
+  = c('yes' = 'blue', 'no' = 'red'), 'pathway' = c('yes' = 'green', 'no'
+  = 'magenta'))). Ignored if `features.colors` = `NULL`.
 
 - show.annotation.legend:
 
