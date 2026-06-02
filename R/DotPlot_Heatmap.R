@@ -568,13 +568,15 @@ DotPlot_Heatmap = function(seurat_object,
         dup.colors2[[i]] = split.colors
       }
       split.colors = unlist(dup.colors2)
-      features.colors = lapply(features.colors, function(cols) {
-        dup.cols = list()
-        for (i in 1:length(cols)) {
-          dup.cols[[i]] = rep(cols[i], length(ident.2))
-        }
-        unlist(dup.cols)
-      })
+      if (is.list(features.colors)) {
+        features.colors = lapply(features.colors, function(cols) {
+          dup.cols = list()
+          for (i in 1:length(cols)) {
+            dup.cols[[i]] = rep(cols[i], length(ident.2))
+          }
+          unlist(dup.cols)
+        })
+      }
       names(idents.colors) = ident.3
       names(split.colors) = rep(ident.2, length(setdiff(features, features.removed)))
       idents.colors = idents.colors[!names(idents.colors) %in% idents.removed]
@@ -953,11 +955,11 @@ DotPlot_Heatmap = function(seurat_object,
     }
     if (isTRUE(cluster.features)) {
       cluster.features = FALSE
-      message("Setting cluster.features to FALSE since separate.split is TRUE.")
+      message("Setting cluster.features to FALSE since separate.split is TRUE")
     }
     if (features.kmeans > 1) {
       features.kmeans = 1
-      message("Setting features.kmeans to 1 since separate.split is TRUE.")
+      message("Setting features.kmeans to 1 since separate.split is TRUE")
     }
     if (isTRUE(show.idents.names.colors)) {
       if (isFALSE(rotate.axis)) {
